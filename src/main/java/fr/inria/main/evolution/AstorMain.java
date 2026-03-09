@@ -16,6 +16,7 @@ import org.apache.log4j.PatternLayout;
 
 import fr.inria.astor.approaches.cardumen.CardumenApproach;
 import fr.inria.astor.approaches.deeprepair.DeepRepairEngine;
+import fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine;
 import fr.inria.astor.approaches.jgenprog.JGenProg;
 import fr.inria.astor.approaches.jgenprog.extension.TibraApproach;
 import fr.inria.astor.approaches.jkali.JKaliEngine;
@@ -58,28 +59,22 @@ public class AstorMain extends AbstractMain {
 
 		if (ExecutionMode.DeepRepair.equals(mode)) {
 			core = new DeepRepairEngine(mutSupporter, projectFacade);
-
 		} else if (ExecutionMode.CARDUMEN.equals(mode)) {
 			core = new CardumenApproach(mutSupporter, projectFacade);
-
 		} else if (ExecutionMode.jKali.equals(mode)) {
 			core = new JKaliEngine(mutSupporter, projectFacade);
-
 		} else if (ExecutionMode.jGenProg.equals(mode)) {
 			core = new JGenProg(mutSupporter, projectFacade);
-
 		} else if (ExecutionMode.MutRepair.equals(mode)) {
 			core = new jMutRepairExhaustive(mutSupporter, projectFacade);
-
 		} else if (ExecutionMode.EXASTOR.equals(mode)) {
 			core = new ExhaustiveIngredientBasedEngine(mutSupporter, projectFacade);
-
 		} else if (ExecutionMode.TIBRA.equals(mode)) {
 			core = new TibraApproach(mutSupporter, projectFacade);
-
 		} else if (ExecutionMode.SCAFFOLD.equals(mode)) {
 			core = new ScaffoldRepairEngine(mutSupporter, projectFacade);
-
+		} else if(ExecutionMode.FlakyRepair.equals(mode)) {
+			core = new FlakyRepairEngine(mutSupporter, projectFacade);
 		} else {
 			// If the execution mode is any of the predefined, Astor
 			// interpretes as
@@ -87,7 +82,6 @@ public class AstorMain extends AbstractMain {
 			// the engine class
 			String customengine = ConfigurationProperties.getProperty(ExtensionPoints.NAVIGATION_ENGINE.identifier);
 			core = createEngineFromArgument(customengine, mutSupporter, projectFacade);
-
 		}
 
 		// Loading extension Points

@@ -1,0 +1,20 @@
+mvn package -f "/home/itiro/Documentos/Repos/astor-flakyrepair/pom.xml" -DskipTests=true
+
+
+java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
+-mode jgenprog \
+-srcjavafolder /src/java/ \
+-srctestfolder /src/test/  \
+-binjavafolder /target/classes/ \
+-bintestfolder /target/test-classes/ \
+-location /home/itiro/Documentos/Repos/astor/examples/Math-issue-280/ \
+-dependencies examples/Math-issue-280/lib
+
+java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
+-mode flakyrepair \
+-srcjavafolder /src/java/ \
+-srctestfolder /src/test/  \
+-binjavafolder /target/classes/ \
+-bintestfolder /target/test-classes/ \
+-location /home/itiro/Documentos/Repos/astor/examples/Math-issue-280/ \
+-dependencies examples/Math-issue-280/lib

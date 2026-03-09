@@ -1,0 +1,25 @@
+{
+  "VARIANT_ID": "2",
+  "VALIDATION": "|true|0|2181|[]|",
+  "patchhunks": [
+    {
+      "LOCATION": "org.apache.commons.math.analysis.solvers.BisectionSolver",
+      "PATH": "\\/home\\/itiro\\/Documentos\\/Repos\\/astor\\/examples\\/math_70_ac\\/src\\/main\\/java\\/org\\/apache\\/commons\\/math\\/analysis\\/solvers\\/BisectionSolver.java",
+      "INGREDIENT_SCOPE": "LOCAL",
+      "SUSPICIOUNESS": "1",
+      "INGREDIENT_PARENT": "return solve(f, min, max)",
+      "PATCH_HUNK_TYPE": "CtReturnImpl|CtBlockImpl",
+      "ORIGINAL_CODE": "return solve(min, max)",
+      "BUGGY_CODE_TYPE": "CtReturnImpl|CtBlockImpl",
+      "OPERATOR": "ReplaceOp",
+      "MODIFIED_FILE_PATH": "\\/home\\/itiro\\/Documentos\\/Repos\\/astor\\/.\\/output_astor\\/AstorMain-math_70_ac\\/\\/src\\/\\/variant-2\\/org\\/apache\\/commons\\/math\\/analysis\\/solvers\\/BisectionSolver.java",
+      "LINE": "72",
+      "MP_RANKING": "0",
+      "PATCH_HUNK_CODE": "return solve(f, min, max)"
+    }
+  ],
+  "TIME": "4",
+  "GENERATION": "1",
+  "FOLDER_SOLUTION_CODE": "\\/home\\/itiro\\/Documentos\\/Repos\\/astor\\/.\\/output_astor\\/AstorMain-math_70_ac\\/\\/src\\/\\/variant-2",
+  "PATCH_DIFF_ORIG": "--- \\/src\\/main\\/java\\/org\\/apache\\/commons\\/math\\/analysis\\/solvers\\/BisectionSolver.java\\n+++ \\/src\\/main\\/java\\/org\\/apache\\/commons\\/math\\/analysis\\/solvers\\/BisectionSolver.java\\n@@ -71,2 +71,2 @@\\n-\\t *\\/ \\tpublic double solve(final org.apache.commons.math.analysis.UnivariateRealFunction f, double min, double max, double initial) throws org.apache.commons.math.MaxIterationsExceededException, org.apache.commons.math.FunctionEvaluationException {\\n-\\t\\treturn solve(min, max);\\n+\\t *\\/ \\tpublic double solve(final org.apache.commons.math.analysis.UnivariateRealFunction f, double min, double max, double initial) throws org.apache.commons.math.MaxIterationsExceededException, org.apache.commons.math.FunctionEvaluationException { \\t\\treturn solve(f, min, max);\\n+\\n\\n"
+}

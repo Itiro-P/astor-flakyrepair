@@ -26,6 +26,7 @@ import com.martiansoftware.jsap.JSAPException;
 
 import fr.inria.astor.approaches.cardumen.CardumenOperatorSpace;
 import fr.inria.astor.approaches.extensions.minimpact.validator.ProcessEvoSuiteValidator;
+import fr.inria.astor.approaches.flakyrepair.extension.FlakyRepairFaultLocalization;
 import fr.inria.astor.approaches.jgenprog.jGenProgSpace;
 import fr.inria.astor.approaches.jkali.JKaliSpace;
 import fr.inria.astor.approaches.jmutrepair.jMutRepairSpace;
@@ -1092,6 +1093,8 @@ public abstract class AstorCoreEngine implements AstorExtensionPoint {
 			this.setFaultLocalization(new NovelGZoltarFaultLocalization());
 		} else if (flvalue.equals("cocospoon")) {
 			this.setFaultLocalization(new CocoFaultLocalization());
+		} else if(flvalue.equals("flakyrepair")) {
+			this.setFaultLocalization(new FlakyRepairFaultLocalization());
 		} else
 			this.setFaultLocalization(
 					(FaultLocalizationStrategy) PlugInLoader.loadPlugin(ExtensionPoints.FAULT_LOCALIZATION));

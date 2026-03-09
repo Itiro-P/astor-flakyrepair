@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDSTest
 -------------------------------------------------------------------------------
-Tests run: 18, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.679 sec
+Tests run: 18, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.055 s -- in org.apache.commons.math3.geometry.euclidean.threed.FieldRotationDSTest

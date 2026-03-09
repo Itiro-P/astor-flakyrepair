@@ -29,3 +29,4 @@ examples/Math-issue-280/target/
 
 .DS_Store
 /output_*
+a.log

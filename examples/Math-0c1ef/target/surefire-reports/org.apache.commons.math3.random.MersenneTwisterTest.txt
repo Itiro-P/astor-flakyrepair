@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: org.apache.commons.math3.random.MersenneTwisterTest
 -------------------------------------------------------------------------------
-Tests run: 63, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.497 sec
+Tests run: 63, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.137 s -- in org.apache.commons.math3.random.MersenneTwisterTest
