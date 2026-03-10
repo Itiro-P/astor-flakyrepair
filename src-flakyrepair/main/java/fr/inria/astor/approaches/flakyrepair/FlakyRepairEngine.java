@@ -11,6 +11,25 @@ import fr.inria.main.evolution.ExtensionPoints;
 public class FlakyRepairEngine extends jMutRepairExhaustive {
     public FlakyRepairEngine(MutationSupporter mutationExecutor, ProjectRepairFacade projFacade) throws JSAPException {
         super(mutationExecutor, projFacade);
-        //ConfigurationProperties.setProperty(ExtensionPoints.FAULT_LOCALIZATION.identifier, "flakyrepair");
+
+        /**
+         * Change fault localization method to target tests.
+         */
+        ConfigurationProperties.setProperty(ExtensionPoints.FAULT_LOCALIZATION.identifier, "flakyrepair");
+
+        /**
+         * Processing patches by re-executing them.
+         */
+        //ConfigurationProperties.setProperty(ExtensionPoints.VALIDATION.identifier, null);
+
+        /*
+         * Validation using O. Parry's flakiness formula.
+         */
+        //ConfigurationProperties.setProperty(ExtensionPoints.FITNESS_FUNCTION.identifier, null);
+
+        /**
+         * Changing output to represent the results in a more representative way.
+         */
+        //ConfigurationProperties.setProperty(ExtensionPoints.OUTPUT_RESULTS.identifier, null);
     }
 }

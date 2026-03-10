@@ -4,11 +4,11 @@
   "patchhunks": [
     {
       "LOCATION": "org.apache.commons.math.analysis.solvers.UnivariateRealSolverUtils",
-      "PATH": "\\/home\\/itiro\\/Documentos\\/Repos\\/astor\\/examples\\/Math-issue-280\\/src\\/java\\/org\\/apache\\/commons\\/math\\/analysis\\/solvers\\/UnivariateRealSolverUtils.java",
+      "PATH": "\\/home\\/itiro\\/Documentos\\/Repos\\/astor-flakyrepair\\/examples\\/Math-issue-280\\/src\\/java\\/org\\/apache\\/commons\\/math\\/analysis\\/solvers\\/UnivariateRealSolverUtils.java",
       "ORIGINAL_CODE": "(fa * fb) \u003e\u003d 0.0",
       "BUGGY_CODE_TYPE": "CtBinaryOperatorImpl|CtIfImpl",
       "OPERATOR": "IfExpresionMutOp",
-      "MODIFIED_FILE_PATH": "\\/home\\/itiro\\/Documentos\\/Repos\\/astor\\/.\\/output_astor\\/AstorMain-Math-issue-280\\/\\/src\\/\\/variant-99\\/org\\/apache\\/commons\\/math\\/analysis\\/solvers\\/UnivariateRealSolverUtils.java",
+      "MODIFIED_FILE_PATH": "\\/home\\/itiro\\/Documentos\\/Repos\\/astor-flakyrepair\\/.\\/output_astor\\/AstorMain-Math-issue-280\\/\\/src\\/\\/variant-99\\/org\\/apache\\/commons\\/math\\/analysis\\/solvers\\/UnivariateRealSolverUtils.java",
       "LINE": "198",
       "SUSPICIOUNESS": "0,243",
       "MP_RANKING": "23",
@@ -16,8 +16,8 @@
       "PATCH_HUNK_TYPE": "CtBinaryOperatorImpl|CtIfImpl"
     }
   ],
-  "TIME": "64",
+  "TIME": "63",
   "GENERATION": "1",
-  "FOLDER_SOLUTION_CODE": "\\/home\\/itiro\\/Documentos\\/Repos\\/astor\\/.\\/output_astor\\/AstorMain-Math-issue-280\\/\\/src\\/\\/variant-99",
+  "FOLDER_SOLUTION_CODE": "\\/home\\/itiro\\/Documentos\\/Repos\\/astor-flakyrepair\\/.\\/output_astor\\/AstorMain-Math-issue-280\\/\\/src\\/\\/variant-99",
   "PATCH_DIFF_ORIG": "--- src\\/java\\/org\\/apache\\/commons\\/math\\/analysis\\/solvers\\/UnivariateRealSolverUtils.java\\n+++ src\\/java\\/org\\/apache\\/commons\\/math\\/analysis\\/solvers\\/UnivariateRealSolverUtils.java\\n@@ -198 +198 @@\\n-\\t\\tif ((fa * fb) \u003e\u003d 0.0) {\\n+\\t\\tif ((fa - fb) \u003e\u003d 0.0) {\\n\\n"
 }
