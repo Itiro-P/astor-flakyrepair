@@ -6,46 +6,39 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
+import fr.inria.astor.approaches.flakyrepair.extension.TestRunner.TestLauncher;
+import fr.inria.astor.core.entities.ModificationPoint;
 import fr.inria.astor.core.entities.ProgramVariant;
 import fr.inria.astor.core.entities.validation.TestCaseVariantValidationResult;
 import fr.inria.astor.core.manipulation.MutationSupporter;
 import fr.inria.astor.core.setup.ConfigurationProperties;
 import fr.inria.astor.core.setup.FinderTestCases;
 import fr.inria.astor.core.setup.ProjectRepairFacade;
-import fr.inria.astor.core.stats.Stats.GeneralStatEnum;
 import fr.inria.astor.core.validation.ProgramVariantValidator;
-import fr.inria.astor.core.validation.junit.LaucherJUnitProcess;
 import fr.inria.astor.core.validation.results.TestCasesProgramValidationResult;
 import fr.inria.astor.core.validation.results.TestResult;
 import fr.inria.astor.util.Converters;
+import spoon.reflect.declaration.CtElement;
+import spoon.reflect.declaration.CtMethod;
 
 public class FlakyRepairProcessValidator extends ProgramVariantValidator {
     protected Logger log = Logger.getLogger(Thread.currentThread().getName());
 
-	/**
-	 * Process-based validation Advantage: stability, memory consumption, CG
-	 * activity Disadvantage: time.
-	 * 
-	 * @param mutatedVariant
-	 * @return
-	 */
 	@Override
 	public TestCaseVariantValidationResult validate(ProgramVariant mutatedVariant, ProjectRepairFacade projectFacade) {
-
 		return this.validate(mutatedVariant, projectFacade,
 				Boolean.valueOf(ConfigurationProperties.getProperty("forceExecuteRegression")));
 
 	}
 
 	/**
-	 * Run the validation of the program variant in two steps: one the original
-	 * failing test, the second the complete test suite (only in case the failing
-	 * now passes)
+	 * Run the validation of the program variant by using re-executions.
 	 * 
 	 * @param mutatedVariant
 	 * @param projectFacade
@@ -54,21 +47,20 @@ public class FlakyRepairProcessValidator extends ProgramVariantValidator {
 	 */
 	public TestCaseVariantValidationResult validate(ProgramVariant mutatedVariant, ProjectRepairFacade projectFacade,
 			boolean forceExecuteRegression) {
-
 		try {
 			URL[] bc = createClassPath(mutatedVariant, projectFacade);
 
-			LaucherJUnitProcess testProcessRunner = new LaucherJUnitProcess();
+			TestLauncher testProcessRunner = new TestLauncher();
 
 			log.debug("-Running first validation");
 
-			long t1 = System.currentTimeMillis();
 			String jvmPath = ConfigurationProperties.getProperty("jvm4testexecution");
 
-			TestResult trfailing = testProcessRunner.execute(jvmPath, bc,
-					projectFacade.getProperties().getFailingTestCases(),
-					ConfigurationProperties.getPropertyInt("tmax1"));
-			long t2 = System.currentTimeMillis();
+			List<String> tests = new ArrayList<>();
+			for(ModificationPoint mp: mutatedVariant.getModificationPoints()) {
+				tests.add(mp.getCtClass().getQualifiedName() + "#" + this.getMethodName(mp));
+			}
+			TestResult trfailing = testProcessRunner.execute(jvmPath, bc, new ArrayList<String>(new HashSet<String>(tests)), ConfigurationProperties.getPropertyInt("tmax1"));
 
 			if (trfailing == null) {
 				log.debug("**The validation 1 have not finished well**");
@@ -76,15 +68,7 @@ public class FlakyRepairProcessValidator extends ProgramVariantValidator {
 			}
 
 			log.debug(trfailing);
-			TestCaseVariantValidationResult r = null;
-
-			if (trfailing.wasSuccessful() || forceExecuteRegression) {
-				r = runRegression(mutatedVariant, projectFacade, bc);
-			} else {
-				r = new TestCasesProgramValidationResult(trfailing, trfailing.wasSuccessful(), false);
-
-			}
-
+			TestCaseVariantValidationResult r = new TestCasesProgramValidationResult(trfailing, trfailing.wasSuccessful(), false);
 			removeOfCompiledCode(mutatedVariant, projectFacade);
 			return r;
 
@@ -95,18 +79,6 @@ public class FlakyRepairProcessValidator extends ProgramVariantValidator {
 		}
 
 		// WE REMOVE THE bin code generated for validating the variant
-
-	}
-
-	protected TestCaseVariantValidationResult runRegression(ProgramVariant mutatedVariant,
-			ProjectRepairFacade projectFacade, URL[] bc) {
-
-		LaucherJUnitProcess testProcessRunner = new LaucherJUnitProcess();
-
-		if (ConfigurationProperties.getPropertyBool("testbystep"))
-			return executeRegressionTestingOneByOne(mutatedVariant, bc, testProcessRunner, projectFacade);
-		else
-			return executeRegressionTesting(mutatedVariant, bc, testProcessRunner, projectFacade);
 
 	}
 
@@ -189,62 +161,18 @@ public class FlakyRepairProcessValidator extends ProgramVariantValidator {
 
 	}
 
-	protected TestCaseVariantValidationResult executeRegressionTesting(ProgramVariant mutatedVariant, URL[] bc,
-			LaucherJUnitProcess p, ProjectRepairFacade projectFacade) {
-		log.debug("-Test Failing is passing, Executing regression");
-
-		List<String> testCasesRegression = projectFacade.getProperties().getRegressionTestCases();
-
-		String jvmPath = ConfigurationProperties.getProperty("jvm4testexecution");
-
-		TestResult trregression = p.execute(jvmPath, bc, testCasesRegression,
-				ConfigurationProperties.getPropertyInt("tmax2"));
-
-		if (testCasesRegression == null || testCasesRegression.isEmpty()) {
-			log.error("Any test case for regression testing");
-			return null;
-		}
-
-		if (trregression == null) {
-			currentStats.increment(GeneralStatEnum.NR_FAILING_VALIDATION_PROCESS);
-			return null;
-		} else {
-			log.debug(trregression);
-			return new TestCasesProgramValidationResult(trregression, trregression.wasSuccessful(),
-					(trregression != null));
-		}
-	}
-
-	protected TestCaseVariantValidationResult executeRegressionTestingOneByOne(ProgramVariant mutatedVariant, URL[] bc,
-			LaucherJUnitProcess p, ProjectRepairFacade projectFacade) {
-
-		log.debug("-Test Failing is passing, Executing regression, One by one");
-		TestResult trregressionall = new TestResult();
-		long t1 = System.currentTimeMillis();
-
-		for (String tc : projectFacade.getProperties().getRegressionTestCases()) {
-
-			List<String> parcial = new ArrayList<String>();
-			parcial.add(tc);
-			String jvmPath = ConfigurationProperties.getProperty("jvm4testexecution");
-
-			TestResult singleTestResult = p.execute(jvmPath, bc, parcial,
-					ConfigurationProperties.getPropertyInt("tmax2"));
-			if (singleTestResult == null) {
-				log.debug("The validation 2 have not finished well");
-				return null;
-			} else {
-				trregressionall.getFailures().addAll(singleTestResult.getFailures());
-				trregressionall.getSuccessTest().addAll(singleTestResult.getSuccessTest());
-				trregressionall.failures += singleTestResult.failures;
-				trregressionall.casesExecuted += singleTestResult.getCasesExecuted();
-
+	public String getMethodName(ModificationPoint mp) {
+		CtElement element = mp.getCodeElement();
+		
+		// Sobe na árvore do Spoon até encontrar o CtMethod pai
+		CtElement parent = element;
+		while (parent != null) {
+			if (parent instanceof CtMethod) {
+				return ((CtMethod<?>) parent).getSimpleName();
 			}
+			parent = parent.getParent();
 		}
-		long t2 = System.currentTimeMillis();
-		log.debug(trregressionall);
-		return new TestCasesProgramValidationResult(trregressionall, true, trregressionall.wasSuccessful());
-
+		return null; // elemento não está dentro de um método (ex: campo, inicializador)
 	}
 
 	@Override

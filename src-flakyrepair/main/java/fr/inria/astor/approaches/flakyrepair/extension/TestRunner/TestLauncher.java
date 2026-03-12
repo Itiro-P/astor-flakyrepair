@@ -1,4 +1,4 @@
-package fr.inria.astor.core.validation.junit;
+package fr.inria.astor.approaches.flakyrepair.extension.TestRunner;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -21,44 +21,32 @@ import org.apache.log4j.Logger;
 import fr.inria.astor.approaches.tos.core.MetaGenerator;
 import fr.inria.astor.core.setup.ConfigurationProperties;
 import fr.inria.astor.core.setup.ProjectConfiguration;
+import fr.inria.astor.core.validation.junit.JUnitExternalExecutor;
+import fr.inria.astor.core.validation.junit.JUnitNologExternalExecutor;
 import fr.inria.astor.core.validation.results.TestResult;
 
-/**
- * Lauches a process and parses its output.
- *
- * @author Matias Martinez, matias.martinez@inria.fr
- *
- */
-public class LaucherJUnitProcess {
-
-	protected Logger log = Logger.getLogger(Thread.currentThread().getName());
+public class TestLauncher {
+	private static final int K = 10;
+    protected Logger log = Logger.getLogger(Thread.currentThread().getName());
+    boolean outputInFile = ConfigurationProperties.getPropertyBool("processoutputinfile");
 	boolean avoidInterruption = false;
 
-	public LaucherJUnitProcess(boolean avoidInterruption) {
+    public TestLauncher(boolean avoidInterruption) {
 		super();
 		this.avoidInterruption = avoidInterruption;
 	}
 
-	public LaucherJUnitProcess() {
-		this(false);
-	}
+	public TestLauncher() {}
 
-	public TestResult execute(String jvmPath, URL[] classpath, List<String> classesToExecute, int waitTime) {
-		return execute(jvmPath, urlArrayToString(classpath), classesToExecute, waitTime);
-	}
-
-	boolean outputInFile = ConfigurationProperties.getPropertyBool("processoutputinfile");
-
-	public TestResult execute(String jvmPath, String classpath, List<String> classesToExecute, int waitTime) {
-		String envOS = System.getProperty("os.name");
+    public TestResult execute(String jvmPath, URL[] classpath, List<String> testsToExecute, int waitTime) {
+        String envOS = System.getProperty("os.name");
 		String timeZone = ConfigurationProperties.getProperty("timezone");
 
-		Process p = null;
 		UUID procWinUUID = null;
 
 		String newJvmPath = jvmPath + File.separator + "java";
-		List<String> cls = new ArrayList<>(new HashSet(classesToExecute));
-		String newClasspath = classpath;
+		List<String> cls = new ArrayList<String>(new HashSet<String>(testsToExecute));
+		String newClasspath = urlArrayToString(classpath);
 		if (ConfigurationProperties.getPropertyBool("runjava7code") || ProjectConfiguration.isJDKLowerThan8()) {
 			newClasspath = (new File(ConfigurationProperties.getProperty("executorjar")).getAbsolutePath())
 					+ File.pathSeparator + classpath;
@@ -66,8 +54,7 @@ public class LaucherJUnitProcess {
 
 		try {
 			File ftemp = null;
-			if (outputInFile)
-				ftemp = File.createTempFile("out", "txt");
+			if (outputInFile) ftemp = File.createTempFile("out", "txt");
 
 			List<String> command = new ArrayList<String>();
 
@@ -109,6 +96,25 @@ public class LaucherJUnitProcess {
 				pb.redirectOutput();
 			pb.redirectErrorStream(true);
 			pb.directory(new File((ConfigurationProperties.getProperty("location"))));
+			TestResult res = new TestResult();
+			for(int i = 0; i < K; i++) {
+				log.info("Running iteration " + (i + 1) + " of test " + testsToExecute.get(0));
+				TestResult curTest = runTest(pb, envOS, timeZone, command, waitTime, procWinUUID, ftemp);
+				if(curTest == null) continue;
+				log.info("Sucess: " + curTest.casesExecuted + "\nFailures: " + curTest.failures);
+				res.casesExecuted += 1;
+				if(!curTest.wasSuccessful()) res.failures += 1;
+			}
+			return res;
+		} catch (IOException ex) {
+			log.info("The Process that runs JUnit test cases had problems: " + ex.getMessage());
+		}
+		return null;
+	}
+
+	private TestResult runTest(ProcessBuilder pb, String envOS, String timeZone, List<String> command, int waitTime, UUID procWinUUID, File ftemp) {
+		Process p = null;
+		try {
 			long t_start = System.currentTimeMillis();
 			p = pb.start();
 
@@ -141,7 +147,6 @@ public class LaucherJUnitProcess {
 			} catch (IOException e) {
 				log.error(e);
 			}
-
 			//
 			if (!p.waitFor(waitTime, TimeUnit.MILLISECONDS)) {
 				killProcess(p, waitTime, procWinUUID);
@@ -165,14 +170,14 @@ public class LaucherJUnitProcess {
 			TestResult tr = getTestResult(output);
 			p.destroyForcibly();
 			return tr;
-		} catch (IOException | InterruptedException | IllegalThreadStateException ex) {
+		} catch (IOException | IllegalThreadStateException | InterruptedException ex) {
 			log.info("The Process that runs JUnit test cases had problems: " + ex.getMessage());
 			killProcess(p, waitTime, procWinUUID);
+			return null;
 		}
-		return null;
 	}
 
-	/**
+    /**
 	 * Workarrond. I will be solved when migrating to java 9.
 	 * https://docs.oracle.com/javase/9/docs/api/java/lang/Process.html#descendants--
 	 * 
@@ -282,7 +287,7 @@ public class LaucherJUnitProcess {
 
 	}
 
-	/**
+    	/**
 	 * This method analyze the output of the junit executor (i.e.,
 	 * {@link JUnitTestExecutor}) and return an entity called TestResult with the
 	 * result of the test execution
@@ -309,8 +314,7 @@ public class LaucherJUnitProcess {
 						String[] failingTestList = resultPrinted[3].replace("[", "").replace("]", "").split(",");
 						for (String failingTest : failingTestList) {
 							failingTest = failingTest.trim();
-							if (!failingTest.isEmpty() && !failingTest.equals("-"))
-								tr.failTest.add(failingTest);
+							if (!failingTest.isEmpty() && !failingTest.equals("-")) tr.failTest.add(failingTest);
 						}
 					}
 					success = true;
@@ -328,5 +332,4 @@ public class LaucherJUnitProcess {
 			return null;
 		}
 	}
-
 }

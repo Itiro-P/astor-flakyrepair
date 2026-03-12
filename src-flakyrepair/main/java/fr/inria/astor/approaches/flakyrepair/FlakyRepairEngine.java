@@ -2,6 +2,8 @@ package fr.inria.astor.approaches.flakyrepair;
 
 import com.martiansoftware.jsap.JSAPException;
 
+import fr.inria.astor.approaches.flakyrepair.extension.FlakyRepairFaultLocalization;
+import fr.inria.astor.approaches.flakyrepair.extension.FlakyRepairProcessValidator;
 import fr.inria.astor.approaches.jmutrepair.jMutRepairExhaustive;
 import fr.inria.astor.core.manipulation.MutationSupporter;
 import fr.inria.astor.core.setup.ConfigurationProperties;
@@ -13,14 +15,14 @@ public class FlakyRepairEngine extends jMutRepairExhaustive {
         super(mutationExecutor, projFacade);
 
         /**
-         * Change fault localization method to target tests.
+         * Using FR's FL
          */
-        ConfigurationProperties.setProperty(ExtensionPoints.FAULT_LOCALIZATION.identifier, "flakyrepair");
+        ConfigurationProperties.setProperty(ExtensionPoints.FAULT_LOCALIZATION.identifier, FlakyRepairFaultLocalization.class.getCanonicalName());
 
         /**
          * Processing patches by re-executing them.
          */
-        //ConfigurationProperties.setProperty(ExtensionPoints.VALIDATION.identifier, null);
+        ConfigurationProperties.setProperty(ExtensionPoints.VALIDATION.identifier, FlakyRepairProcessValidator.class.getCanonicalName());
 
         /*
          * Validation using O. Parry's flakiness formula.
