@@ -1,4 +1,8 @@
-mvn package -f "/home/itiro/Documentos/Repos/astor-flakyrepair/pom.xml" -DskipTests=true
+// Compilar o projeto
+
+mvn package -f "$(pwd)/pom.xml" -DskipTests=true
+
+// Executar com o exemplo do Commons Math, issue 280
 
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
 -mode flakyrepair \
@@ -7,15 +11,30 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
 -srctestfolder /src/test/  \
 -binjavafolder /target/classes/ \
 -bintestfolder /target/test-classes/ \
--location /home/itiro/Documentos/Repos/astor-flakyrepair/examples/Math-issue-280/ \
+-location $(pwd)/examples/Math-issue-280/ \
 -dependencies examples/Math-issue-280/lib
 
-mvn package -f "/home/itiro/Documentos/Repos/astor-flakyrepair/pom.xml" -DskipTests=true && java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
+// Compilar e executar com o exemplo do Commons Math, issue 280
+
+mvn package -f "$(pwd)/pom.xml" -DskipTests=true && java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
 -mode flakyrepair \
 -parameters includeTestInSusp:true \
 -srcjavafolder /src/java/ \
 -srctestfolder /src/test/  \
 -binjavafolder /target/classes/ \
 -bintestfolder /target/test-classes/ \
--location /home/itiro/Documentos/Repos/astor-flakyrepair/examples/Math-issue-280/ \
+-location $(pwd)/examples/Math-issue-280/ \
+-dependencies examples/Math-issue-280/lib
+
+
+// Executar com o exemplo do Commons Math, issue 280. Usando o jMutRepair
+
+java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
+-mode jmutrepair \
+-parameters includeTestInSusp:true \
+-srcjavafolder /src/java/ \
+-srctestfolder /src/test/  \
+-binjavafolder /target/classes/ \
+-bintestfolder /target/test-classes/ \
+-location $(pwd)/examples/Math-issue-280/ \
 -dependencies examples/Math-issue-280/lib
