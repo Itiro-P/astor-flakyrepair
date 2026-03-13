@@ -29,27 +29,17 @@ public class FlakyRepairFaultLocalization implements FaultLocalizationStrategy {
         List<CtMethod<?>> allMethods = MutationSupporter.factory.getModel().getElements(new TypeFilter<>(CtMethod.class));
 
         for (CtMethod<?> spoonMethod : allMethods) {
-
-            // Filtro 1: apenas métodos anotados com @Test
-            if (spoonMethod.getAnnotation(org.junit.Test.class) == null) {
-                continue;
-            }
-
-            // Filtro 3: deve ter corpo com pelo menos um statement
-            if (spoonMethod.getBody() == null || spoonMethod.getBody().getStatements().isEmpty()) {
-                continue;
-            }
-
-            // Filtro 4: posição deve ser válida (evita elementos sintéticos)
-            if (!spoonMethod.getBody().getStatements().get(0).getPosition().isValidPosition()) {
+            if (spoonMethod.getAnnotation(org.junit.Test.class) == null ||
+                spoonMethod.getDeclaringType().getModifiers().contains(ModifierKind.ABSTRACT) ||
+                (spoonMethod.getBody() == null || spoonMethod.getBody().getStatements().isEmpty()) ||
+                !spoonMethod.getBody().getStatements().get(0).getPosition().isValidPosition()
+                ) {
                 continue;
             }
 
             String className = spoonMethod.getDeclaringType().getQualifiedName();
             String methodName = spoonMethod.getSimpleName();
 
-            // Linha do primeiro statement do corpo — que é o que o Spoon
-            // consegue mapear para um CtElement durante createModificationPoints
             int lineNumber = spoonMethod.getBody().getStatements().get(0).getPosition().getLine();
 
             SuspiciousCode sc = new SuspiciousCode(className, methodName, 1.0);

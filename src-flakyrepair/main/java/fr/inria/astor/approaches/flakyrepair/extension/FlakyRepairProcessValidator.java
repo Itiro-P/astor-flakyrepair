@@ -24,6 +24,7 @@ import fr.inria.astor.core.validation.ProgramVariantValidator;
 import fr.inria.astor.core.validation.results.TestCasesProgramValidationResult;
 import fr.inria.astor.core.validation.results.TestResult;
 import fr.inria.astor.util.Converters;
+import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtMethod;
 
@@ -58,7 +59,20 @@ public class FlakyRepairProcessValidator extends ProgramVariantValidator {
 
 			List<String> tests = new ArrayList<>();
 			for(ModificationPoint mp: mutatedVariant.getModificationPoints()) {
-				tests.add(mp.getCtClass().getQualifiedName() + "#" + this.getMethodName(mp));
+				CtClass<?> ctClass = mp.getCtClass();
+				
+				// Se for abstrata, busca subclasses concretas
+				if(ctClass.isAbstract()) {
+					MutationSupporter.getFactory().Class().getAll().stream()
+						.filter(t -> t instanceof CtClass)
+						.map(t -> (CtClass<?>) t)
+						.filter(c -> !c.isAbstract())
+						.filter(c -> c.getSuperclass() != null && 
+								c.getSuperclass().getQualifiedName().equals(ctClass.getQualifiedName()))
+						.forEach(c -> tests.add(c.getQualifiedName() + "#" + getMethodName(mp)));
+				} else {
+					tests.add(ctClass.getQualifiedName() + "#" + getMethodName(mp));
+				}
 			}
 			TestResult trfailing = testProcessRunner.execute(jvmPath, bc, new ArrayList<String>(new HashSet<String>(tests)), ConfigurationProperties.getPropertyInt("tmax1"));
 

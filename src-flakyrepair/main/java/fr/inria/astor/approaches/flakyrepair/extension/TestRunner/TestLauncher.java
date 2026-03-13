@@ -38,10 +38,9 @@ public class TestLauncher {
 
 	public TestLauncher() {}
 
-    public TestResult execute(String jvmPath, URL[] classpath, List<String> testsToExecute, int waitTime) {
-        String envOS = System.getProperty("os.name");
+	public TestResult execute(String jvmPath, URL[] classpath, List<String> testsToExecute, int waitTime) {
+		String envOS = System.getProperty("os.name");
 		String timeZone = ConfigurationProperties.getProperty("timezone");
-
 		UUID procWinUUID = null;
 
 		String newJvmPath = jvmPath + File.separator + "java";
@@ -49,15 +48,11 @@ public class TestLauncher {
 		String newClasspath = urlArrayToString(classpath);
 		if (ConfigurationProperties.getPropertyBool("runjava7code") || ProjectConfiguration.isJDKLowerThan8()) {
 			newClasspath = (new File(ConfigurationProperties.getProperty("executorjar")).getAbsolutePath())
-					+ File.pathSeparator + classpath;
+					+ File.pathSeparator + newClasspath;
 		}
 
 		try {
-			File ftemp = null;
-			if (outputInFile) ftemp = File.createTempFile("out", "txt");
-
 			List<String> command = new ArrayList<String>();
-
 			command.add("\"" + newJvmPath + "\"");
 			command.add("-Xmx2048m");
 
@@ -84,28 +79,26 @@ public class TestLauncher {
 			} else {
 				command.set(0, "'" + newJvmPath + "'");
 				command.set(5, "'" + newClasspath + "'");
-				// On Windows, BufferedWriter have a problem to write over 8192 characters.
-				// We must provide command in ProcessBuilder constructor.
 				pb = new ProcessBuilder("powershell", "-Command", "& " + toString(command));
 			}
 
-			if (outputInFile) {
-				pb.redirectOutput(ftemp);
-			} else
-				// Why this?
-				pb.redirectOutput();
 			pb.redirectErrorStream(true);
-			pb.directory(new File((ConfigurationProperties.getProperty("location"))));
+			pb.directory(new File(ConfigurationProperties.getProperty("location")));
+
+			File ftemp = File.createTempFile("out", "txt");
+			pb.redirectOutput(ftemp);
+
 			TestResult res = new TestResult();
-			for(int i = 0; i < K; i++) {
+			for (int i = 0; i < K; i++) {
 				log.info("Running iteration " + (i + 1) + " of test " + testsToExecute.get(0));
 				TestResult curTest = runTest(pb, envOS, timeZone, command, waitTime, procWinUUID, ftemp);
-				if(curTest == null) continue;
-				log.info("Sucess: " + curTest.casesExecuted + "\nFailures: " + curTest.failures);
+				if (curTest == null) continue;
+				log.info("Success: " + curTest.casesExecuted + "\nFailures: " + curTest.failures);
 				res.casesExecuted += 1;
-				if(!curTest.wasSuccessful()) res.failures += 1;
+				if (!curTest.wasSuccessful()) res.failures += 1;
 			}
 			return res;
+
 		} catch (IOException ex) {
 			log.info("The Process that runs JUnit test cases had problems: " + ex.getMessage());
 		}
@@ -119,64 +112,46 @@ public class TestLauncher {
 			p = pb.start();
 
 			BufferedWriter p_stdin = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()));
-
 			try {
 				if (!envOS.contains("Windows")) {
-					// Set up the timezone
 					p_stdin.write("TZ=\"" + timeZone + "\"");
-					p_stdin.newLine();
-					p_stdin.flush();
+					p_stdin.newLine(); p_stdin.flush();
 					p_stdin.write("export TZ");
-					p_stdin.newLine();
-					p_stdin.flush();
+					p_stdin.newLine(); p_stdin.flush();
 					p_stdin.write("echo $TZ");
-					p_stdin.newLine();
-					p_stdin.flush();
-					// Writing the command
+					p_stdin.newLine(); p_stdin.flush();
 					p_stdin.write(toString(command));
-
-					p_stdin.newLine();
-					p_stdin.flush();
+					p_stdin.newLine(); p_stdin.flush();
 				}
-
-				// end
 				p_stdin.write("exit");
-				p_stdin.newLine();
-				p_stdin.flush();
-
+				p_stdin.newLine(); p_stdin.flush();
 			} catch (IOException e) {
 				log.error(e);
 			}
-			//
+
 			if (!p.waitFor(waitTime, TimeUnit.MILLISECONDS)) {
 				killProcess(p, waitTime, procWinUUID);
-
 				return null;
 			}
+
 			long t_end = System.currentTimeMillis();
 			log.debug("Execution time " + ((t_end - t_start) / 1000) + "seconds");
 
 			if (!avoidInterruption) {
-				// We force obtaining the exit value.
 				p.exitValue();
 			}
 
-			BufferedReader output = null;
-			if (outputInFile)
-				output = new BufferedReader(new FileReader(ftemp.getAbsolutePath()));
-			else
-				output = new BufferedReader(new InputStreamReader(p.getInputStream()));
-
+			BufferedReader output = new BufferedReader(new FileReader(ftemp.getAbsolutePath()));
 			TestResult tr = getTestResult(output);
 			p.destroyForcibly();
 			return tr;
+
 		} catch (IOException | IllegalThreadStateException | InterruptedException ex) {
 			log.info("The Process that runs JUnit test cases had problems: " + ex.getMessage());
 			killProcess(p, waitTime, procWinUUID);
 			return null;
 		}
 	}
-
     /**
 	 * Workarrond. I will be solved when migrating to java 9.
 	 * https://docs.oracle.com/javase/9/docs/api/java/lang/Process.html#descendants--
@@ -242,12 +217,12 @@ public class TestLauncher {
 	}
 
 	protected String urlArrayToString(URL[] urls) {
-		String s = "";
+		StringBuilder s = new StringBuilder();
 		for (int i = 0; i < urls.length; i++) {
-			URL url = urls[i];
-			s += "\"" + url.getPath() + "\"" + File.pathSeparator;
+			if (i > 0) s.append(File.pathSeparator);
+			s.append(urls[i].getPath());
 		}
-		return s;
+		return s.toString();
 	}
 
 	protected String getProcessError(InputStream str) {

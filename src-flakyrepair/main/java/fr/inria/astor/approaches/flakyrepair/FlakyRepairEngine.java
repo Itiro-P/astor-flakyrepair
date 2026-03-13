@@ -24,6 +24,11 @@ public class FlakyRepairEngine extends jMutRepairExhaustive {
          */
         ConfigurationProperties.setProperty(ExtensionPoints.VALIDATION.identifier, FlakyRepairProcessValidator.class.getCanonicalName());
 
+        /**
+         * By default, the processor's space of jMutRepair are if conditions and return statements.
+         * We set the default behaviour of Astor: statements granularity.
+         */
+        ConfigurationProperties.setProperty(ExtensionPoints.TARGET_CODE_PROCESSOR.identifier, "statements");
         /*
          * Validation using O. Parry's flakiness formula.
          */
