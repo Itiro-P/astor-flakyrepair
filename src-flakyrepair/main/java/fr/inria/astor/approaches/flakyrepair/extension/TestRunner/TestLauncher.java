@@ -22,7 +22,6 @@ import fr.inria.astor.approaches.tos.core.MetaGenerator;
 import fr.inria.astor.core.setup.ConfigurationProperties;
 import fr.inria.astor.core.setup.ProjectConfiguration;
 import fr.inria.astor.core.validation.junit.JUnitExternalExecutor;
-import fr.inria.astor.core.validation.junit.JUnitNologExternalExecutor;
 import fr.inria.astor.core.validation.results.TestResult;
 
 public class TestLauncher {
@@ -38,13 +37,16 @@ public class TestLauncher {
 
 	public TestLauncher() {}
 
+	public static void main(String[] args) {
+		
+	}
+
 	public TestResult execute(String jvmPath, URL[] classpath, List<String> testsToExecute, int waitTime) {
 		String envOS = System.getProperty("os.name");
 		String timeZone = ConfigurationProperties.getProperty("timezone");
 		UUID procWinUUID = null;
 
 		String newJvmPath = jvmPath + File.separator + "java";
-		List<String> cls = new ArrayList<String>(new HashSet<String>(testsToExecute));
 		String newClasspath = urlArrayToString(classpath);
 		if (ConfigurationProperties.getPropertyBool("runjava7code") || ProjectConfiguration.isJDKLowerThan8()) {
 			newClasspath = (new File(ConfigurationProperties.getProperty("executorjar")).getAbsolutePath())
@@ -52,52 +54,99 @@ public class TestLauncher {
 		}
 
 		try {
-			List<String> command = new ArrayList<String>();
-			command.add("\"" + newJvmPath + "\"");
-			command.add("-Xmx2048m");
+			List<String> baseCommand = new ArrayList<String>();
+			baseCommand.add("\"" + newJvmPath + "\"");
+			baseCommand.add("-Xmx2048m");
 
 			String[] ids = ConfigurationProperties.getProperty(MetaGenerator.METALL).split(File.pathSeparator);
 			for (String mutid : ids) {
-				command.add("-D" + MetaGenerator.MUT_IDENTIFIER + mutid + "="
+				baseCommand.add("-D" + MetaGenerator.MUT_IDENTIFIER + mutid + "="
 						+ ConfigurationProperties.getProperty(MetaGenerator.MUT_IDENTIFIER + mutid));
 			}
 			if (envOS.contains("Windows")) {
 				procWinUUID = UUID.randomUUID();
-				command.add("-DwinProcUUID=" + procWinUUID);
+				baseCommand.add("-DwinProcUUID=" + procWinUUID);
 				System.setProperty("user.timezone", timeZone);
 			}
 
-			command.add("-cp");
-			command.add("\"" + newClasspath + "\"");
-			command.add(laucherClassName().getCanonicalName());
-			command.addAll(cls);
+			baseCommand.add("-cp");
+			baseCommand.add("\"" + newClasspath + "\"");
+			baseCommand.add(laucherClassName().getCanonicalName());
+			
+			for(String test: new ArrayList<String>(new HashSet<String>(testsToExecute))) {
+				List<String> command = new ArrayList<String>(baseCommand);
+				command.add(test);
+				ProcessBuilder pb;
+				if (!envOS.contains("Windows")) {
+					printCommandToExecute(command, waitTime);
+					pb = new ProcessBuilder("/bin/bash");
+				} else {
+					command.set(0, "'" + newJvmPath + "'");
+					command.set(5, "'" + newClasspath + "'");
+					pb = new ProcessBuilder("powershell", "-Command", "& " + toString(command));
+				}
 
-			ProcessBuilder pb;
-			if (!envOS.contains("Windows")) {
-				printCommandToExecute(command, waitTime);
-				pb = new ProcessBuilder("/bin/bash");
-			} else {
-				command.set(0, "'" + newJvmPath + "'");
-				command.set(5, "'" + newClasspath + "'");
-				pb = new ProcessBuilder("powershell", "-Command", "& " + toString(command));
+				pb.redirectErrorStream(true);
+				pb.directory(new File(ConfigurationProperties.getProperty("location")));
+
+				TestResult res = new TestResult();
+				for (int i = 1; i <= K; i++) {
+					File ftemp = File.createTempFile("out", "txt");
+					TestResult curTest = null;
+					Process p = null;
+					pb.redirectOutput(ftemp);
+
+					log.info("Running iteration " + i + " of test " + test);
+					try {
+						long t_start = System.currentTimeMillis();
+						p = pb.start();
+
+						BufferedWriter p_stdin = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()));
+						try {
+							if (!envOS.contains("Windows")) {
+								p_stdin.write("TZ=\"" + timeZone + "\"");
+								p_stdin.newLine(); p_stdin.flush();
+								p_stdin.write("export TZ");
+								p_stdin.newLine(); p_stdin.flush();
+								p_stdin.write("echo $TZ");
+								p_stdin.newLine(); p_stdin.flush();
+								p_stdin.write(toString(command));
+								p_stdin.newLine(); p_stdin.flush();
+							}
+							p_stdin.write("exit");
+							p_stdin.newLine(); p_stdin.flush();
+						} catch (IOException e) {
+							log.error(e);
+						}
+
+						if (!p.waitFor(waitTime, TimeUnit.MILLISECONDS)) {
+							killProcess(p, waitTime, procWinUUID);
+							continue;
+						}
+
+						long t_end = System.currentTimeMillis();
+						log.debug("Execution time " + ((t_end - t_start) / 1000) + "seconds");
+
+						if (!avoidInterruption) {
+							p.exitValue();
+						}
+
+						BufferedReader output = new BufferedReader(new FileReader(ftemp.getAbsolutePath()));;
+						curTest = getTestResult(output);
+						p.destroyForcibly();
+
+					} catch (IOException | IllegalThreadStateException | InterruptedException ex) {
+						log.info("The Process that runs JUnit test cases had problems: " + ex.getMessage());
+						ftemp.delete();
+						killProcess(p, waitTime, procWinUUID);
+						continue;
+					}
+					if (curTest == null) continue;
+					log.info("Success: " + curTest.casesExecuted + "\nFailures: " + curTest.failures);
+					res.casesExecuted += 1;
+					if (!curTest.wasSuccessful()) res.failures += 1;
+				}
 			}
-
-			pb.redirectErrorStream(true);
-			pb.directory(new File(ConfigurationProperties.getProperty("location")));
-
-			File ftemp = File.createTempFile("out", "txt");
-			pb.redirectOutput(ftemp);
-
-			TestResult res = new TestResult();
-			for (int i = 0; i < K; i++) {
-				log.info("Running iteration " + (i + 1) + " of test " + testsToExecute.get(0));
-				TestResult curTest = runTest(pb, envOS, timeZone, command, waitTime, procWinUUID, ftemp);
-				if (curTest == null) continue;
-				log.info("Success: " + curTest.casesExecuted + "\nFailures: " + curTest.failures);
-				res.casesExecuted += 1;
-				if (!curTest.wasSuccessful()) res.failures += 1;
-			}
-			return res;
 
 		} catch (IOException ex) {
 			log.info("The Process that runs JUnit test cases had problems: " + ex.getMessage());
@@ -105,53 +154,6 @@ public class TestLauncher {
 		return null;
 	}
 
-	private TestResult runTest(ProcessBuilder pb, String envOS, String timeZone, List<String> command, int waitTime, UUID procWinUUID, File ftemp) {
-		Process p = null;
-		try {
-			long t_start = System.currentTimeMillis();
-			p = pb.start();
-
-			BufferedWriter p_stdin = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()));
-			try {
-				if (!envOS.contains("Windows")) {
-					p_stdin.write("TZ=\"" + timeZone + "\"");
-					p_stdin.newLine(); p_stdin.flush();
-					p_stdin.write("export TZ");
-					p_stdin.newLine(); p_stdin.flush();
-					p_stdin.write("echo $TZ");
-					p_stdin.newLine(); p_stdin.flush();
-					p_stdin.write(toString(command));
-					p_stdin.newLine(); p_stdin.flush();
-				}
-				p_stdin.write("exit");
-				p_stdin.newLine(); p_stdin.flush();
-			} catch (IOException e) {
-				log.error(e);
-			}
-
-			if (!p.waitFor(waitTime, TimeUnit.MILLISECONDS)) {
-				killProcess(p, waitTime, procWinUUID);
-				return null;
-			}
-
-			long t_end = System.currentTimeMillis();
-			log.debug("Execution time " + ((t_end - t_start) / 1000) + "seconds");
-
-			if (!avoidInterruption) {
-				p.exitValue();
-			}
-
-			BufferedReader output = new BufferedReader(new FileReader(ftemp.getAbsolutePath()));
-			TestResult tr = getTestResult(output);
-			p.destroyForcibly();
-			return tr;
-
-		} catch (IOException | IllegalThreadStateException | InterruptedException ex) {
-			log.info("The Process that runs JUnit test cases had problems: " + ex.getMessage());
-			killProcess(p, waitTime, procWinUUID);
-			return null;
-		}
-	}
     /**
 	 * Workarrond. I will be solved when migrating to java 9.
 	 * https://docs.oracle.com/javase/9/docs/api/java/lang/Process.html#descendants--
@@ -255,10 +257,7 @@ public class TestLauncher {
 	}
 
 	public Class laucherClassName() {
-		if (ConfigurationProperties.getPropertyBool("logtestexecution"))
-			return JUnitExternalExecutor.class;
-		else
-			return JUnitNologExternalExecutor.class;
+		return FrExternalExecutor.class;
 
 	}
 
