@@ -21,7 +21,6 @@ import org.apache.log4j.Logger;
 import fr.inria.astor.approaches.tos.core.MetaGenerator;
 import fr.inria.astor.core.setup.ConfigurationProperties;
 import fr.inria.astor.core.setup.ProjectConfiguration;
-import fr.inria.astor.core.validation.junit.JUnitExternalExecutor;
 import fr.inria.astor.core.validation.results.TestResult;
 
 public class TestLauncher {
@@ -35,16 +34,16 @@ public class TestLauncher {
 		this.avoidInterruption = avoidInterruption;
 	}
 
-	public TestLauncher() {}
-
-	public static void main(String[] args) {
-		
+	public TestLauncher() {
+		super();
+		this.avoidInterruption = false;
 	}
 
 	public TestResult execute(String jvmPath, URL[] classpath, List<String> testsToExecute, int waitTime) {
 		String envOS = System.getProperty("os.name");
 		String timeZone = ConfigurationProperties.getProperty("timezone");
 		UUID procWinUUID = null;
+		List<TestResult> res = new ArrayList<TestResult>();
 
 		String newJvmPath = jvmPath + File.separator + "java";
 		String newClasspath = urlArrayToString(classpath);
@@ -72,9 +71,14 @@ public class TestLauncher {
 			baseCommand.add("-cp");
 			baseCommand.add("\"" + newClasspath + "\"");
 			baseCommand.add(laucherClassName().getCanonicalName());
-			
 			for(String test: new ArrayList<String>(new HashSet<String>(testsToExecute))) {
 				List<String> command = new ArrayList<String>(baseCommand);
+				TestResult testResult = new TestResult();
+				testResult.casesExecuted = K;
+				List<String> t = new ArrayList<String>(); 
+				t.add(test);
+				testResult.setSuccessTest(t);
+
 				command.add(test);
 				ProcessBuilder pb;
 				if (!envOS.contains("Windows")) {
@@ -89,7 +93,6 @@ public class TestLauncher {
 				pb.redirectErrorStream(true);
 				pb.directory(new File(ConfigurationProperties.getProperty("location")));
 
-				TestResult res = new TestResult();
 				for (int i = 1; i <= K; i++) {
 					File ftemp = File.createTempFile("out", "txt");
 					TestResult curTest = null;
@@ -142,16 +145,18 @@ public class TestLauncher {
 						continue;
 					}
 					if (curTest == null) continue;
-					log.info("Success: " + curTest.casesExecuted + "\nFailures: " + curTest.failures);
-					res.casesExecuted += 1;
-					if (!curTest.wasSuccessful()) res.failures += 1;
+					log.info("\nFailures: " + curTest.failures);
+					if(curTest.failures > 0) {
+						testResult.failures += curTest.failures;
+					}
 				}
+				res.add(testResult);
 			}
 
 		} catch (IOException ex) {
 			log.info("The Process that runs JUnit test cases had problems: " + ex.getMessage());
 		}
-		return null;
+		return res.get(0);
 	}
 
     /**
@@ -256,7 +261,7 @@ public class TestLauncher {
 		return commandString;
 	}
 
-	public Class laucherClassName() {
+	public Class<?> laucherClassName() {
 		return FrExternalExecutor.class;
 
 	}
@@ -278,8 +283,8 @@ public class TestLauncher {
 			String line;
 			while ((line = in.readLine()) != null) {
 				processOut += line + "\n";
-				if (line.startsWith(JUnitExternalExecutor.OUTSEP)) {
-					String[] resultPrinted = line.split(JUnitExternalExecutor.OUTSEP);
+				if (line.startsWith(FrExternalExecutor.OUTSEP)) {
+					String[] resultPrinted = line.split(FrExternalExecutor.OUTSEP);
 					int nrtc = Integer.valueOf(resultPrinted[1]);
 					tr.casesExecuted = nrtc;
 					int nrfailing = Integer.valueOf(resultPrinted[2]);

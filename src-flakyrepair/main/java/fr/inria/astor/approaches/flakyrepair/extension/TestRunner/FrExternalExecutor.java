@@ -77,7 +77,6 @@ public class FrExternalExecutor {
 			}
 		}));
         String[] args = arg[0].split("#");
-		System.out.println(args[0] + " " + args[1]);
 		JUnitCore runner = new JUnitCore();
 		Logger.getGlobal().setLevel(Level.OFF);
         Request req = Request.method(Class.forName(args[0]), args[1]);
