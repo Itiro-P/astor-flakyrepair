@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import fr.inria.astor.approaches.flakyrepair.extension.FlakyRepairFaultLocalization;
+import fr.inria.astor.approaches.flakyrepair.extension.FrFaultLocalization;
 import fr.inria.astor.core.faultlocalization.FaultLocalizationResult;
 import fr.inria.astor.core.faultlocalization.entity.SuspiciousCode;
 import fr.inria.astor.core.faultlocalization.flacoco.FlacocoFaultLocalization;
@@ -141,7 +141,7 @@ public class FaultLocalizationMain extends AbstractMain {
 			|| faultLocalizationMode.equals(FaultLocalization.ALL)) {
 			executed = true;
 
-			FlakyRepairFaultLocalization flakyRepairFaultLocalization = new FlakyRepairFaultLocalization();
+			FrFaultLocalization flakyRepairFaultLocalization = new FrFaultLocalization();
 			FaultLocalizationResult result = flakyRepairFaultLocalization.searchSuspicious(projectFacade, testsToRun);
 
 			System.out.println("FK results: " + result);

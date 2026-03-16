@@ -18,7 +18,7 @@ import spoon.reflect.visitor.filter.TypeFilter;
  *
  * @author Pedro I. Nagao
  */
-public class FlakyRepairFaultLocalization implements FaultLocalizationStrategy {
+public class FrFaultLocalization implements FaultLocalizationStrategy {
 
     @Override
     public FaultLocalizationResult searchSuspicious(ProjectRepairFacade projectToRepair,

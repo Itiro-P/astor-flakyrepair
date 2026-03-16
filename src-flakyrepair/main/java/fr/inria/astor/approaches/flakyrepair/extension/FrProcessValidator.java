@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -28,13 +29,13 @@ import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtMethod;
 
-public class FlakyRepairProcessValidator extends ProgramVariantValidator {
+public class FrProcessValidator extends ProgramVariantValidator {
     protected Logger log = Logger.getLogger(Thread.currentThread().getName());
 
 	@Override
 	public TestCaseVariantValidationResult validate(ProgramVariant mutatedVariant, ProjectRepairFacade projectFacade) {
 		return this.validate(mutatedVariant, projectFacade,
-				Boolean.valueOf(ConfigurationProperties.getProperty("forceExecuteRegression")));
+				Boolean.valueOf(ConfigurationProperties.getProperty("forceExecuteRegression"))).get(0);
 
 	}
 
@@ -46,7 +47,7 @@ public class FlakyRepairProcessValidator extends ProgramVariantValidator {
 	 * @param forceExecuteRegression
 	 * @return
 	 */
-	public TestCaseVariantValidationResult validate(ProgramVariant mutatedVariant, ProjectRepairFacade projectFacade,
+	private List<TestCaseVariantValidationResult> validate(ProgramVariant mutatedVariant, ProjectRepairFacade projectFacade,
 			boolean forceExecuteRegression) {
 		try {
 			URL[] bc = createClassPath(mutatedVariant, projectFacade);
@@ -74,7 +75,7 @@ public class FlakyRepairProcessValidator extends ProgramVariantValidator {
 					tests.add(ctClass.getQualifiedName() + "#" + getMethodName(mp));
 				}
 			}
-			TestResult trfailing = testProcessRunner.execute(jvmPath, bc, new ArrayList<String>(new HashSet<String>(tests)), ConfigurationProperties.getPropertyInt("tmax1"));
+			List<TestResult> trfailing = testProcessRunner.execute(jvmPath, bc, new ArrayList<String>(new HashSet<String>(tests)), ConfigurationProperties.getPropertyInt("tmax1"));
 
 			if (trfailing == null) {
 				log.debug("**The validation 1 have not finished well**");
@@ -82,9 +83,13 @@ public class FlakyRepairProcessValidator extends ProgramVariantValidator {
 			}
 
 			log.debug(trfailing);
-			TestCaseVariantValidationResult r = new TestCasesProgramValidationResult(trfailing, trfailing.wasSuccessful(), false);
+			List<TestCaseVariantValidationResult> results = trfailing.stream()
+					.map(test -> new TestCasesProgramValidationResult(test, test.wasSuccessful(), false))
+					.filter(r -> r != null)
+					.collect(Collectors.toList());
+
 			removeOfCompiledCode(mutatedVariant, projectFacade);
-			return r;
+			return results;
 
 		} catch (MalformedURLException e) {
 			removeOfCompiledCode(mutatedVariant, projectFacade);

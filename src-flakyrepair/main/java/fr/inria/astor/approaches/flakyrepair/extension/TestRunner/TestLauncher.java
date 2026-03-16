@@ -39,7 +39,7 @@ public class TestLauncher {
 		this.avoidInterruption = false;
 	}
 
-	public TestResult execute(String jvmPath, URL[] classpath, List<String> testsToExecute, int waitTime) {
+	public List<TestResult> execute(String jvmPath, URL[] classpath, List<String> testsToExecute, int waitTime) {
 		String envOS = System.getProperty("os.name");
 		String timeZone = ConfigurationProperties.getProperty("timezone");
 		UUID procWinUUID = null;
@@ -156,7 +156,7 @@ public class TestLauncher {
 		} catch (IOException ex) {
 			log.info("The Process that runs JUnit test cases had problems: " + ex.getMessage());
 		}
-		return res.get(0);
+		return res;
 	}
 
     /**
