@@ -18,7 +18,7 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
 
 mvn package -f "$(pwd)/pom.xml" -DskipTests=true && java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
 -mode flakyrepair \
--parameters includeTestInSusp:true \
+-parameters includeTestInSusp:true:canhavezerosusp:true \
 -srcjavafolder /src/java/ \
 -srctestfolder /src/test/  \
 -binjavafolder /target/classes/ \
@@ -26,12 +26,10 @@ mvn package -f "$(pwd)/pom.xml" -DskipTests=true && java -cp target/astor-*-jar-
 -location $(pwd)/examples/Math-issue-280/ \
 -dependencies examples/Math-issue-280/lib
 
-
 // Executar com o exemplo do Commons Math, issue 280. Usando o jMutRepair
 
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
 -mode jmutrepair \
--parameters includeTestInSusp:true \
 -srcjavafolder /src/java/ \
 -srctestfolder /src/test/  \
 -binjavafolder /target/classes/ \
