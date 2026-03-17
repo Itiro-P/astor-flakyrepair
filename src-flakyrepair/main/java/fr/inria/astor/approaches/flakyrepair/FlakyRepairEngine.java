@@ -1,21 +1,14 @@
 package fr.inria.astor.approaches.flakyrepair;
 
-import java.net.URL;
-
 import com.martiansoftware.jsap.JSAPException;
 
 import fr.inria.astor.approaches.flakyrepair.extension.FrFaultLocalization;
 import fr.inria.astor.approaches.flakyrepair.extension.FrFitnessFunction;
 import fr.inria.astor.approaches.flakyrepair.extension.FrProcessValidator;
 import fr.inria.astor.approaches.jmutrepair.jMutRepairExhaustive;
-import fr.inria.astor.core.entities.ProgramVariant;
-import fr.inria.astor.core.entities.validation.VariantValidationResult;
 import fr.inria.astor.core.manipulation.MutationSupporter;
-import fr.inria.astor.core.manipulation.bytecode.entities.CompilationResult;
 import fr.inria.astor.core.setup.ConfigurationProperties;
 import fr.inria.astor.core.setup.ProjectRepairFacade;
-import fr.inria.astor.core.stats.Stats;
-import fr.inria.astor.core.stats.Stats.GeneralStatEnum;
 import fr.inria.main.evolution.ExtensionPoints;
 
 public class FlakyRepairEngine extends jMutRepairExhaustive {
