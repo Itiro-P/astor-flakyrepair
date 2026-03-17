@@ -5,8 +5,9 @@ mvn package -f "$(pwd)/pom.xml" -DskipTests=true
 // Executar com o exemplo do Commons Math, issue 280
 
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
--mode flakyrepair \
--parameters includeTestInSusp:true \
+-mode custom \
+-customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
+-parameters includeTestInSusp:true:canhavezerosusp:true \
 -srcjavafolder /src/java/ \
 -srctestfolder /src/test/  \
 -binjavafolder /target/classes/ \
@@ -17,8 +18,8 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
 // Compilar e executar com o exemplo do Commons Math, issue 280
 
 mvn package -f "$(pwd)/pom.xml" -DskipTests=true && java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
--mode flakyrepair \
--parameters includeTestInSusp:true:canhavezerosusp:true \
+-mode custom \
+-customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
 -srcjavafolder /src/java/ \
 -srctestfolder /src/test/  \
 -binjavafolder /target/classes/ \

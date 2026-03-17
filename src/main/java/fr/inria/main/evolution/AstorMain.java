@@ -73,8 +73,6 @@ public class AstorMain extends AbstractMain {
 			core = new TibraApproach(mutSupporter, projectFacade);
 		} else if (ExecutionMode.SCAFFOLD.equals(mode)) {
 			core = new ScaffoldRepairEngine(mutSupporter, projectFacade);
-		} else if(ExecutionMode.FlakyRepair.equals(mode)) {
-			core = new FlakyRepairEngine(mutSupporter, projectFacade);
 		} else {
 			// If the execution mode is any of the predefined, Astor
 			// interpretes as

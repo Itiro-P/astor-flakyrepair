@@ -24,7 +24,7 @@ import fr.inria.astor.core.setup.ConfigurationProperties;
 public class FaultLocalizationMain extends AbstractMain {
 
 	public enum FaultLocalization {
-		FLACOCO, ALL, GZOLTAR, GZOLTAR1_7, FLAKY_REPAIR
+		FLACOCO, ALL, GZOLTAR, GZOLTAR1_7
 	};
 
 	public static void main(String[] args) throws Exception {
@@ -135,20 +135,6 @@ public class FaultLocalizationMain extends AbstractMain {
 
 			results.add(result);
 
-		}
-
-		if(faultLocalizationMode.equals(FaultLocalization.FLAKY_REPAIR)
-			|| faultLocalizationMode.equals(FaultLocalization.ALL)) {
-			executed = true;
-
-			FrFaultLocalization flakyRepairFaultLocalization = new FrFaultLocalization();
-			FaultLocalizationResult result = flakyRepairFaultLocalization.searchSuspicious(projectFacade, testsToRun);
-
-			System.out.println("FK results: " + result);
-
-			save(result, FaultLocalization.FLAKY_REPAIR);
-
-			results.add(result);
 		}
 
 		if (!executed) {
