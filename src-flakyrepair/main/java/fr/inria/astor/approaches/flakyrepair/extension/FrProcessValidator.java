@@ -35,7 +35,7 @@ public class FrProcessValidator extends ProgramVariantValidator {
 	@Override
 	public TestCaseVariantValidationResult validate(ProgramVariant mutatedVariant, ProjectRepairFacade projectFacade) {
 		return this.validate(mutatedVariant, projectFacade,
-				Boolean.valueOf(ConfigurationProperties.getProperty("forceExecuteRegression"))).get(0);
+				Boolean.valueOf(ConfigurationProperties.getProperty("forceExecuteRegression")));
 
 	}
 
@@ -47,7 +47,7 @@ public class FrProcessValidator extends ProgramVariantValidator {
 	 * @param forceExecuteRegression
 	 * @return
 	 */
-	private List<TestCaseVariantValidationResult> validate(ProgramVariant mutatedVariant, ProjectRepairFacade projectFacade,
+	private TestCaseVariantValidationResult validate(ProgramVariant mutatedVariant, ProjectRepairFacade projectFacade,
 			boolean forceExecuteRegression) {
 		try {
 			URL[] bc = createClassPath(mutatedVariant, projectFacade);
@@ -75,7 +75,7 @@ public class FrProcessValidator extends ProgramVariantValidator {
 					tests.add(ctClass.getQualifiedName() + "#" + getMethodName(mp));
 				}
 			}
-			List<TestResult> trfailing = testProcessRunner.execute(jvmPath, bc, new ArrayList<String>(new HashSet<String>(tests)), ConfigurationProperties.getPropertyInt("tmax1"));
+			TestResult trfailing = testProcessRunner.execute(jvmPath, bc, new ArrayList<String>(new HashSet<String>(tests)), ConfigurationProperties.getPropertyInt("tmax1"));
 
 			if (trfailing == null) {
 				log.debug("**The validation 1 have not finished well**");
@@ -83,13 +83,9 @@ public class FrProcessValidator extends ProgramVariantValidator {
 			}
 
 			log.debug(trfailing);
-			List<TestCaseVariantValidationResult> results = trfailing.stream()
-					.map(test -> new TestCasesProgramValidationResult(test, test.wasSuccessful(), false))
-					.filter(r -> r != null)
-					.collect(Collectors.toList());
 
 			removeOfCompiledCode(mutatedVariant, projectFacade);
-			return results;
+			return new TestCasesProgramValidationResult(trfailing, trfailing.wasSuccessful(), false);
 
 		} catch (MalformedURLException e) {
 			removeOfCompiledCode(mutatedVariant, projectFacade);
