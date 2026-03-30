@@ -1,7 +1,10 @@
 package fr.inria.astor.approaches.flakyrepair.extension.operators;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
 import fr.inria.astor.approaches.jmutrepair.operators.ExpresionMutOp;
@@ -13,6 +16,8 @@ import spoon.reflect.code.CtLiteral;
 import spoon.reflect.declaration.CtElement;
 
 public class LiteralMultiplierOp extends ExpresionMutOp {
+	private static final Set<String> allowedMethods = new HashSet<>(Arrays.asList("sleep", "wait", "join", "emit", "pause"));
+
 
 	public LiteralMultiplierOp() {
 		super();
@@ -21,7 +26,7 @@ public class LiteralMultiplierOp extends ExpresionMutOp {
 	@Override
 	public boolean canBeAppliedToPoint(ModificationPoint point) {
 		CtElement el = point.getCodeElement();
-		return el instanceof CtLiteral && el.getParent() instanceof CtInvocation;
+		return el instanceof CtLiteral && el.getParent() instanceof CtInvocation && allowedMethods.contains(((CtInvocation) el.getParent()).getExecutable().getSimpleName());
 	}
 
 	protected OperatorInstance createModificationInstance(ModificationPoint point, MutantCtElement fix)
