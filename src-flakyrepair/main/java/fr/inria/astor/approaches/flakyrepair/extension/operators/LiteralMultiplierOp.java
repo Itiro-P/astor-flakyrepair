@@ -11,6 +11,7 @@ import fr.inria.astor.approaches.jmutrepair.operators.ExpresionMutOp;
 import fr.inria.astor.core.entities.ModificationPoint;
 import fr.inria.astor.core.entities.OperatorInstance;
 import fr.inria.astor.core.entities.ProgramVariant;
+import spoon.reflect.code.CtComment;
 import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.declaration.CtElement;
@@ -25,12 +26,14 @@ public class LiteralMultiplierOp extends ExpresionMutOp {
 	@Override
 	public boolean canBeAppliedToPoint(ModificationPoint point) {
 		CtElement el = point.getCodeElement();
-		return el instanceof CtLiteral && el.getParent() instanceof CtInvocation && allowedMethods.contains(((CtInvocation) el.getParent()).getExecutable().getSimpleName());
+		return el instanceof CtLiteral && 
+			   el.getParent() instanceof CtInvocation && 
+			   allowedMethods.contains(((CtInvocation<?>) el.getParent()).getExecutable().getSimpleName());
 	}
 
 	protected OperatorInstance createModificationInstance(ModificationPoint point, MutantCtElement fix)
 			throws IllegalAccessException {
-		CtLiteral targetLiteral = (CtLiteral) point.getCodeElement();
+		CtLiteral<?> targetLiteral = (CtLiteral<?>) point.getCodeElement();
 		OperatorInstance operation = new OperatorInstance();
 		operation.setOriginal(targetLiteral);
 		operation.setOperationApplied(this);
@@ -43,7 +46,7 @@ public class LiteralMultiplierOp extends ExpresionMutOp {
 	/** Return the list of CtElements Mutanted */
 	@Override
 	public List<MutantCtElement> getMutants(CtElement element) {
-		CtLiteral literal = (CtLiteral) element;
+		CtLiteral<?> literal = (CtLiteral<?>) element;
 		List<MutantCtElement> mutations = new ArrayList<>();
 		if (literal.getValue() instanceof Number) {
 			Number value = (Number) literal.getValue();
@@ -52,6 +55,8 @@ public class LiteralMultiplierOp extends ExpresionMutOp {
 				Number newValue = value.doubleValue() * multiplier;
 				CtLiteral mutant = literal.clone();
 				mutant.setValue(newValue);
+				CtComment comment = mutant.getFactory().Code().createComment("Replaced " + value + " with " + newValue, CtComment.CommentType.INLINE);
+				mutant.addComment(comment);
 				mutations.add(new MutantCtElement(mutant, 1.0));
 			}
 		}

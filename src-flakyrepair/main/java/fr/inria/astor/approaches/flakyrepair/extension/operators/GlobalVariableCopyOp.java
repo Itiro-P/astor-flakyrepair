@@ -27,16 +27,14 @@ public class GlobalVariableCopyOp extends AutonomousOperator {
         CtType<?> declaringClass = element.getParent(CtType.class);
         
         if (declaringClass == null) return false;
-        
-        // Caso 1: CtFieldAccess (campos de instância - this.field) na mesma classe
+
         if (element instanceof CtFieldAccess) {
             CtFieldAccess<?> fieldAccess = (CtFieldAccess<?>) element;
             CtField<?> field = fieldAccess.getVariable().getFieldDeclaration();
             if (field == null) return false;
             return declaringClass == field.getParent(CtType.class);
         }
-        
-        // Caso 2: CtVariableAccess para variáveis estáticas não-constantes na mesma classe
+
         if (element instanceof CtVariableAccess) {
             try {
                 CtVariableAccess<?> varAccess = (CtVariableAccess<?>) element;
@@ -81,7 +79,6 @@ public class GlobalVariableCopyOp extends AutonomousOperator {
 
             fieldAccess.replace(localVar);
 
-            // marca modificado no opInstance, para facilitar no undoChangesInModel
             operation.setModified(localVar);
 
         } catch(Exception ex) {

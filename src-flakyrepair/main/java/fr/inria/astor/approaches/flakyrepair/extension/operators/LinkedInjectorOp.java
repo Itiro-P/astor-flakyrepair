@@ -80,9 +80,9 @@ public class LinkedInjectorOp extends ExpresionMutOp {
 			
 			if (newClassName != null) {
 				CtInvocation<?> mutant = invocation.clone();
-				mutant.getExecutable().setDeclaringType(
-					mutant.getFactory().Type().createReference(newClassName)
-				);
+                CtComment comment = mutant.getFactory().Code().createComment("Replaced " + oldClass + " with " + newClassName, CtComment.CommentType.INLINE);
+                mutant.addComment(comment);
+				mutant.getExecutable().setDeclaringType(mutant.getFactory().Type().createReference(newClassName));
 				mutations.add(new MutantCtElement(mutant, 1.0));
 			}
 		}
