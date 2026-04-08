@@ -17,8 +17,7 @@ import spoon.reflect.declaration.CtElement;
 
 public class LiteralMultiplierOp extends ExpresionMutOp {
 	private static final Set<String> allowedMethods = new HashSet<>(Arrays.asList("sleep", "wait", "join", "emit", "pause"));
-
-
+	private static final List<Double> multipliers = Arrays.asList(0.1, 0.5, 1.25, 2.0, 3.0, 4.0);
 	public LiteralMultiplierOp() {
 		super();
 	}
@@ -48,11 +47,13 @@ public class LiteralMultiplierOp extends ExpresionMutOp {
 		List<MutantCtElement> mutations = new ArrayList<>();
 		if (literal.getValue() instanceof Number) {
 			Number value = (Number) literal.getValue();
-			// Multiply by 2 as example
-			Number newValue = value.longValue() * 2;
-			CtLiteral mutant = literal.clone();
-			mutant.setValue(newValue);
-			mutations.add(new MutantCtElement(mutant, 1.0));
+			for (Double multiplier : multipliers) {
+				// Multiply by each multiplier
+				Number newValue = value.doubleValue() * multiplier;
+				CtLiteral mutant = literal.clone();
+				mutant.setValue(newValue);
+				mutations.add(new MutantCtElement(mutant, 1.0));
+			}
 		}
 		return mutations;
 	}
