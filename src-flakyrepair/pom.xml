@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.inria.sacha.automaticRepair</groupId>
+	<artifactId>astor-flakyrepair</artifactId>
+	<version>2.0.0</version>
+	<packaging>jar</packaging>
+
+	<name>ASTOR - FlakyRepair Extension</name>
+	<description>FlakyRepair: Automatic repair of flaky tests using NonDex validation</description>
+
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<spoon.version>9.2.0-beta-1</spoon.version>
+		<log4j.version>2.13.3</log4j.version>
+		<junit.version>4.13.2</junit.version>
+		<nondex.version>2.1.2</nondex.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>fr.inria.gforge.spoon</groupId>
+				<artifactId>spoon-core</artifactId>
+				<version>${spoon.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.5</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>3.7</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-core</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-api</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-1.2-api</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>2.8.2</version>
+			</dependency>
+
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.gzoltar</groupId>
+				<artifactId>com.gzoltar.cli</artifactId>
+				<version>1.7.3</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.gzoltar</groupId>
+				<artifactId>com.gzoltar.core</artifactId>
+				<version>1.7.3</version>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-cli</groupId>
+				<artifactId>commons-cli</artifactId>
+				<version>1.4</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.googlecode.json-simple</groupId>
+				<artifactId>json-simple</artifactId>
+				<version>1.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.javassist</groupId>
+				<artifactId>javassist</artifactId>
+				<version>3.30.2-GA</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<!-- Spoon for AST manipulation -->
+		<dependency>
+			<groupId>fr.inria.gforge.spoon</groupId>
+			<artifactId>spoon-core</artifactId>
+			<version>${spoon.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-to-slf4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-1.2-api</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+
+		<!-- Testing -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.3.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.3.2</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Fault Localization -->
+		<dependency>
+			<groupId>com.gzoltar</groupId>
+			<artifactId>com.gzoltar.cli</artifactId>
+			<version>1.7.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.gzoltar</groupId>
+			<artifactId>com.gzoltar.core</artifactId>
+			<version>1.7.3</version>
+		</dependency>
+
+		<!-- Utilities -->
+		<dependency>
+			<groupId>commons-cli</groupId>
+			<artifactId>commons-cli</artifactId>
+			<version>1.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.30.2-GA</version>
+		</dependency>
+
+		<!-- NonDex for flaky test detection and validation -->
+		<!-- NonDex is integrated via Maven plugin execution -->
+		<!-- See build section for NonDex plugin configuration -->
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+
+			<!-- Surefire for running tests -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version>
+				<configuration>
+					<includes>
+						<include>**/*Test.java</include>
+					</includes>
+				</configuration>
+			</plugin>
+
+			<!-- NonDex Maven Plugin for flaky test detection -->
+			<!-- Usage: mvn nondex:amd to run NonDex (Amplified Multithreaded Driver) -->
+			<!-- This detects non-deterministic tests by running them multiple times with different orderings -->
+			<plugin>
+				<groupId>com.github.nondex</groupId>
+				<artifactId>nondex-maven-plugin</artifactId>
+				<version>${nondex.version}</version>
+				<configuration>
+					<!-- Number of times to run each test -->
+					<runs>10</runs>
+					<verbose>true</verbose>
+				</configuration>
+			</plugin>
+
+			<!-- JAR packaging plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.3.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<finalName>astor-flakyrepair</finalName>
+							<appendAssemblyId>true</appendAssemblyId>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Source plugin for generating source JAR -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<!-- Maven Central Repository -->
+		<repository>
+			<id>central</id>
+			<url>https://repo.maven.apache.org/maven2</url>
+		</repository>
+	</repositories>
+
+</project>

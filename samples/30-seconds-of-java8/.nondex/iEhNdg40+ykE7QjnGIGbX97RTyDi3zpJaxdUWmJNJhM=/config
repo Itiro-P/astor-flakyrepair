@@ -1,0 +1,11 @@
+nondexFilter=.*
+nondexMode=FULL
+nondexSeed=349305086
+nondexStart=0
+nondexEnd=9223372036854775807
+nondexPrintstack=false
+nondexDir=/home/itiro/Repos/astor-flakyrepair/samples/30-seconds-of-java8/.nondex
+nondexJarDir=/home/itiro/Repos/astor-flakyrepair/samples/30-seconds-of-java8/.nondex
+nondexExecid=iEhNdg40+ykE7QjnGIGbX97RTyDi3zpJaxdUWmJNJhM=
+nondexLogging=CONFIG
+test=

@@ -8,8 +8,7 @@ import com.martiansoftware.jsap.JSAPException;
 
 import fr.inria.astor.approaches.flakyrepair.extension.FrFaultLocalization;
 import fr.inria.astor.approaches.flakyrepair.extension.FrFitnessFunction;
-import fr.inria.astor.approaches.flakyrepair.extension.FrInvocationFixProcessor;
-import fr.inria.astor.approaches.flakyrepair.extension.FrOperatorSpace;
+import fr.inria.astor.approaches.flakyrepair.extension.FrRepairSpace;
 import fr.inria.astor.approaches.flakyrepair.extension.FrProcessValidator;
 import fr.inria.astor.approaches.flakyrepair.extension.FrVariantFactory;
 import fr.inria.astor.approaches.jmutrepair.jMutRepairExhaustive;
@@ -41,24 +40,14 @@ public class FlakyRepairEngine extends jMutRepairExhaustive {
         ConfigurationProperties.setProperty("canhavezerosusp", Boolean.TRUE.toString());
         ConfigurationProperties.setProperty("includeTestInSusp", Boolean.TRUE.toString());
 
-        /**
-         * By default, the processor's space of jMutRepair are if conditions and return statements.
-         * We set the default behaviour of Astor: statements granularity.
-         */
-        //ConfigurationProperties.setProperty(ExtensionPoints.TARGET_CODE_PROCESSOR.identifier, "statements");
         /*
          * Validation using O. Parry's flakiness formula.
          */
         ConfigurationProperties.setProperty(ExtensionPoints.FITNESS_FUNCTION.identifier, FrFitnessFunction.class.getCanonicalName());
 
-        ConfigurationProperties.setProperty(ExtensionPoints.OPERATORS_SPACE.identifier, FrOperatorSpace.class.getCanonicalName());
+        ConfigurationProperties.setProperty(ExtensionPoints.OPERATORS_SPACE.identifier, FrRepairSpace.class.getCanonicalName());
 
-        ConfigurationProperties.setProperty(ExtensionPoints.TARGET_CODE_PROCESSOR.identifier, FrInvocationFixProcessor.class.getCanonicalName());
-
-        /**
-         * Changing output to represent the results in a more representative way.
-         */
-        //ConfigurationProperties.setProperty(ExtensionPoints.OUTPUT_RESULTS.identifier, null);
+        ConfigurationProperties.setProperty(ExtensionPoints.TARGET_CODE_PROCESSOR.identifier, "statements");
     }
 
     @Override
