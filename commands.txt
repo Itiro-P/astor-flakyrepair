@@ -1,38 +1,32 @@
 // Compilar o projeto
 
-mvn package -f "$(pwd)/pom.xml" -DskipTests=true
+mvn package -DskipTests=true
 
-// Executar com o exemplo do Commons Math, issue 280
+// Compilar um projeto
+mvn test-compile -f "$(pwd)/samples/30-seconds-of-java8/pom.xml"
 
-java -cp target/astor-*-jar-with-dependencies.jar fr.inria.astor.approaches.flakyrepair.FrMain \
--mode custom \
--customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
--srcjavafolder /src/java/ \
--srctestfolder /src/test/  \
--binjavafolder /target/classes/ \
--bintestfolder /target/test-classes/ \
--location $(pwd)/examples/Math-issue-280/ \
--dependencies examples/Math-issue-280/lib
+// Executar com um projeto
 
-// Compilar e executar com o exemplo do Commons Math, issue 280
-
-mvn package -f "$(pwd)/pom.xml" -DskipTests=true && java -cp target/astor-*-jar-with-dependencies.jar fr.inria.astor.approaches.flakyrepair.FrMain \
--mode custom \
--customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
--srcjavafolder /src/java/ \
--srctestfolder /src/test/  \
--binjavafolder /target/classes/ \
--bintestfolder /target/test-classes/ \
--location $(pwd)/examples/Math-issue-280/ \
--dependencies examples/Math-issue-280/lib
-
-// Executar com o exemplo do Commons Math, issue 280. Usando o jMutRepair
-
+mvn clean compile test-compile -f "$(pwd)/samples/30-seconds-of-java8/pom.xml" -DskipTests=true && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
--mode jmutrepair \
+-mode custom \
+-customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
 -srcjavafolder /src/java/ \
 -srctestfolder /src/test/  \
 -binjavafolder /target/classes/ \
 -bintestfolder /target/test-classes/ \
--location $(pwd)/examples/Math-issue-280/ \
--dependencies examples/Math-issue-280/lib
+-location $(pwd)/samples/30-seconds-of-java8/ \
+-dependencies $(pwd)/samples/30-seconds-of-java8/lib
+
+// Compilar e executar com um projeto
+mvn package -DskipTests=true && \
+mvn clean compile test-compile -f "$(pwd)/samples/30-seconds-of-java8/pom.xml" -DskipTests=true && \
+java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
+-mode custom \
+-customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
+-srcjavafolder /src/java/ \
+-srctestfolder /src/test/  \
+-binjavafolder /target/classes/ \
+-bintestfolder /target/test-classes/ \
+-location $(pwd)/samples/30-seconds-of-java8/ \
+-dependencies $(pwd)/samples/30-seconds-of-java8/lib

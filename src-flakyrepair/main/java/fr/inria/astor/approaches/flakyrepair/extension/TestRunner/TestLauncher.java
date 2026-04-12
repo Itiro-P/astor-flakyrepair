@@ -129,9 +129,7 @@ public class TestLauncher {
 
         try {
             org.apache.commons.io.FileUtils.copyDirectory(mutatedFolder, pastaTargetClasses);
-        } catch (IOException e) {
-            log.error("Erro ao sobrescrever as classes originais: " + e.getMessage());
-        }
+        } catch (IOException e) {}
 
         cmd.add("mvn");
         cmd.add("-f");
@@ -140,7 +138,7 @@ public class TestLauncher {
         cmd.add("--quiet"); 
         cmd.add("--batch-mode");
         
-        cmd.add("-Dmaven.test.additionalClasspath=\"" + classpath + "\"");
+        cmd.add("-Dmaven.test.additionalClasspath=\"" + firstPath + "\"");
         
         cmd.add("edu.illinois:nondex-maven-plugin:2.2.1:nondex");
         cmd.add("-DnondexSeed=" + seed);
