@@ -138,8 +138,6 @@ public class TestLauncher {
         cmd.add("--quiet"); 
         cmd.add("--batch-mode");
         
-        cmd.add("-Dmaven.test.additionalClasspath=\"" + firstPath + "\"");
-        
         cmd.add("edu.illinois:nondex-maven-plugin:2.2.1:nondex");
         cmd.add("-DnondexSeed=" + seed);
         cmd.add("-DnondexRuns=" + TestLauncher.K);
