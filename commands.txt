@@ -1,38 +1,29 @@
 // Compilar o projeto
+mvn package -DskipTests=true
+mvn dependency:copy-dependencies \
+-DoutputDirectory=lib \
+-DincludeScope=test
 
-mvn package -f "$(pwd)/pom.xml" -DskipTests=true
-
-// Executar com o exemplo do Commons Math, issue 280
-
-java -cp target/astor-*-jar-with-dependencies.jar fr.inria.astor.approaches.flakyrepair.FrMain \
--mode custom \
--customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
--srcjavafolder /src/java/ \
--srctestfolder /src/test/  \
--binjavafolder /target/classes/ \
--bintestfolder /target/test-classes/ \
--location $(pwd)/examples/Math-issue-280/ \
--dependencies examples/Math-issue-280/lib
-
-// Compilar e executar com o exemplo do Commons Math, issue 280
-
-mvn package -f "$(pwd)/pom.xml" -DskipTests=true && java -cp target/astor-*-jar-with-dependencies.jar fr.inria.astor.approaches.flakyrepair.FrMain \
--mode custom \
--customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
--srcjavafolder /src/java/ \
--srctestfolder /src/test/  \
--binjavafolder /target/classes/ \
--bintestfolder /target/test-classes/ \
--location $(pwd)/examples/Math-issue-280/ \
--dependencies examples/Math-issue-280/lib
-
-// Executar com o exemplo do Commons Math, issue 280. Usando o jMutRepair
+// Executar com o exemplo
 
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
--mode jmutrepair \
--srcjavafolder /src/java/ \
--srctestfolder /src/test/  \
--binjavafolder /target/classes/ \
--bintestfolder /target/test-classes/ \
--location $(pwd)/examples/Math-issue-280/ \
--dependencies examples/Math-issue-280/lib
+-mode custom \
+-customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
+-srcjavafolder src/main/java/ \
+-srctestfolder src/test/java/  \
+-binjavafolder target/classes/ \
+-bintestfolder target/test-classes/ \
+-location $(pwd)/samples/30-seconds-of-java8/ \
+-dependencies $(pwd)/samples/30-seconds-of-java8/lib/
+
+// Compilar e executar com o exemplo
+
+mvn package -DskipTests=true && java -cp /home/itiro/Repos/astor-flakyrepair/target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
+-mode custom \
+-customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
+-location $(pwd)/samples/30-seconds-of-java8/ \
+-dependencies $(pwd)/samples/30-seconds-of-java8/lib/ \
+-srcjavafolder src/main/java/ \
+-srctestfolder src/test/java/ \
+-binjavafolder target/classes/ \
+-bintestfolder target/test-classes/
