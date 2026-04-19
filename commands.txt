@@ -19,12 +19,29 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
   -mode custom \
   -customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
   -javacompliancelevel 8 \
-  -srcjavafolder /src/java/ \
-  -srctestfolder /src/test/  \
-  -binjavafolder /target/classes/ \
-  -bintestfolder /target/test-classes/ \
+  -srcjavafolder src/java/ \
+  -srctestfolder src/test/  \
+  -binjavafolder target/classes/ \
+  -bintestfolder target/test-classes/ \
   -location "$(pwd)/samples/30-seconds-of-java8/" \
-  -dependencies "$(pwd)/samples/30-seconds-of-java8/lib" \
+  -dependencies "$(pwd)/samples/30-seconds-of-java8/lib"
+
+// druid (java 8)
+mvn clean compile test-compile dependency:copy-dependencies \
+  -f "$(pwd)/samples/druid/core/pom.xml" \
+  -DskipTests=true -DoutputDirectory=lib \
+  -DincludeScope=test && \
+java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
+  -mode custom \
+  -customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
+  -javacompliancelevel 8 \
+  -srcjavafolder src/main/java/ \
+  -srctestfolder src/test/  \
+  -binjavafolder target/classes/ \
+  -bintestfolder target/test-classes/ \
+  -location "$(pwd)/samples/druid/core" \
+  -dependencies "$(pwd)/samples/druid/core/lib"
+
 
 // Mapper solon-plugin (java 17)
 mvn clean compile test-compile package dependency:copy-dependencies \
@@ -35,9 +52,10 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
   -mode custom \
   -customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
   -javacompliancelevel 17 \
-  -srcjavafolder /src/main/java/ \
-  -srctestfolder /src/test/  \
-  -binjavafolder /target/classes/ \
-  -bintestfolder /target/test-classes/ \
+  -srcjavafolder src/main/java/ \
+  -srctestfolder src/test/  \
+  -binjavafolder target/classes/ \
+  -bintestfolder target/test-classes/ \
   -location "$(pwd)/samples/Mapper/solon-plugin/" \
   -dependencies "$(pwd)/samples/Mapper/solon-plugin/lib"
+

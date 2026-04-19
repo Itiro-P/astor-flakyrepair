@@ -37,7 +37,6 @@ public class FlakyRepairEngine extends jMutRepairExhaustive {
          * Processing patches by re-executing them.
          */
         ConfigurationProperties.setProperty(ExtensionPoints.VALIDATION.identifier, FrProcessValidator.class.getCanonicalName());
-        ConfigurationProperties.setProperty("canhavezerosusp", Boolean.TRUE.toString());
         ConfigurationProperties.setProperty("includeTestInSusp", Boolean.TRUE.toString());
 
         /*
