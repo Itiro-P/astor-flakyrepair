@@ -4,3 +4,6 @@
 [submodule "samples/Mapper"]
 	path = samples/Mapper
 	url = https://github.com/abel533/Mapper.git
+[submodule "samples/druid"]
+	path = samples/druid
+	url = https://github.com/MundaneImmortal/druid.git
