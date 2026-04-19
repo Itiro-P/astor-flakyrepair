@@ -24,23 +24,7 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
   -binjavafolder /target/classes/ \
   -bintestfolder /target/test-classes/ \
   -location "$(pwd)/samples/30-seconds-of-java8/" \
-  -dependencies "$(pwd)/samples/30-seconds-of-java8/lib"
-
-// Ebean ebean-api (java 11)
-mvn clean compile test-compile package dependency:copy-dependencies \
-  -f "$(pwd)/samples/ebean/pom.xml" \
-  -pl ebean-api \
-  -am -DskipTests=true -DoutputDirectory=lib -DincludeScope=test &&
-java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
-  -mode custom \
-  -customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
-  -javacompliancelevel 11 \
-  -srcjavafolder /src/main/java/ \
-  -srctestfolder /src/test/  \
-  -binjavafolder /target/classes/ \
-  -bintestfolder /target/test-classes/ \
-  -location "$(pwd)/samples/ebean/ebean-api/" \
-  -dependencies "$(pwd)/samples/ebean/ebean-api/lib"
+  -dependencies "$(pwd)/samples/30-seconds-of-java8/lib" \
 
 // Mapper solon-plugin (java 17)
 mvn clean compile test-compile package dependency:copy-dependencies \
