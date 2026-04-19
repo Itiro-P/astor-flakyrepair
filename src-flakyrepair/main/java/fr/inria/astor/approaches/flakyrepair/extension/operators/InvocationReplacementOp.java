@@ -3,6 +3,7 @@ package fr.inria.astor.approaches.flakyrepair.extension.operators;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.inria.astor.approaches.flakyrepair.extension.operators.mutators.MethodConstraintRelaxationMutator;
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
 import fr.inria.astor.approaches.jmutrepair.operators.MutatorComposite;
 import fr.inria.astor.core.entities.ModificationPoint;
@@ -11,7 +12,6 @@ import fr.inria.astor.core.entities.ProgramVariant;
 import fr.inria.astor.core.manipulation.MutationSupporter;
 import fr.inria.astor.core.solutionsearch.spaces.operators.AutonomousOperator;
 import spoon.reflect.code.CtExpression;
-import spoon.reflect.code.CtIf;
 import spoon.reflect.code.CtInvocation;
 import spoon.reflect.declaration.CtElement;
 
@@ -99,8 +99,8 @@ public class InvocationReplacementOp extends AutonomousOperator {
 	@Override
 	public boolean undoChangesInModel(OperatorInstance opInstance, ProgramVariant p) {
 		try {
-			CtExpression ctst = (CtExpression) opInstance.getOriginal();
-			CtExpression fix = (CtExpression) opInstance.getModified();
+			CtInvocation ctst = (CtInvocation) opInstance.getOriginal();
+			CtInvocation fix = (CtInvocation) opInstance.getModified();
 			fix.replace(ctst);
 
 			return true;

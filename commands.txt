@@ -1,32 +1,59 @@
 // Compilar o projeto
 
-mvn package -DskipTests=true
+mvn clean package -DskipTests=true
 
 // Compilar um projeto
-mvn test-compile -f "$(pwd)/samples/30-seconds-of-java8/pom.xml"
+mvn clean test-compile -f "$(pwd)/samples/30-seconds-of-java8/pom.xml"
 
-// Executar com um projeto
-
-mvn clean compile test-compile -f "$(pwd)/samples/30-seconds-of-java8/pom.xml" -DskipTests=true && \
-java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
--mode custom \
--customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
--srcjavafolder /src/java/ \
--srctestfolder /src/test/  \
--binjavafolder /target/classes/ \
--bintestfolder /target/test-classes/ \
--location $(pwd)/samples/30-seconds-of-java8/ \
--dependencies $(pwd)/samples/30-seconds-of-java8/lib
+// Copiar as dependências
+mvn dependency:copy-dependencies -f "$(pwd)/samples/30-seconds-of-java8/pom.xml" -DoutputDirectory=lib -DincludeScope=test
 
 // Compilar e executar com um projeto
-mvn package -DskipTests=true && \
-mvn clean compile test-compile -f "$(pwd)/samples/30-seconds-of-java8/pom.xml" -DskipTests=true && \
+
+// 30-seconds-of-java8 (java 8)
+mvn clean compile test-compile dependency:copy-dependencies \
+  -f "$(pwd)/samples/30-seconds-of-java8/pom.xml" \
+  -DskipTests=true -DoutputDirectory=lib \
+  -DincludeScope=test && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
--mode custom \
--customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
--srcjavafolder /src/java/ \
--srctestfolder /src/test/  \
--binjavafolder /target/classes/ \
--bintestfolder /target/test-classes/ \
--location $(pwd)/samples/30-seconds-of-java8/ \
--dependencies $(pwd)/samples/30-seconds-of-java8/lib
+  -mode custom \
+  -customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
+  -javacompliancelevel 8 \
+  -srcjavafolder /src/java/ \
+  -srctestfolder /src/test/  \
+  -binjavafolder /target/classes/ \
+  -bintestfolder /target/test-classes/ \
+  -location "$(pwd)/samples/30-seconds-of-java8/" \
+  -dependencies "$(pwd)/samples/30-seconds-of-java8/lib"
+
+// Ebean ebean-api (java 11)
+mvn clean compile test-compile package dependency:copy-dependencies \
+  -f "$(pwd)/samples/ebean/pom.xml" \
+  -pl ebean-api \
+  -am -DskipTests=true -DoutputDirectory=lib -DincludeScope=test &&
+java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
+  -mode custom \
+  -customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
+  -javacompliancelevel 11 \
+  -srcjavafolder /src/main/java/ \
+  -srctestfolder /src/test/  \
+  -binjavafolder /target/classes/ \
+  -bintestfolder /target/test-classes/ \
+  -location "$(pwd)/samples/ebean/ebean-api/" \
+  -dependencies "$(pwd)/samples/ebean/ebean-api/lib"
+
+// Mapper solon-plugin (java 17)
+mvn clean compile test-compile package dependency:copy-dependencies \
+  -f "$(pwd)/samples/Mapper/pom.xml" \
+  -pl solon-plugin \
+  -am -DskipTests=true -DoutputDirectory=lib -DincludeScope=test &&
+java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
+  -mode custom \
+  -customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
+  -javacompliancelevel 17 \
+  -srcjavafolder /src/main/java/ \
+  -srctestfolder /src/test/  \
+  -binjavafolder /target/classes/ \
+  -bintestfolder /target/test-classes/ \
+  -location "$(pwd)/samples/Mapper/solon-plugin/" \
+  -dependencies "$(pwd)/samples/Mapper/solon-plugin/lib"

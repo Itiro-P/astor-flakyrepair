@@ -12,7 +12,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
-import fr.inria.astor.approaches.flakyrepair.extension.TestRunner.TestLauncher;
+import fr.inria.astor.approaches.flakyrepair.extension.testRunner.TestLauncher;
 import fr.inria.astor.core.entities.ModificationPoint;
 import fr.inria.astor.core.entities.ProgramVariant;
 import fr.inria.astor.core.entities.validation.TestCaseVariantValidationResult;

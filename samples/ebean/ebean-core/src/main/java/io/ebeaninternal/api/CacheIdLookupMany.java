@@ -1,0 +1,51 @@
+package io.ebeaninternal.api;
+
+import io.ebeaninternal.server.expression.IdInCommon;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+/**
+ * Used for bean cache lookup with where ids in expression.
+ */
+public final class CacheIdLookupMany<T> implements CacheIdLookup<T> {
+
+  private final IdInCommon idInExpression;
+  private int remaining;
+
+  public CacheIdLookupMany(IdInCommon idInExpression) {
+    this.idInExpression = idInExpression;
+  }
+
+  /**
+   * Return the Id values for the in expression.
+   */
+  @Override
+  public Collection<?> idValues() {
+    return idInExpression.idValues();
+  }
+
+  /**
+   * Process the hits returning the beans fetched from cache and
+   * adjusting the in expression (to not fetch the hits).
+   */
+  @Override
+  public List<T> removeHits(BeanCacheResult<T> cacheResult) {
+    Set<Object> hitIds = new HashSet<>();
+    List<T> beans = new ArrayList<>();
+    for (BeanCacheResult.Entry<T> hit : cacheResult.hits()) {
+      hitIds.add(hit.key());
+      beans.add(hit.bean());
+    }
+    this.remaining = idInExpression.removeIds(hitIds);
+    return beans;
+  }
+
+  @Override
+  public boolean allHits() {
+    return remaining == 0;
+  }
+}

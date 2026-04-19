@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.avaje</groupId>
+    <artifactId>java11-oss</artifactId>
+    <version>4.3</version>
+  </parent>
+
+  <groupId>io.ebean</groupId>
+  <artifactId>ebean-parent</artifactId>
+  <version>14.7.0</version>
+  <packaging>pom</packaging>
+
+  <name>ebean parent</name>
+  <description>Parent for ebean modules</description>
+  <url>https://ebean.io/</url>
+
+  <scm>
+    <developerConnection>scm:git:git@github.com:ebean-orm/ebean.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>rbygrave</id>
+      <name>Rob Bygrave</name>
+      <email>robin.bygrave@gmail.com</email>
+    </developer>
+  </developers>
+
+  <properties>
+    <nexus.staging.stagingRepositoryId>ebeanCore</nexus.staging.stagingRepositoryId>
+    <nexus.staging.keepStagingRepositoryOnFailure>true</nexus.staging.keepStagingRepositoryOnFailure>
+    <nexus.staging.skipStagingRepositoryClose>true</nexus.staging.skipStagingRepositoryClose>
+    <nexus.staging.autoReleaseAfterClose>false</nexus.staging.autoReleaseAfterClose>
+    <jackson.version>2.15.0</jackson.version>
+    <h2database.version>2.2.220</h2database.version>
+    <ebean-persistence-api.version>3.0</ebean-persistence-api.version>
+    <ebean-types.version>3.0</ebean-types.version>
+
+    <ebean-annotation.version>8.4</ebean-annotation.version>
+    <ebean-ddl-runner.version>2.3</ebean-ddl-runner.version>
+    <ebean-migration-auto.version>1.2</ebean-migration-auto.version>
+    <ebean-migration.version>14.2.0</ebean-migration.version>
+    <ebean-test-containers.version>7.4</ebean-test-containers.version>
+    <ebean-datasource.version>9.0</ebean-datasource.version>
+    <ebean-agent.version>14.7.0</ebean-agent.version>
+    <ebean-maven-plugin.version>14.7.0</ebean-maven-plugin.version>
+    <surefire.useModulePath>false</surefire.useModulePath>
+  </properties>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>io.avaje</groupId>
+      <artifactId>junit</artifactId>
+      <version>1.5</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.5.0</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>${h2database.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+  <modules>
+    <module>ebean-api</module>
+    <module>ebean-bom</module>
+    <module>ebean-core-type</module>
+    <module>ebean-core</module>
+    <module>ebean-ddl-generator</module>
+    <module>ebean-test</module>
+    <module>querybean-generator</module>
+    <module>kotlin-querybean-generator</module>
+    <module>ebean-querybean</module>
+    <module>ebean-postgis-types</module>
+    <module>ebean-net-postgis-types</module>
+    <module>ebean-redis</module>
+    <module>platforms</module>
+    <module>composites</module>
+    <module>ebean-jackson-mapper</module>
+    <module>ebean-spring-txn</module>
+  </modules>
+
+  <profiles>
+    <profile>
+      <id>central</id>
+    </profile>
+    <profile>
+      <id>h2v1</id>
+      <properties>
+        <h2database.version>1.4.199</h2database.version>
+      </properties>
+    </profile>
+    <profile>
+      <id>default</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>tests</module>
+      </modules>
+    </profile>
+  </profiles>
+
+</project>
+

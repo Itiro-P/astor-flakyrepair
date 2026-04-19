@@ -1,0 +1,6 @@
+[submodule "samples/30-seconds-of-java8"]
+	path = samples/30-seconds-of-java8
+	url = https://github.com/hellokaton/30-seconds-of-java8.git
+[submodule "samples/Mapper"]
+	path = samples/Mapper
+	url = https://github.com/abel533/Mapper.git

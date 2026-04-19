@@ -1,0 +1,30 @@
+datasource:
+  db:
+    username: sa
+    password: sa
+    databaseUrl: jdbc:h2:mem:tests
+
+  pg:
+    username: sa
+    password: sa
+    databaseUrl: jdbc:h2:mem:tests
+
+ebean:
+  ddl:
+    generate: true
+    run: true
+
+  docstore:
+    url: http://127.0.0.1:9200
+    active: true
+    generateMapping: true
+    dropCreate: true
+#    useDocker: true
+    elasticVersion: 5.6
+
+  test:
+    redis: latest
+    platform: h2 #, postgres, mysql, mariadb, oracle, sqlserver, hana
+#    useDocker: false
+    ddlMode: dropCreate # none | dropCreate | create | migrations
+    dbName: junk

@@ -30,5 +30,6 @@ examples/Math-issue-280/target/
 .DS_Store
 /output_*
 .nondex
+.dtfixingtools
 a.log
 diffSolutions/

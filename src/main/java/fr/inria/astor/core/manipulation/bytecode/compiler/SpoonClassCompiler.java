@@ -98,11 +98,14 @@ public class SpoonClassCompiler implements VariantCompiler {
 		cps.add(path);
 
 		String compliance = ConfigurationProperties.getProperty("javacompliancelevel");
-		cps.add("-source");
-		cps.add("1." + compliance);
+		int complianceInt = Integer.parseInt(compliance);
+		String sourceVersion = complianceInt <= 8 ? "1." + compliance : compliance;
 
+		cps.add("-source");
+		cps.add(sourceVersion);
 		cps.add("-target");
-		cps.add("1." + compliance);
+		cps.add(sourceVersion);
+
 		dcc = new JavaXToolsCompiler();
 		CompilationResult rbc = dcc.javaBytecodeFor(toCompile, new HashMap<String, byte[]>(), cps);
 		return rbc;

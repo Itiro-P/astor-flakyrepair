@@ -1,0 +1,252 @@
+package io.ebeaninternal.server.cache;
+
+import io.ebeaninternal.server.deploy.BeanDescriptor;
+
+import java.util.*;
+
+/**
+ * List of changes to be applied to L2 cache.
+ */
+public final class CacheChangeSet {
+
+  private final List<CacheChange> entries = new ArrayList<>();
+  private final Set<String> touchedTables = new HashSet<>();
+  private final Set<BeanDescriptor<?>> queryCaches = new HashSet<>();
+  private final Set<BeanDescriptor<?>> beanCaches = new HashSet<>();
+  private final Map<BeanDescriptor<?>, CacheChangeBeanRemove> beanRemoveMap = new HashMap<>();
+  private final Map<ManyKey, ManyChange> manyChangeMap = new HashMap<>();
+
+  /**
+   * Construct specifying if we also need to process invalidation for entities based on views.
+   */
+  public CacheChangeSet() {
+  }
+
+  /**
+   * Return the touched tables.
+   */
+  public Set<String> touchedTables() {
+    return touchedTables;
+  }
+
+  /**
+   * Apply the changes to the L2 cache except entity/view invalidation.
+   * <p>
+   * Return the set of table changes to process invalidation for entities based on views.
+   */
+  public void apply() {
+    for (BeanDescriptor<?> entry : queryCaches) {
+      entry.clearQueryCache();
+    }
+    for (BeanDescriptor<?> entry : beanCaches) {
+      entry.clearBeanCache();
+    }
+    for (CacheChange entry : entries) {
+      entry.apply();
+    }
+    for (CacheChange entry : manyChangeMap.values()) {
+      entry.apply();
+    }
+    for (CacheChange entry : beanRemoveMap.values()) {
+      entry.apply();
+    }
+  }
+
+  /**
+   * Add an entry to clear a query cache.
+   */
+  public void addInvalidate(BeanDescriptor<?> descriptor) {
+    touchedTables.add(descriptor.baseTable());
+  }
+
+  /**
+   * Add invalidation on a set of tables.
+   */
+  public void addInvalidate(Set<String> tables) {
+    touchedTables.addAll(tables);
+  }
+
+  /**
+   * Add an entry to clear a query cache.
+   */
+  public void addClearQuery(BeanDescriptor<?> descriptor) {
+    queryCaches.add(descriptor);
+    touchedTables.add(descriptor.baseTable());
+  }
+
+  /**
+   * Add an entry to clear a bean cache.
+   */
+  public void addClearBean(BeanDescriptor<?> descriptor) {
+    beanCaches.add(descriptor);
+  }
+
+  /**
+   * Add many property clear.
+   */
+  public <T> void addManyClear(BeanDescriptor<T> desc, String manyProperty) {
+    many(desc, manyProperty).setClear();
+  }
+
+  /**
+   * Add many property remove.
+   */
+  public <T> void addManyRemove(BeanDescriptor<T> desc, String manyProperty, String parentKey) {
+    many(desc, manyProperty).addRemove(parentKey);
+  }
+
+  /**
+   * Add many property put.
+   */
+  public <T> void addManyPut(BeanDescriptor<T> desc, String manyProperty, String parentKey, CachedManyIds entry) {
+    many(desc, manyProperty).addPut(parentKey, entry);
+  }
+
+  /**
+   * On bean insert register table for view based entity invalidation.
+   */
+  public void addBeanInsert(String baseTable) {
+    touchedTables.add(baseTable);
+  }
+
+  /**
+   * Remove a bean from the cache.
+   */
+  public <T> void addBeanRemove(BeanDescriptor<T> desc, Object id) {
+    CacheChangeBeanRemove entry = beanRemoveMap.get(desc);
+    if (entry != null) {
+      entry.addId(id);
+    } else {
+      beanRemoveMap.put(desc, new CacheChangeBeanRemove(id, desc));
+      touchedTables.add(desc.baseTable());
+    }
+  }
+
+  /**
+   * Remove a bean from the cache.
+   */
+  public <T> void addBeanRemoveMany(BeanDescriptor<T> desc, Collection<Object> ids) {
+    CacheChangeBeanRemove entry = beanRemoveMap.get(desc);
+    if (entry != null) {
+      entry.addIds(ids);
+    } else {
+      beanRemoveMap.put(desc, new CacheChangeBeanRemove(desc, ids));
+      touchedTables.add(desc.baseTable());
+    }
+  }
+
+  /**
+   * Update a bean entry.
+   */
+  public <T> void addBeanUpdate(BeanDescriptor<T> desc, String key, Map<String, Object> changes, boolean updateNaturalKey, long version) {
+    touchedTables.add(desc.baseTable());
+    entries.add(new CacheChangeBeanUpdate(desc, key, changes, updateNaturalKey, version));
+  }
+
+  /**
+   * Update a natural key.
+   */
+  public <T> void addNaturalKeyPut(BeanDescriptor<T> desc, String key, String val) {
+    entries.add(new CacheChangeNaturalKeyPut(desc, key, val));
+  }
+
+  /**
+   * Return the ManyChange for the given descriptor and property manyProperty.
+   */
+  private ManyChange many(BeanDescriptor<?> desc, String manyProperty) {
+    ManyKey key = new ManyKey(desc, manyProperty);
+    return manyChangeMap.computeIfAbsent(key, ManyChange::new);
+  }
+
+  /**
+   * Changes for a specific many property.
+   */
+  private static final class ManyChange implements CacheChange {
+
+    final ManyKey key;
+    final Set<String> removes = new HashSet<>();
+    final Map<String, CachedManyIds> puts = new LinkedHashMap<>();
+    boolean clear;
+
+    ManyChange(ManyKey key) {
+      this.key = key;
+    }
+
+    /**
+     * Clear all entries.
+     */
+    void setClear() {
+      this.clear = true;
+      removes.clear();
+    }
+
+    /**
+     * Remove entry for the given parentId.
+     */
+    void addRemove(String parentKey) {
+      if (!clear) {
+        removes.add(parentKey);
+      }
+    }
+
+    /**
+     * Put entry for the given parentId.
+     */
+    void addPut(String parentKey, CachedManyIds entry) {
+      puts.put(parentKey, entry);
+    }
+
+    @Override
+    public void apply() {
+      if (clear) {
+        key.cacheClear();
+      } else {
+        for (Map.Entry<String, CachedManyIds> entry : puts.entrySet()) {
+          key.cachePut(entry.getKey(), entry.getValue());
+        }
+        for (String parentKey : removes) {
+          key.cacheRemove(parentKey);
+        }
+      }
+    }
+  }
+
+  /**
+   * Key for changes on a many property.
+   */
+  private static final class ManyKey {
+
+    private final BeanDescriptor<?> desc;
+    private final String manyProperty;
+
+    ManyKey(BeanDescriptor<?> desc, String manyProperty) {
+      this.desc = desc;
+      this.manyProperty = manyProperty;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      ManyKey manyKey = (ManyKey) o;
+      return desc.equals(manyKey.desc) && manyProperty.equals(manyKey.manyProperty);
+    }
+
+    @Override
+    public int hashCode() {
+      return 92821 * desc.hashCode() + manyProperty.hashCode();
+    }
+
+    void cacheClear() {
+      desc.cacheManyPropClear(manyProperty);
+    }
+
+    void cachePut(String parentKey, CachedManyIds entry) {
+      desc.cacheManyPropPut(manyProperty, parentKey, entry);
+    }
+
+    void cacheRemove(String parentKey) {
+      desc.cacheManyPropRemove(manyProperty, parentKey);
+    }
+  }
+}
