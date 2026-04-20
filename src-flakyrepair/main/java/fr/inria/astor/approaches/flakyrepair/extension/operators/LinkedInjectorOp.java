@@ -3,7 +3,7 @@ package fr.inria.astor.approaches.flakyrepair.extension.operators;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.inria.astor.approaches.flakyrepair.extension.operators.mutators.MethodConstraintRelaxationMutator;
+import fr.inria.astor.approaches.flakyrepair.extension.operators.mutators.LinkedInjectorMutator;
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
 import fr.inria.astor.approaches.jmutrepair.operators.MutatorComposite;
 import fr.inria.astor.core.entities.ModificationPoint;
@@ -11,7 +11,8 @@ import fr.inria.astor.core.entities.OperatorInstance;
 import fr.inria.astor.core.entities.ProgramVariant;
 import fr.inria.astor.core.manipulation.MutationSupporter;
 import fr.inria.astor.core.solutionsearch.spaces.operators.AutonomousOperator;
-import spoon.reflect.code.CtInvocation;
+import spoon.reflect.code.CtConstructorCall;
+import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.declaration.CtElement;
 
 /**
@@ -20,18 +21,19 @@ import spoon.reflect.declaration.CtElement;
  *
  */
 @SuppressWarnings("rawtypes")
-public class InvocationReplacementOp extends AutonomousOperator {
+public class LinkedInjectorOp extends AutonomousOperator {
 
 	MutatorComposite mutatorBinary = null;
-	public InvocationReplacementOp() {
+	public LinkedInjectorOp() {
 		super();
 		this.mutatorBinary = new MutatorComposite(MutationSupporter.getFactory());
-        this.mutatorBinary.getMutators().add(new MethodConstraintRelaxationMutator(this.mutatorBinary.getFactory()));
+        this.mutatorBinary.getMutators().add(new LinkedInjectorMutator(this.mutatorBinary.getFactory()));
 	}
 
     @Override
     public boolean canBeAppliedToPoint(ModificationPoint point) {
-        return (point.getCodeElement() instanceof CtInvocation);
+        CtElement el = point.getCodeElement();
+        return (el instanceof CtConstructorCall) || (el instanceof CtLocalVariable);
     }
 
 	@Override
@@ -39,8 +41,8 @@ public class InvocationReplacementOp extends AutonomousOperator {
 		boolean successful = false;
 		try {
 
-			CtInvocation ctst = (CtInvocation) operation.getOriginal();
-			CtInvocation fix = (CtInvocation) operation.getModified();
+			CtElement ctst = operation.getOriginal();
+			CtElement fix = operation.getModified();
 
 			ctst.replace(fix);
 			successful = true;
@@ -58,7 +60,7 @@ public class InvocationReplacementOp extends AutonomousOperator {
 
 	protected OperatorInstance createModificationInstance(ModificationPoint point, MutantCtElement fix)
 		throws IllegalAccessException {
-        CtInvocation target = (CtInvocation) point.getCodeElement();
+        CtElement target = point.getCodeElement();
 		OperatorInstance operation = new OperatorInstance();
 		operation.setOriginal(target);
 		operation.setOperationApplied(this);
@@ -90,16 +92,15 @@ public class InvocationReplacementOp extends AutonomousOperator {
 
 	/** Return the list of CtElements Mutanted */
 	public List<MutantCtElement> getMutants(CtElement element) {
-		CtInvocation target = (CtInvocation) element;
-		List<MutantCtElement> mutations = this.mutatorBinary.execute(target);
+		List<MutantCtElement> mutations = this.mutatorBinary.execute(element);
 		return mutations;
     }
 
 	@Override
 	public boolean undoChangesInModel(OperatorInstance opInstance, ProgramVariant p) {
 		try {
-			CtInvocation ctst = (CtInvocation) opInstance.getOriginal();
-			CtInvocation fix = (CtInvocation) opInstance.getModified();
+			CtElement ctst = opInstance.getOriginal();
+			CtElement fix = opInstance.getModified();
 			fix.replace(ctst);
 
 			return true;

@@ -22,8 +22,10 @@ public class MethodConstraintRelaxationMutator extends SpoonMutator<CtInvocation
          * Sample: 30-seconds-of-java8
          * - https://github.com/hellokaton/30-seconds-of-java8/pull/5/
          * - https://github.com/hellokaton/30-seconds-of-java8/pull/6/
+         * - https://github.com/hellokaton/30-seconds-of-java8/pull/18/
          */
         methodReplacements.put("containsExactly", "containsOnly");
+        methodReplacements.put("containOnly", "containsExactlyInAnyOrder");
         /**
          * Sample: servicecomb-java-chassis
          * - https://github.com/apache/servicecomb-java-chassis/pull/4994

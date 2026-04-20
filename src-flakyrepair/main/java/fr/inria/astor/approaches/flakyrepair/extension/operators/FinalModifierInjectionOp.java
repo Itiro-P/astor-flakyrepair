@@ -16,7 +16,7 @@ import spoon.reflect.declaration.CtMethod;
 
 /**
  * 
- * @author Matias Martinez
+ * @author Pedro I. Nagao
  *
  */
 @SuppressWarnings("rawtypes")

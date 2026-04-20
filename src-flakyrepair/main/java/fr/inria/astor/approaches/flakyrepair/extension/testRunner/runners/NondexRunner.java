@@ -70,21 +70,19 @@ public class NondexRunner extends Runner {
             }
 
             boolean finished = p.waitFor(waitTime, TimeUnit.MILLISECONDS);
-            if (!finished) {
+            boolean timedOut = !finished;
+            if (timedOut) {
                 p.destroyForcibly();
-                testResult.failures++;
-                ftemp.delete();
             }
 
             try (BufferedReader reader = new BufferedReader(new FileReader(ftemp))) {
                 int failed = parseOutput(reader, test);
                 testResult.failures += failed;
-                log.info("[NonDex] Test " + test + " failed " + testResult.failures + " times of " + K + " iterations.\n");
+                //if (timedOut) testResult.failures++;
+                log.info("[NonDex] Test " + test + " failed " + testResult.failures + " times of " + K + "...");
             } finally {
                 ftemp.delete();
             }
-
-            p.destroyForcibly();
 
         } catch (IOException | InterruptedException e) {
             testResult.failures += K;
@@ -99,37 +97,42 @@ public class NondexRunner extends Runner {
         List<String> cmd = new ArrayList<>();
         String[] cs = classpath.split(File.pathSeparator);
         String firstPath = cs[0];
+
+        boolean foundVariant = false;
         for(String c: cs) {
             if(c.contains(File.separator + "bin" + File.separator + "variant-")) {
                 firstPath = c;
+                foundVariant = true;
                 break;
             }
         }
+
+        if (foundVariant) {
+            File mutatedFolder = new File(firstPath);
+
+            String sampleTarget = ConfigurationProperties.getProperty("location") + "target/test-classes";
+            File pastaTargetClasses = new File(sampleTarget);
+            
+            try {
+                org.apache.commons.io.FileUtils.copyDirectory(mutatedFolder, pastaTargetClasses);
+            } catch (IOException e) {
+                log.error(e.getMessage());
+            }
+        }
         String pomPath = ConfigurationProperties.getProperty("location") + "pom.xml";
-
-        File mutatedFolder = new File(firstPath);
-        File pastaTargetClasses = new File(ConfigurationProperties.getProperty("location"), "target/test-classes");
-
-        try {
-            org.apache.commons.io.FileUtils.copyDirectory(mutatedFolder, pastaTargetClasses);
-        } catch (IOException e) {}
 
         cmd.add("mvn");
         cmd.add("-f");
         cmd.add("\"" + pomPath + "\"");
 
-        String pl = ConfigurationProperties.getProperty("mavenmodule");
-        if (pl != null && !pl.isEmpty()) {
-            cmd.add("-pl");
-            cmd.add(pl);
-            cmd.add("--also-make");
-        }
-
         cmd.add("--quiet"); 
         cmd.add("--batch-mode");
+
+        cmd.add("-Dmaven.main.skip=true");
+        cmd.add("-Dmaven.test.compile.skip=true");
+        cmd.add("-Dmaven.compiler.skip=true");
         
         cmd.add("edu.illinois:nondex-maven-plugin:2.2.1:nondex");
-        cmd.add("-DnondexSeed=" + seed);
         cmd.add("-DnondexRuns=" + K);
         cmd.add("-Dtest=" + test);
         

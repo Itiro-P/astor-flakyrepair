@@ -9,9 +9,11 @@ import fr.inria.astor.core.faultlocalization.entity.SuspiciousCode;
 import fr.inria.astor.core.faultlocalization.gzoltar.GzoltarTestClassesFinder;
 import fr.inria.astor.core.manipulation.MutationSupporter;
 import fr.inria.astor.core.setup.ProjectRepairFacade;
+import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtStatement;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.ModifierKind;
+import spoon.reflect.reference.CtTypeReference;
 import spoon.reflect.visitor.filter.TypeFilter;
 
 /**
@@ -29,7 +31,24 @@ public class FrFaultLocalization implements FaultLocalizationStrategy {
         List<CtMethod<?>> allMethods = MutationSupporter.factory.getModel().getElements(new TypeFilter<>(CtMethod.class));
         
         for (CtMethod<?> spoonMethod : allMethods) {
-            if (spoonMethod.getAnnotation(org.junit.Test.class) == null ||
+            boolean hasAssert = spoonMethod.getElements(new TypeFilter<>(CtInvocation.class))
+            .stream()
+            .anyMatch(inv -> {
+                String methodName = inv.getExecutable().getSimpleName();
+
+                if (!methodName.startsWith("assert")) return false;
+
+                CtTypeReference declaringType = inv.getExecutable().getDeclaringType();
+                if (declaringType == null) return false;
+
+                String qualifiedName = declaringType.getQualifiedName();
+
+                return qualifiedName.startsWith("org.junit")
+                    || qualifiedName.contains("Assertions")
+                    || qualifiedName.contains("Assert");
+            });
+
+            if ((spoonMethod.getAnnotation(org.junit.Test.class) == null && !hasAssert) ||
                 spoonMethod.getDeclaringType().getModifiers().contains(ModifierKind.ABSTRACT) ||
                 spoonMethod.getBody() == null || 
                 spoonMethod.getBody().getStatements().isEmpty()) {

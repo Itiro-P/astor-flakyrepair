@@ -28,7 +28,7 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
 
 // druid (java 8)
 mvn clean compile test-compile dependency:copy-dependencies \
-  -f "$(pwd)/samples/druid/core/pom.xml" \
+  -f "$(pwd)/samples/druid/pom.xml" \
   -DskipTests=true -DoutputDirectory=lib \
   -DincludeScope=test && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
@@ -36,15 +36,16 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
   -customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
   -javacompliancelevel 8 \
   -srcjavafolder src/main/java/ \
-  -srctestfolder src/test/  \
+  -srctestfolder src/test/java/  \
   -binjavafolder target/classes/ \
   -bintestfolder target/test-classes/ \
-  -location "$(pwd)/samples/druid/core" \
-  -dependencies "$(pwd)/samples/druid/core/lib"
+  -location "$(pwd)/samples/druid/" \
+  -dependencies "$(pwd)/samples/druid/lib"
 
 
 // Mapper solon-plugin (java 17)
-mvn clean compile test-compile package dependency:copy-dependencies \
+// Usa o operador 'final'. Que é desabilitado por padrão
+mvn clean compile test-compile dependency:copy-dependencies \
   -f "$(pwd)/samples/Mapper/pom.xml" \
   -pl solon-plugin \
   -am -DskipTests=true -DoutputDirectory=lib -DincludeScope=test &&

@@ -7,7 +7,7 @@ import fr.inria.astor.core.solutionsearch.population.FitnessFunction;
 public class FrFitnessFunction implements FitnessFunction {
     public double calculateFitnessValue(VariantValidationResult validationResult) {
         TestCaseVariantValidationResult vr = (TestCaseVariantValidationResult)validationResult;
-        return (2 * Math.min(vr.getCasesExecuted() - vr.getFailureCount(), vr.getFailureCount())) / vr.getCasesExecuted();
+        return ((double) (2 * Math.min(vr.getCasesExecuted() - vr.getFailureCount(), vr.getFailureCount()))) / vr.getCasesExecuted();
     }
 
 	
