@@ -10,6 +10,12 @@ import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.ModifierKind;
 import spoon.reflect.factory.Factory;
 
+/**
+ * Mutator que adiciona `final` a métodos não-final.
+ *
+ * Clona o `CtMethod` alvo e adiciona o modificador `final`, retornando
+ * a versão mutada como um `MutantCtElement`.
+ */
 public class FinalModifierInjectionMutator extends SpoonMutator<CtMethod> {
     public FinalModifierInjectionMutator(Factory factory) {
         super(factory);
@@ -24,6 +30,7 @@ public class FinalModifierInjectionMutator extends SpoonMutator<CtMethod> {
         if (method.hasModifier(ModifierKind.FINAL)) {
             return result;
         }
+        // Clona o método e injeta o modificador `final` na cópia.
         CtMethod mutatedMethod = factory.Core().clone(method);
         mutatedMethod.addModifier(ModifierKind.FINAL);
         

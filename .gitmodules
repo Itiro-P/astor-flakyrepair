@@ -7,3 +7,6 @@
 [submodule "samples/druid"]
 	path = samples/druid
 	url = https://github.com/MundaneImmortal/druid.git
+[submodule "samples/cloudstack"]
+	path = samples/cloudstack
+	url = https://github.com/rRajivramachandran/cloudstack.git

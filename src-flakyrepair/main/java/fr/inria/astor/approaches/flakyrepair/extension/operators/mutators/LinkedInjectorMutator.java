@@ -12,11 +12,16 @@ import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.declaration.CtElement;
-import spoon.reflect.declaration.CtNamedElement;
-import spoon.reflect.declaration.CtVariable;
 import spoon.reflect.factory.Factory;
 import spoon.reflect.reference.CtTypeReference;
 
+/**
+ * Mutator que troca coleções por suas versões "encadeadas".
+ *
+ * Substitui usos de coleções mutáveis padrão (ex: HashMap/HashSet)
+ * por suas contrapartes "linked" (ex: LinkedHashMap/LinkedHashSet). Útil
+ * quando a ordem de iteração pode afetar comportamento flaky (não-determinístico).
+ */
 @SuppressWarnings("rawtypes")
 public class LinkedInjectorMutator extends SpoonMutator<CtInvocation> {
 
@@ -24,11 +29,11 @@ public class LinkedInjectorMutator extends SpoonMutator<CtInvocation> {
 
     public LinkedInjectorMutator(Factory factory) {
         super(factory);
-        /**
-         * Sample: druid
-         * - https://github.com/alibaba/druid/pull/4717/
-         */
+        // Mapeamento de classes alvo -> classe substituta.
+        // Exemplo real: druid PR que troca HashMap por LinkedHashMap.
+        // https://github.com/alibaba/druid/pull/4717/
         classReplacements.put("java.util.HashMap", "java.util.LinkedHashMap");
+        classReplacements.put("java.util.HashSet", "java.util.LinkedHashSet");
     }
 
     public List<MutantCtElement> execute(CtElement toMutate) {
@@ -67,6 +72,8 @@ public class LinkedInjectorMutator extends SpoonMutator<CtInvocation> {
 
         return result;
     }
+
+    // key/metadata helpers: identificadores e nível de mutação.
 
     @Override
 	public String key() {

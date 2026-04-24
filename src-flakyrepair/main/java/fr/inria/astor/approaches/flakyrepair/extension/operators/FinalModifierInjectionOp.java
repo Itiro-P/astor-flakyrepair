@@ -15,9 +15,13 @@ import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtMethod;
 
 /**
- * 
- * @author Pedro I. Nagao
+ * Operator que injeta o modificador `final` em métodos candidatos.
  *
+ * Usa um `MutatorComposite` que produz variantes do método com o
+ * modificador `final` adicionado. Os métodos criados são usados para gerar
+ * instâncias de operador que podem ser aplicadas/undo no modelo.
+ *
+ * Autor: Pedro I. Nagao
  */
 @SuppressWarnings("rawtypes")
 public class FinalModifierInjectionOp extends AutonomousOperator {
@@ -40,6 +44,7 @@ public class FinalModifierInjectionOp extends AutonomousOperator {
 		boolean successful = false;
 		try {
 
+			// Substitui o método original pelo método mutado (com `final`).
 			CtMethod ctst = (CtMethod) operation.getOriginal();
 			CtMethod fix = (CtMethod) operation.getModified();
 

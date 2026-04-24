@@ -16,9 +16,10 @@ import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.declaration.CtElement;
 
 /**
- * 
- * @author Matias Martinez
+ * Operador que troca uma coleção por sua versão "encadeada" para preservar a ordem dos elementos.
  *
+ * Encapsula o `LinkedInjectorMutator` e cria instâncias de operador
+ * a partir das mutações encontradas (construtores e variáveis locais).
  */
 @SuppressWarnings("rawtypes")
 public class LinkedInjectorOp extends AutonomousOperator {
@@ -33,7 +34,9 @@ public class LinkedInjectorOp extends AutonomousOperator {
     @Override
     public boolean canBeAppliedToPoint(ModificationPoint point) {
         CtElement el = point.getCodeElement();
-        return (el instanceof CtConstructorCall) || (el instanceof CtLocalVariable);
+		// Pode aplicar quando o ponto de modificação é a criação de uma coleção
+		// (`new HashMap()`) ou uma variável local cujo RHS é uma construção.
+		return (el instanceof CtConstructorCall) || (el instanceof CtLocalVariable);
     }
 
 	@Override
@@ -41,6 +44,7 @@ public class LinkedInjectorOp extends AutonomousOperator {
 		boolean successful = false;
 		try {
 
+			// Substitui o elemento AST (construtor/variável) pela versão mutada.
 			CtElement ctst = operation.getOriginal();
 			CtElement fix = operation.getModified();
 

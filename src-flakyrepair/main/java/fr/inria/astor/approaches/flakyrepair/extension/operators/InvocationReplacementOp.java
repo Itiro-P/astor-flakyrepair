@@ -15,8 +15,8 @@ import spoon.reflect.code.CtInvocation;
 import spoon.reflect.declaration.CtElement;
 
 /**
- * 
- * @author Matias Martinez
+ * Operator que substitui invocações por variantes menos restritivas (ex.:
+ * métodos que não exigem ordem). Encapsula o `MethodConstraintRelaxationMutator`.
  *
  */
 @SuppressWarnings("rawtypes")
@@ -31,7 +31,8 @@ public class InvocationReplacementOp extends AutonomousOperator {
 
     @Override
     public boolean canBeAppliedToPoint(ModificationPoint point) {
-        return (point.getCodeElement() instanceof CtInvocation);
+		// Aplica apenas em pontos que sejam invocações (chamadas de método).
+		return (point.getCodeElement() instanceof CtInvocation);
     }
 
 	@Override
@@ -39,6 +40,7 @@ public class InvocationReplacementOp extends AutonomousOperator {
 		boolean successful = false;
 		try {
 
+			// Substitui a invocação original pela versão renomeada/relaxada.
 			CtInvocation ctst = (CtInvocation) operation.getOriginal();
 			CtInvocation fix = (CtInvocation) operation.getModified();
 

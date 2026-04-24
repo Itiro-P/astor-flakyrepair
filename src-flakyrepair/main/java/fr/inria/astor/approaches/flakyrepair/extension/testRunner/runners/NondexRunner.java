@@ -110,7 +110,7 @@ public class NondexRunner extends Runner {
         if (foundVariant) {
             File mutatedFolder = new File(firstPath);
 
-            String sampleTarget = ConfigurationProperties.getProperty("location") + "target/test-classes";
+            String sampleTarget = ConfigurationProperties.getProperty("location") + "/target/test-classes";
             File pastaTargetClasses = new File(sampleTarget);
             
             try {
@@ -119,7 +119,7 @@ public class NondexRunner extends Runner {
                 log.error(e.getMessage());
             }
         }
-        String pomPath = ConfigurationProperties.getProperty("location") + "pom.xml";
+        String pomPath = ConfigurationProperties.getProperty("location") + "/pom.xml";
 
         cmd.add("mvn");
         cmd.add("-f");
