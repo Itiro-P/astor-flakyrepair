@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import fr.inria.astor.approaches.flakyrepair.extension.operators.mutators.SortedInjectionMutator;
+import fr.inria.astor.approaches.flakyrepair.extension.operators.mutators.SortInjectionMutator;
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
 import fr.inria.astor.approaches.jmutrepair.operators.MutatorComposite;
 import fr.inria.astor.core.entities.ModificationPoint;
@@ -30,11 +30,11 @@ import spoon.reflect.visitor.filter.TypeFilter;
  * da asserção, corrigindo flakiness por ordem não determinística.
  */
 @SuppressWarnings("rawtypes")
-public class SortedCollectionOp extends AutonomousOperator {
+public class SortCollectionOp extends AutonomousOperator {
 	private Set<String> collections = new HashSet<>();
 
 	MutatorComposite mutatorBinary = null;
-	public SortedCollectionOp() {
+	public SortCollectionOp() {
 		super();
 
 		/**
@@ -49,7 +49,7 @@ public class SortedCollectionOp extends AutonomousOperator {
 		this.collections.add("contains");
 
 		this.mutatorBinary = new MutatorComposite(MutationSupporter.getFactory());
-        this.mutatorBinary.getMutators().add(new SortedInjectionMutator(this.mutatorBinary.getFactory()));
+        this.mutatorBinary.getMutators().add(new SortInjectionMutator(this.mutatorBinary.getFactory()));
 	}
 
 	@Override

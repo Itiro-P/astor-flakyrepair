@@ -60,3 +60,20 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
   -location "$(pwd)/samples/Mapper/solon-plugin/" \
   -dependencies "$(pwd)/samples/Mapper/solon-plugin/lib"
 
+
+// cloudstack plugins/network-elements/tungsten
+(cd "$(pwd)/samples/cloudstack" && \
+mvn clean compile test-compile package dependency:copy-dependencies \
+  -pl plugins/network-elements/tungsten \
+  -am -DskipTests=true -DoutputDirectory=lib -DincludeScope=test) && \
+java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
+  -mode custom \
+  -customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
+  -javacompliancelevel 11 \
+  -srcjavafolder src/main/java/ \
+  -srctestfolder src/test/  \
+  -binjavafolder target/classes/ \
+  -bintestfolder target/test-classes/ \
+  -location "$(pwd)/samples/cloudstack/plugins/network-elements/tungsten" \
+  -dependencies "$(pwd)/samples/cloudstack/plugins/network-elements/tungsten/lib"
+

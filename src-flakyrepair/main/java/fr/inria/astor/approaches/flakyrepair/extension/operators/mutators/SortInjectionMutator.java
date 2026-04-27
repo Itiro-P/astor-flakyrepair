@@ -20,11 +20,11 @@ import spoon.reflect.visitor.filter.TypeFilter;
  * Mutator que insere chamadas a `Collections.sort(...)` antes da primeira
  * asserção em um bloco, para ordenar coleções que podem causar testes flaky.
  */
-public class SortedInjectionMutator extends SpoonMutator<CtBlock> {
+public class SortInjectionMutator extends SpoonMutator<CtBlock> {
     private Set<String> collections = new HashSet<>();
 
 
-    public SortedInjectionMutator(Factory factory) {
+    public SortInjectionMutator(Factory factory) {
         super(factory);
 
         this.collections.add("add");
