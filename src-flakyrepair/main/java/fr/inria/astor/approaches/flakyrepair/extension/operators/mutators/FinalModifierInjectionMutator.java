@@ -15,6 +15,7 @@ import spoon.reflect.factory.Factory;
  *
  * Clona o `CtMethod` alvo e adiciona o modificador `final`, retornando
  * a versão mutada como um `MutantCtElement`.
+ * @author Pedro Itiro Nagao
  */
 public class FinalModifierInjectionMutator extends SpoonMutator<CtMethod> {
     public FinalModifierInjectionMutator(Factory factory) {

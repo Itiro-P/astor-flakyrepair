@@ -20,6 +20,7 @@ import spoon.reflect.declaration.CtElement;
  *
  * Encapsula o `LinkedInjectorMutator` e cria instâncias de operador
  * a partir das mutações encontradas (construtores e variáveis locais).
+ * @author Pedro Itiro Nagao
  */
 @SuppressWarnings("rawtypes")
 public class LinkedInjectorOp extends AutonomousOperator {

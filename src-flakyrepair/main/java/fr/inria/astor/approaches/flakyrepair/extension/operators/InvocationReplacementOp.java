@@ -17,6 +17,7 @@ import spoon.reflect.declaration.CtElement;
 /**
  * Operator que substitui invocações por variantes menos restritivas (ex.:
  * métodos que não exigem ordem). Encapsula o `MethodConstraintRelaxationMutator`.
+ * @author Pedro Itiro Nagao
  *
  */
 @SuppressWarnings("rawtypes")
@@ -25,6 +26,7 @@ public class InvocationReplacementOp extends AutonomousOperator {
 	MutatorComposite mutatorBinary = null;
 	public InvocationReplacementOp() {
 		super();
+		// Registra os mutators no Factory para uso do programa
 		this.mutatorBinary = new MutatorComposite(MutationSupporter.getFactory());
         this.mutatorBinary.getMutators().add(new MethodConstraintRelaxationMutator(this.mutatorBinary.getFactory()));
 	}

@@ -28,6 +28,7 @@ import spoon.reflect.visitor.filter.TypeFilter;
  * Breve: detecta blocos com variáveis-coleção e asserções; usa
  * `SortedInjectionMutator` para gerar variantes onde a coleção é ordenada antes
  * da asserção, corrigindo flakiness por ordem não determinística.
+ * @author Pedro Itiro Nagao
  */
 @SuppressWarnings("rawtypes")
 public class SortCollectionOp extends AutonomousOperator {

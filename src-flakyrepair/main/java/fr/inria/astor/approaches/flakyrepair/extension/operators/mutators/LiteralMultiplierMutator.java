@@ -8,17 +8,18 @@ import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
 import fr.inria.astor.approaches.jmutrepair.operators.SpoonMutator;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.declaration.CtElement;
-import spoon.reflect.declaration.ModifierKind;
 import spoon.reflect.factory.Factory;
 
 /**
  * Mutator que multiplica literais numéricos de certos métodos por um fator (ex: 2x). 
  * Útil para lidar com testes flaky causados por valores limite ou condições de corrida que dependem de tempos ou contagens específicas.
+ * @author Pedro Itiro Nagao
  */
 public class LiteralMultiplierMutator extends SpoonMutator<CtLiteral> {
+    // Lista de fatores para multiplicar o literal alvo.
     private static final List<Double> multiplicationFactors = Arrays.asList(0.1, 0.4, 0.5, 0.9, 1.1, 1.5, 2.0, 5.0, 10.0);
 
-        public LiteralMultiplierMutator(Factory factory) {
+    public LiteralMultiplierMutator(Factory factory) {
         super(factory);
     }
 
@@ -28,6 +29,7 @@ public class LiteralMultiplierMutator extends SpoonMutator<CtLiteral> {
         CtLiteral literal = (CtLiteral) toMutate;
 
         for(double factor : multiplicationFactors) {
+            // Clonamos o literal original e aplicamos o fator
             CtLiteral mutatedLiteral = factory.Core().clone(literal);
             if (mutatedLiteral.getValue() instanceof Number) {
                 Number originalValue = (Number) mutatedLiteral.getValue();
