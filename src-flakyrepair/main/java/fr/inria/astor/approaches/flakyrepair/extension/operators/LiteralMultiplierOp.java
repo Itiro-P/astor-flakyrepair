@@ -39,10 +39,10 @@ public class LiteralMultiplierOp extends AutonomousOperator {
 	@Override
 	public boolean canBeAppliedToPoint(ModificationPoint point) {
 		CtElement element = point.getCodeElement();
-
+		// Vemos se é um literal.
 		if (!(element instanceof CtLiteral)) return false;
         CtLiteral literal = (CtLiteral) element;
-
+		// Agora vemos se é uma invocaćão e é um dos métodos mutáveis.
 		return literal.getParent() instanceof CtInvocation
             && allowedMethods.contains(((CtInvocation) literal.getParent()).getExecutable().getSimpleName());
 	}
