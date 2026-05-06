@@ -66,6 +66,7 @@ public class SortCollectionOp extends AutonomousOperator {
 			.stream()
 			.anyMatch(var -> isCollection(((CtLocalVariable) var).getType()));
 
+		// procuramos o primeiro assert que o teste pode ter.
 		boolean hasAssert = block.getElements(new TypeFilter<>(CtInvocation.class))
 			.stream()
 			.anyMatch(inv -> inv.getExecutable().getSimpleName().startsWith("assert"));
@@ -73,6 +74,11 @@ public class SortCollectionOp extends AutonomousOperator {
 		return hasCollectionVar && hasAssert;
 	}
 
+	/**
+	 * Método helper para checar se um tipo é uma colećão
+	 * @param typeRef o tipo
+	 * @return 'true' se é uma colećão.
+	 */
 	private boolean isCollection(CtTypeReference<?> typeRef) {
 		if (typeRef == null) return false;
 		

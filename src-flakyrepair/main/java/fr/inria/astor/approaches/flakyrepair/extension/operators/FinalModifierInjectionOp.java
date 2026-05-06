@@ -21,7 +21,7 @@ import spoon.reflect.declaration.CtMethod;
  * modificador `final` adicionado. Os métodos criados são usados para gerar
  * instâncias de operador que podem ser aplicadas/undo no modelo.
  *
- * Autor: Pedro I. Nagao
+ * @author: Pedro I. Nagao
  */
 @SuppressWarnings("rawtypes")
 public class FinalModifierInjectionOp extends AutonomousOperator {

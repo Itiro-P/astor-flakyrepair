@@ -19,6 +19,7 @@ import spoon.reflect.visitor.filter.TypeFilter;
 /**
  * Mutator que insere chamadas a `Collections.sort(...)` antes da primeira
  * asserção em um bloco, para ordenar coleções que podem causar testes flaky.
+ * @author Pedro Itiro Nagao
  */
 public class SortInjectionMutator extends SpoonMutator<CtBlock> {
     private Set<String> collections = new HashSet<>();
@@ -91,6 +92,11 @@ public class SortInjectionMutator extends SpoonMutator<CtBlock> {
         return result;
     }
 
+    /**
+	 * Método helper para checar se um tipo é uma colećão
+	 * @param typeRef o tipo
+	 * @return 'true' se é uma colećão.
+	 */
 	private boolean isCollection(CtTypeReference<?> typeRef) {
 		if (typeRef == null) return false;
 		
