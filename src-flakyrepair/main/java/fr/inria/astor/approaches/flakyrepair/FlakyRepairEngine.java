@@ -8,8 +8,8 @@ import com.martiansoftware.jsap.JSAPException;
 
 import fr.inria.astor.approaches.flakyrepair.extension.FrFaultLocalization;
 import fr.inria.astor.approaches.flakyrepair.extension.FrFitnessFunction;
-import fr.inria.astor.approaches.flakyrepair.extension.FrRepairSpace;
 import fr.inria.astor.approaches.flakyrepair.extension.FrProcessValidator;
+import fr.inria.astor.approaches.flakyrepair.extension.FrRepairSpace;
 import fr.inria.astor.approaches.flakyrepair.extension.FrVariantFactory;
 import fr.inria.astor.approaches.jmutrepair.jMutRepairExhaustive;
 import fr.inria.astor.core.entities.ModificationPoint;

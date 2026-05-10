@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import fr.inria.astor.approaches.flakyrepair.extension.testRunner.runners.IDFlakiesRunner;
 import fr.inria.astor.approaches.flakyrepair.extension.testRunner.runners.NondexRunner;
 import fr.inria.astor.approaches.flakyrepair.extension.testRunner.runners.Runner;
 import fr.inria.astor.core.validation.results.TestResult;

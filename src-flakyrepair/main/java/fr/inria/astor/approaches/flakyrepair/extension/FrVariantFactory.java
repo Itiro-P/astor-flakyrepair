@@ -200,7 +200,7 @@ public class FrVariantFactory extends ProgramVariantFactory {
 
 		List<SuspiciousModificationPoint> suspiciousModificationPoints = new ArrayList<SuspiciousModificationPoint>();
 
-		CtClass ctclasspointed = resolveCtClass(suspiciousCode.getClassName(), progInstance);
+		CtClass<?> ctclasspointed = resolveCtClass(suspiciousCode.getClassName(), progInstance);
 		if (ctclasspointed == null) {
 			log.info(" Not ctClass for suspicious code " + suspiciousCode);
 			return null;

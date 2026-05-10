@@ -9,10 +9,10 @@ import fr.inria.astor.core.solutionsearch.spaces.operators.OperatorSpace;
 
 public class FrRepairSpace extends OperatorSpace {
     public FrRepairSpace() {
-        //super.register(new InvocationReplacementOp());
-        //super.register(new LinkedInjectorOp());
-        //super.register(new SortCollectionOp());
-        //super.register(new LiteralMultiplierOp());
+        super.register(new InvocationReplacementOp());
+        super.register(new LinkedInjectorOp());
+        super.register(new SortCollectionOp());
+        super.register(new LiteralMultiplierOp());
         super.register(new EqualComparatorOp());
         /** 
          * Esse operador so ajuda em casos restritos.

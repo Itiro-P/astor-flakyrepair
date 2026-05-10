@@ -38,7 +38,7 @@ public class FrFaultLocalization implements FaultLocalizationStrategy {
 
                 if (!methodName.startsWith("assert")) return false;
 
-                CtTypeReference declaringType = inv.getExecutable().getDeclaringType();
+                CtTypeReference<?> declaringType = inv.getExecutable().getDeclaringType();
                 if (declaringType == null) return false;
 
                 String qualifiedName = declaringType.getQualifiedName();
