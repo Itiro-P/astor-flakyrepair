@@ -16,7 +16,6 @@ import org.apache.log4j.PatternLayout;
 
 import fr.inria.astor.approaches.cardumen.CardumenApproach;
 import fr.inria.astor.approaches.deeprepair.DeepRepairEngine;
-import fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine;
 import fr.inria.astor.approaches.jgenprog.JGenProg;
 import fr.inria.astor.approaches.jgenprog.extension.TibraApproach;
 import fr.inria.astor.approaches.jkali.JKaliEngine;

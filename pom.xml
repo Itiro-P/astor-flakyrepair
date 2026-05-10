@@ -345,6 +345,7 @@
 								<source>src-deeprepair/main/java</source>
 								<source>src-3sfix/main/java</source>
                                 <source>src-flakyrepair/main/java</source>
+								<source>src-flakydebug/main/java</source>
 							</sources>
 						</configuration>
 					</execution>
