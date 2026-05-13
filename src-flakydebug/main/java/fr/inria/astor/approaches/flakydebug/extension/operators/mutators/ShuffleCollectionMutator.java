@@ -19,8 +19,7 @@ import spoon.reflect.visitor.filter.TypeFilter;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 /**
- * Mutator que injeta flakiness ordenando coleções ao contrário 
- * (Collections.reverseOrder()) antes da primeira asserção.
+ * Mutator que injeta flakiness ordenando coleções aleatoriamente antes da primeira asserção.
  * @author Pedro Itiro Nagao
  */
 public class ShuffleCollectionMutator extends SpoonMutator<CtBlock> {
