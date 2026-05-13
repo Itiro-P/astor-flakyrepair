@@ -60,7 +60,7 @@ public class ShuffleCollectionMutator extends SpoonMutator<CtBlock> {
                 CtInvocation assertInClone = mutatedBlock.getElements(
                     new TypeFilter<CtInvocation>(CtInvocation.class))
                     .stream()
-                    .filter(inv -> inv.equals(assertion)) // Ou use um critério de linha/assinatura
+                    .filter(inv -> inv.equals(assertion))
                     .findFirst()
                     .orElse(null);
 
