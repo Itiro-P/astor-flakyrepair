@@ -1,11 +1,11 @@
-package fr.inria.astor.approaches.flakydebug.extension.operators;
+package fr.inria.astor.approaches.flakyrepair.extension.operators;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.SortInjectionMutator;
+import fr.inria.astor.approaches.flakyrepair.extension.operators.mutators.SortInjectionMutator;
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
 import fr.inria.astor.approaches.jmutrepair.operators.MutatorComposite;
 import fr.inria.astor.core.entities.ModificationPoint;
@@ -31,11 +31,11 @@ import spoon.reflect.visitor.filter.TypeFilter;
  * @author Pedro Itiro Nagao
  */
 @SuppressWarnings("rawtypes")
-public class SortCollectionOp extends AutonomousOperator {
+public class ShuffleCollectionOp extends AutonomousOperator {
 	private Set<String> collections = new HashSet<>();
 
 	MutatorComposite mutatorBinary = null;
-	public SortCollectionOp() {
+	public ShuffleCollectionOp() {
 		super();
 
 		/**

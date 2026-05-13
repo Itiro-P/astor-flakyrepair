@@ -7,23 +7,23 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import fr.inria.astor.approaches.flakydebug.extension.testRunner.runners.NondexRunner;
+import fr.inria.astor.approaches.flakydebug.extension.FdTestResult;
+import fr.inria.astor.approaches.flakydebug.extension.testRunner.runners.JUnitRunner;
 import fr.inria.astor.approaches.flakydebug.extension.testRunner.runners.Runner;
-import fr.inria.astor.core.validation.results.TestResult;
 
 public class TestLauncher {
     protected Logger log = Logger.getLogger(Thread.currentThread().getName());
-    private static List<Runner> approaches = new ArrayList<>(Arrays.asList(new NondexRunner()));
+    private static List<Runner> approaches = new ArrayList<>(Arrays.asList(new JUnitRunner()));
     public TestLauncher() {
     }
 
-    public TestResult execute(String jvmPath, URL[] classpath, List<String> testsToExecute, int waitTime) { 
-        TestResult res = new TestResult();
+    public FdTestResult execute(String jvmPath, URL[] classpath, List<String> testsToExecute, int waitTime) { 
+        FdTestResult res = new FdTestResult();
         res.successTest.add(testsToExecute.get(0));
         for(Runner apRunner: approaches) {
             String approachName = apRunner.getClass().getSimpleName();
             log.info("Using approach " + approachName);
-            TestResult curResult = apRunner.execute(jvmPath, classpath, testsToExecute, waitTime);
+            FdTestResult curResult = apRunner.execute(jvmPath, classpath, testsToExecute, waitTime);
             res = curResult;
             if(curResult.wasSuccessful()) {
                 log.info("The approach " + approachName + " was sucessfull");

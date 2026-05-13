@@ -80,7 +80,6 @@ public class FlakyDebugEngine extends jMutRepairExhaustive {
 				// We create all operators to apply in the modifpoint
 				List<OperatorInstance> operatorInstances = createInstancesOfOperators(
 						(SuspiciousModificationPoint) modifPoint);
-
 				if (operatorInstances == null || operatorInstances.isEmpty())
 					continue;
 

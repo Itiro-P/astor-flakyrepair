@@ -21,8 +21,6 @@ import fr.inria.astor.core.setup.ConfigurationProperties;
 import fr.inria.astor.core.setup.FinderTestCases;
 import fr.inria.astor.core.setup.ProjectRepairFacade;
 import fr.inria.astor.core.validation.ProgramVariantValidator;
-import fr.inria.astor.core.validation.results.TestCasesProgramValidationResult;
-import fr.inria.astor.core.validation.results.TestResult;
 import fr.inria.astor.util.Converters;
 import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtElement;
@@ -74,7 +72,7 @@ public class FdProcessValidator extends ProgramVariantValidator {
 					tests.add(ctClass.getQualifiedName() + "#" + getMethodName(mp));
 				}
 			}
-			TestResult trfailing = testProcessRunner.execute(jvmPath, bc, new ArrayList<String>(new HashSet<String>(tests)), ConfigurationProperties.getPropertyInt("tmax1"));
+			FdTestResult trfailing = testProcessRunner.execute(jvmPath, bc, new ArrayList<String>(new HashSet<String>(tests)), ConfigurationProperties.getPropertyInt("tmax1"));
 
 			if (trfailing == null) {
 				log.debug("**The validation 1 have not finished well**");
@@ -84,7 +82,7 @@ public class FdProcessValidator extends ProgramVariantValidator {
 			log.debug(trfailing);
 
 			removeOfCompiledCode(mutatedVariant, projectFacade);
-			return new TestCasesProgramValidationResult(trfailing, trfailing.wasSuccessful(), false);
+			return new FdTestCasesProgramValidationResult(trfailing, trfailing.wasSuccessful(), false);
 
 		} catch (MalformedURLException e) {
 			removeOfCompiledCode(mutatedVariant, projectFacade);

@@ -3,7 +3,7 @@ package fr.inria.astor.approaches.flakydebug.extension.operators;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.MethodConstraintRelaxationMutator;
+import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.MethodConstraintMutator;
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
 import fr.inria.astor.approaches.jmutrepair.operators.MutatorComposite;
 import fr.inria.astor.core.entities.ModificationPoint;
@@ -15,8 +15,8 @@ import spoon.reflect.code.CtInvocation;
 import spoon.reflect.declaration.CtElement;
 
 /**
- * Operator que substitui invocações por variantes menos restritivas (ex.:
- * métodos que não exigem ordem). Encapsula o `MethodConstraintRelaxationMutator`.
+ * Operator que substitui invocações por variantes mais restritivas (ex.:
+ * métodos que exigem ordem).
  * @author Pedro Itiro Nagao
  *
  */
@@ -28,7 +28,7 @@ public class InvocationReplacementOp extends AutonomousOperator {
 		super();
 		// Registra os mutators no Factory para uso do programa
 		this.mutatorBinary = new MutatorComposite(MutationSupporter.getFactory());
-        this.mutatorBinary.getMutators().add(new MethodConstraintRelaxationMutator(this.mutatorBinary.getFactory()));
+        this.mutatorBinary.getMutators().add(new MethodConstraintMutator(this.mutatorBinary.getFactory()));
 	}
 
     @Override

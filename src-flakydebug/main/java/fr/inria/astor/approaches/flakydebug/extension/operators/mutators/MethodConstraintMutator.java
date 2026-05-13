@@ -13,8 +13,8 @@ import spoon.reflect.declaration.CtElement;
 import spoon.reflect.factory.Factory;
 
 /**
- * Mutator que substitui chamadas de métodos por versões "relaxadas" que impõem menos restrições
- * (ex: `containsExactly` -> `containsOnly`). Útil para lidar com testes flaky causados por
+ * Mutator que substitui chamadas de métodos por versões "restritas" que impõem mais restrições
+ * (ex: `containsOnly` -> `containsExactly`). Útil para lidar com testes flaky causados por
  * verificações de conteúdo que não exigem ordem ou presença exata.
  *
  * Clona a invocação original e altera seu nome para a versão relaxada, retornando a mutação
@@ -22,24 +22,25 @@ import spoon.reflect.factory.Factory;
  * @author Pedro Itiro Nagao
  */
 @SuppressWarnings("rawtypes")
-public class MethodConstraintRelaxationMutator extends SpoonMutator<CtInvocation> {
+public class MethodConstraintMutator extends SpoonMutator<CtInvocation> {
 
     // Mapeia nomes de métodos que costumam impor ordem/contrato -> versões "relaxadas".
     private static Map<String, List<String>> methodReplacements = new HashMap<>();
 
-    public MethodConstraintRelaxationMutator(Factory factory) {
+    public MethodConstraintMutator(Factory factory) {
         super(factory);
         // Exemplos reais de substituições observadas em PRs de projetos
         // https://github.com/hellokaton/30-seconds-of-java8/pull/5
         // https://github.com/hellokaton/30-seconds-of-java8/pull/6
-        methodReplacements.put("containsExactly", Arrays.asList("containsOnly", "containsExactlyInAnyOrder"));
+        methodReplacements.put("containsExactlyInAnyOrder", Arrays.asList("containsExactly"));
+        methodReplacements.put("containsOnly", Arrays.asList("containsExactly"));
         // https://github.com/apache/incubator-kie-drools/pull/6187\
         // https://github.com/apache/pulsar/pull/24871
         // https://github.com/AuthMe/AuthMeReloaded/pull/2386
         methodReplacements.put("containOnly", Arrays.asList("containsExactlyInAnyOrder"));
-        methodReplacements.put("contains", Arrays.asList("containsInAnyOrder"));
+        methodReplacements.put("contains", Arrays.asList("containsExactly"));
         // https://github.com/apache/fory/pull/2738
-        methodReplacements.put("copyOf", Arrays.asList("sortedCopyOf"));
+        methodReplacements.put("sortedCopyOf", Arrays.asList("copyOf"));
     }
 
     public List<MutantCtElement> execute(CtElement toMutate) {

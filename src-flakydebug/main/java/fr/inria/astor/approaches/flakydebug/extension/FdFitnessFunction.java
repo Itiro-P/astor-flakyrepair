@@ -12,6 +12,6 @@ public class FdFitnessFunction implements FitnessFunction {
 
 	
 	public double getWorstMaxFitnessValue() {
-        return 1.0;
+        return 0.0;
     }
 }
