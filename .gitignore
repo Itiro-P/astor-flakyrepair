@@ -32,5 +32,5 @@ examples/Math-issue-280/target/
 /output_*
 .nondex
 .dtfixingtools
-a.log
+*.log
 diffSolutions/
