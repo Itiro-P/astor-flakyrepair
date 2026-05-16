@@ -77,8 +77,8 @@ public class IDFlakiesRunner extends Runner {
             }
 
             try (BufferedReader reader = new BufferedReader(new FileReader(ftemp))) {
-                int failed = parseOutput(reader, test);
-                testResult.failures += failed;
+                int failed = p.exitValue();
+                testResult.failures += failed == 1 ? 1 : 0;
                 log.info("[IDFlakies] Test " + test + " failed " + testResult.failures + " times of " + K + " iterations.\n");
             } finally {
                 ftemp.delete();
@@ -132,16 +132,5 @@ public class IDFlakiesRunner extends Runner {
         cmd.add("-Ddt.randomize.rounds=" + K);
         cmd.add("-Ddt.detector.original_order.all_must_pass=false");        
         return cmd;
-    }
-
-    protected int parseOutput(BufferedReader reader, String test) throws IOException {
-        String line;
-        int timesFailed = 0;
-        while ((line = reader.readLine()) != null) {
-            if (line.contains("<<< FAILURE! - in")) {
-                timesFailed++;
-            }
-        }
-        return timesFailed;
     }
 }

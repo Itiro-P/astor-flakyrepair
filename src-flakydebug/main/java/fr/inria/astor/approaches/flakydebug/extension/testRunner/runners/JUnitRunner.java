@@ -69,8 +69,8 @@ public class JUnitRunner extends Runner {
                 if (!finished) p.destroyForcibly();
 
                 try (BufferedReader reader = new BufferedReader(new FileReader(ftemp))) {
-                    int failed = parseOutput(reader, test);
-                    testResult.failures += failed;
+                    int failed = p.exitValue();
+                    testResult.failures += failed == 1 ? 1 : 0;
                 } finally {
                     ftemp.delete();
                 }
@@ -127,16 +127,5 @@ public class JUnitRunner extends Runner {
         cmd.add("test");
         cmd.add("-Dtest=" + test);
         return cmd;
-    }
-
-    protected int parseOutput(BufferedReader reader, String test) throws IOException {
-        String line;
-        int timesFailed = 0;
-        while ((line = reader.readLine()) != null) {
-            if (line.contains("<<< FAILURE! - in")) {
-                timesFailed++;
-            }
-        }
-        return timesFailed;
     }
 }

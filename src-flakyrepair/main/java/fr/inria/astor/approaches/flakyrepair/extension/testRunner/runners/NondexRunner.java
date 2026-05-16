@@ -76,8 +76,8 @@ public class NondexRunner extends Runner {
             }
 
             try (BufferedReader reader = new BufferedReader(new FileReader(ftemp))) {
-                int failed = parseOutput(reader, test);
-                testResult.failures += failed;
+                int failed = p.exitValue();
+                testResult.failures += failed == 1 ? 1 : 0;
                 //if (timedOut) testResult.failures++;
                 log.info("[NonDex] Test " + test + " failed " + testResult.failures + " times of " + K + "...");
             } finally {
@@ -137,16 +137,5 @@ public class NondexRunner extends Runner {
         cmd.add("-Dtest=" + test);
         
         return cmd;
-    }
-
-    protected int parseOutput(BufferedReader reader, String test) throws IOException {
-        String line;
-        int timesFailed = 0;
-        while ((line = reader.readLine()) != null) {
-            if (line.contains("<<< FAILURE! - in")) {
-                timesFailed++;
-            }
-        }
-        return timesFailed;
     }
 }

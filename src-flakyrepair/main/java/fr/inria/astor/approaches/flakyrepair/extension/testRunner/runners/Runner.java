@@ -1,8 +1,6 @@
 package fr.inria.astor.approaches.flakyrepair.extension.testRunner.runners;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Random;
@@ -29,8 +27,6 @@ public abstract class Runner {
     public abstract TestResult execute(String jvmPath, URL[] classpath, List<String> testsToExecute, int waitTime);
 
     protected abstract List<String> buildCommand(String envOS, int seed, String classpath, String test);
-
-    protected abstract int parseOutput(BufferedReader reader, String test) throws IOException;
 
     protected String urlArrayToString(URL[] urls) {
         StringBuilder sb = new StringBuilder();
