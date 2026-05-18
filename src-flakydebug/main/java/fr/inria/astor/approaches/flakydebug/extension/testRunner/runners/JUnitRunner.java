@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import fr.inria.astor.approaches.flakydebug.extension.FdProcessValidator;
 import fr.inria.astor.approaches.flakydebug.extension.FdTestResult;
+import fr.inria.astor.approaches.flakydebug.extension.operators.utils.ShuffledMap;
 import fr.inria.astor.core.setup.ConfigurationProperties;
 
 public class JUnitRunner extends Runner {
@@ -51,10 +53,8 @@ public class JUnitRunner extends Runner {
                 pb.directory(new File(location));
 
                 printCommandToExecute(command, waitTime);
-
                 Process p = pb.start();
-                try (BufferedWriter stdin = new BufferedWriter(
-                        new OutputStreamWriter(p.getOutputStream()))) {
+                try (BufferedWriter stdin = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()))) {
                     if (envOS == null || !envOS.contains("Windows")) {
                         stdin.write("TZ=\"" + timeZone + "\""); stdin.newLine(); stdin.flush();
                         stdin.write("export TZ");               stdin.newLine(); stdin.flush();
@@ -64,13 +64,21 @@ public class JUnitRunner extends Runner {
                 } catch (IOException e) {
                     log.error(e);
                 }
-
+                
+                int exitCode = 0;
                 boolean finished = p.waitFor(waitTime, TimeUnit.MILLISECONDS);
-                if (!finished) p.destroyForcibly();
+
+                if (!finished) {
+                    log.info("Test succeded wait time.\n");
+                    p.destroyForcibly();
+                    p.waitFor();
+                    exitCode = 1;
+                } else {
+                    exitCode = p.exitValue();
+                }
 
                 try (BufferedReader reader = new BufferedReader(new FileReader(ftemp))) {
-                    int failed = p.exitValue();
-                    testResult.failures += failed == 1 ? 1 : 0;
+                    testResult.failures += (exitCode != 0) ? 1 : 0;
                 } finally {
                     ftemp.delete();
                 }

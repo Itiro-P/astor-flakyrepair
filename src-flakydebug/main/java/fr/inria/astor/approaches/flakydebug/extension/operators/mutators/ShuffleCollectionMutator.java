@@ -102,7 +102,7 @@ public class ShuffleCollectionMutator extends SpoonMutator<CtBlock> {
                 .anyMatch(this.collections::contains);
         } catch (Exception e) {
             String name = typeRef.getQualifiedName();
-            return name.contains("List") || name.contains("Collection") || name.contains("Set");
+            return name.contains("List") || name.contains("Collection");
         }
     }
 

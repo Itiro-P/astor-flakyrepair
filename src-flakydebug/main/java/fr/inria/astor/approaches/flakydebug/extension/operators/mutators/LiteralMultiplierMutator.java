@@ -52,7 +52,7 @@ public class LiteralMultiplierMutator extends SpoonMutator<CtLiteral> {
 
     @Override
 	public String key() {
-		return "literalMultiplierOp";
+		return "literalMultiplierMutator";
 	}
 
 	@Override

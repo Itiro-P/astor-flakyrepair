@@ -12,6 +12,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
+import fr.inria.astor.approaches.flakydebug.extension.operators.utils.ShuffledMap;
 import fr.inria.astor.approaches.flakydebug.extension.testRunner.TestLauncher;
 import fr.inria.astor.core.entities.ModificationPoint;
 import fr.inria.astor.core.entities.ProgramVariant;
@@ -19,6 +20,7 @@ import fr.inria.astor.core.entities.validation.TestCaseVariantValidationResult;
 import fr.inria.astor.core.manipulation.MutationSupporter;
 import fr.inria.astor.core.setup.ConfigurationProperties;
 import fr.inria.astor.core.setup.FinderTestCases;
+import fr.inria.astor.core.setup.ProjectConfiguration;
 import fr.inria.astor.core.setup.ProjectRepairFacade;
 import fr.inria.astor.core.validation.ProgramVariantValidator;
 import fr.inria.astor.util.Converters;
@@ -47,6 +49,16 @@ public class FdProcessValidator extends ProgramVariantValidator {
 	private TestCaseVariantValidationResult validate(ProgramVariant mutatedVariant, ProjectRepairFacade projectFacade,
 			boolean forceExecuteRegression) {
 		try {
+			ProjectConfiguration projConfig = projectFacade.getProperties();
+			List<URL> deps = projConfig.getDependencies();
+			String astorJar = ShuffledMap.class
+				.getProtectionDomain()
+				.getCodeSource()
+				.getLocation()
+				.getPath();
+			deps.add(new URL("file://" + astorJar));
+			projConfig.setDependencies(deps);
+			projectFacade.setProperties(projConfig);
 			URL[] bc = createClassPath(mutatedVariant, projectFacade);
 
 			TestLauncher testProcessRunner = new TestLauncher();
@@ -96,42 +108,47 @@ public class FdProcessValidator extends ProgramVariantValidator {
 
 	protected URL[] createClassPath(ProgramVariant mutatedVariant, ProjectRepairFacade projectFacade)
 			throws MalformedURLException {
-
 		List<URL> originalURL = createOriginalURLs(projectFacade);
 		URL[] bc;
 		if (mutatedVariant.getCompilation() != null) {
-
 			File variantOutputFile = defineLocationOfCompiledCode(mutatedVariant, projectFacade);
-
 			bc = Converters.redefineURL(variantOutputFile, originalURL.toArray(new URL[0]));
 		} else {
 			bc = originalURL.toArray(new URL[0]);
 		}
 
 		boolean isGZoltarDependencyFound = false;
-
 		for (int i = 0; i < bc.length && !isGZoltarDependencyFound; i++) {
 			if (bc[i].getFile().contains("gzoltar-0.1.1")) {
 				isGZoltarDependencyFound = true;
 			}
 		}
 
+		String astorJar = ShuffledMap.class
+			.getProtectionDomain()
+			.getCodeSource()
+			.getLocation()
+			.getPath();
+
 		if (!isGZoltarDependencyFound) {
-
 			File libsfolder = new File("." + File.separator + "lib");
-
-			URL[] newBc = new URL[bc.length + 1];
+			URL[] newBc = new URL[bc.length + 2];
 			newBc[0] = new URL("file://" + libsfolder.getAbsolutePath() + File.separator
-					+ "com.gzoltar-0.1.1-jar-with-dependencies.jar");
-
+				+ "com.gzoltar-0.1.1-jar-with-dependencies.jar");
+			newBc[1] = new URL("file://" + astorJar);
 			for (int i = 0; i < bc.length; i++) {
-				newBc[i + 1] = bc[i];
+				newBc[i + 2] = bc[i];
 			}
-
 			return newBc;
 		}
 
-		return bc;
+		URL[] newBc = new URL[bc.length + 1];
+		newBc[0] = new URL("file://" + astorJar);
+		for (int i = 0; i < bc.length; i++) {
+			newBc[i + 1] = bc[i];
+		}
+
+		return newBc;
 	}
 
 	public List<URL> createOriginalURLs(ProjectRepairFacade projectFacade) throws MalformedURLException {

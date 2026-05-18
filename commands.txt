@@ -114,7 +114,6 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
   -location "$(pwd)/samples/cloudstack/plugins/network-elements/tungsten" \
   -dependencies "$(pwd)/samples/cloudstack/plugins/network-elements/tungsten/lib"
 
-
 // Projetos mínimos (todos com Java 11)
 
 // hash_map

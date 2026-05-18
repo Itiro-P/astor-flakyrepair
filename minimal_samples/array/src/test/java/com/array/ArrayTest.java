@@ -1,20 +1,18 @@
-package com.hash_map;
+package com.array;
 
 import org.junit.Test;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 
-public class HashMapTest {
+public class ArrayTest {
     @Test
     public void pickKeys() {
         Map<String, Integer> map = new HashMap<>();
@@ -23,9 +21,10 @@ public class HashMapTest {
         map.put("c", 3);
  
         List<String> keys = new ArrayList<>(map.keySet());
-        Collections.shuffle(keys);
+        List<String> keys2 = new ArrayList<>(List.of("a", "b", "c"));
+
         // Flaky: assume ordem de inserção, que HashMap não preserva
         // Ordem de inserção não deve importar aqui
-        assertThat(keys, contains("a", "b", "c"));
+        assertEquals(keys, keys2);
     }
 }

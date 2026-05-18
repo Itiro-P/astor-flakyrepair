@@ -16,12 +16,10 @@ import fr.inria.astor.core.solutionsearch.spaces.operators.AutonomousOperator;
 import spoon.reflect.code.CtBlock;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtInvocation;
-import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.code.CtVariableRead;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtType;
 import spoon.reflect.reference.CtTypeReference;
-import spoon.reflect.visitor.filter.TypeFilter;
 
 /**
  * Operador que insere o método `.shuffle()` de coleções antes do primeiro método

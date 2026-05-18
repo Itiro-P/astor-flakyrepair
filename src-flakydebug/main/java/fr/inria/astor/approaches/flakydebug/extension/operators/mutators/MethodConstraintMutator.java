@@ -63,7 +63,7 @@ public class MethodConstraintMutator extends SpoonMutator<CtInvocation> {
 
     @Override
 	public String key() {
-		return "methodConstraintRelaxationOp";
+		return "methodConstraintMutator";
 	}
 
 	@Override

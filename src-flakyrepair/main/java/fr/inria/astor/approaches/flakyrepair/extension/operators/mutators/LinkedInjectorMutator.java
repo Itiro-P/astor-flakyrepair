@@ -82,8 +82,6 @@ public class LinkedInjectorMutator extends SpoonMutator<CtInvocation> {
         return result;
     }
 
-    // key/metadata helpers: identificadores e nível de mutação.
-
     @Override
 	public String key() {
 		return "linkedInjectorOp";
