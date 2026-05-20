@@ -90,7 +90,7 @@ public class ShuffleListMutator extends SpoonMutator<CtBlock> {
     }
 
     @Override
-    public String key() { return "shuffleCollectionMutator"; }
+    public String key() { return "shuffleListMutator"; }
 
     @Override
     public void setup() {}

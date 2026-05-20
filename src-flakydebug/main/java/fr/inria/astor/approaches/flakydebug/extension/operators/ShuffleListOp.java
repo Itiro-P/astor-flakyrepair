@@ -48,7 +48,7 @@ public class ShuffleListOp extends AutonomousOperator {
 		String methodName = invocation.getExecutable().getSimpleName().toLowerCase();
 
 		// 2. Filtra apenas métodos de asserção
-		//if (!methodName.startsWith("assert")) return false;
+		if (!methodName.startsWith("assert")) return false;
 
 		// 3. Checa se algum dos argumentos passados é uma variável do tipo coleção
 		List<CtExpression> args = invocation.getArguments();
