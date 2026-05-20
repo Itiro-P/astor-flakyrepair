@@ -1,15 +1,12 @@
 package fr.inria.astor.approaches.flakyrepair.extension.operators.mutators;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
 import fr.inria.astor.approaches.jmutrepair.operators.SpoonMutator;
 import spoon.reflect.code.*;
 import spoon.reflect.declaration.CtElement;
-import spoon.reflect.declaration.CtType;
 import spoon.reflect.factory.Factory;
 import spoon.reflect.reference.CtExecutableReference;
 import spoon.reflect.reference.CtTypeReference;
@@ -22,17 +19,8 @@ import spoon.reflect.visitor.filter.TypeFilter;
  * @author Pedro Itiro Nagao
  */
 public class SortInjectionMutator extends SpoonMutator<CtBlock> {
-    private Set<String> collections = new HashSet<>();
-
-
     public SortInjectionMutator(Factory factory) {
         super(factory);
-
-        this.collections.add("add");
-		this.collections.add("remove");
-		this.collections.add("size");
-		this.collections.add("iterator");
-		this.collections.add("contains");
     }
 
     @Override
@@ -45,8 +33,7 @@ public class SortInjectionMutator extends SpoonMutator<CtBlock> {
         for (CtLocalVariable var : collectionVars) {
 
             // Verifica se a variável local parece ser uma coleção (heurística).
-            if (!isCollection(var.getType())) continue;
-
+            if (!isList(var.getType())) continue;
 
             // Localiza a primeira chamada de `assert*` no bloco; se não houver,
             // não faz sentido inserir a ordenação.
@@ -93,27 +80,14 @@ public class SortInjectionMutator extends SpoonMutator<CtBlock> {
     }
 
     /**
-	 * Método helper para checar se um tipo é uma colećão
+	 * Método helper para checar se um tipo é uma lista
 	 * @param typeRef o tipo
-	 * @return 'true' se é uma colećão.
+	 * @return 'true' se é uma lista.
 	 */
-	private boolean isCollection(CtTypeReference<?> typeRef) {
-		if (typeRef == null) return false;
-		
-		try {
-			CtType<?> typeDecl = typeRef.getTypeDeclaration();
-			if (typeDecl == null) return false;
-
-			return typeDecl.getAllMethods().stream()
-				.map(m -> m.getSimpleName())
-				.anyMatch(this.collections::contains);
-
-		} catch (Exception e) {
-			// fallback por nome
-			String name = typeRef.getQualifiedName();
-			return name.contains("List") || name.contains("Collection") || name.contains("Set");
-		}
-	}
+    private boolean isList(CtTypeReference<?> typeRef) {
+        if (typeRef == null) return false;
+        return typeRef.isSubtypeOf(typeRef.getFactory().Type().createReference(java.util.List.class));
+    }
 
     @Override
     public String key() { return "sortedInjectionMutator"; }

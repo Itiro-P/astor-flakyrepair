@@ -98,8 +98,7 @@ public class ShuffleMapOp extends AutonomousOperator {
 
     private boolean isMap(CtTypeReference<?> typeRef) {
         if (typeRef == null) return false;
-        String name = typeRef.getQualifiedName();
-        return name.equals("java.util.Map") || name.equals("Map");
+        return typeRef.isSubtypeOf(typeRef.getFactory().Type().createReference(java.util.Map.class));
     }
 
     public List<MutantCtElement> getMutants(CtElement element) {

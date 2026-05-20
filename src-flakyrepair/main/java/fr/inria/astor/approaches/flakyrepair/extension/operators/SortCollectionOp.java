@@ -1,9 +1,7 @@
 package fr.inria.astor.approaches.flakyrepair.extension.operators;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import fr.inria.astor.approaches.flakyrepair.extension.operators.mutators.SortInjectionMutator;
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
@@ -17,7 +15,6 @@ import spoon.reflect.code.CtBlock;
 import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.declaration.CtElement;
-import spoon.reflect.declaration.CtType;
 import spoon.reflect.reference.CtTypeReference;
 import spoon.reflect.visitor.filter.TypeFilter;
 
@@ -32,22 +29,9 @@ import spoon.reflect.visitor.filter.TypeFilter;
  */
 @SuppressWarnings("rawtypes")
 public class SortCollectionOp extends AutonomousOperator {
-	private Set<String> collections = new HashSet<>();
-
 	MutatorComposite mutatorBinary = null;
 	public SortCollectionOp() {
 		super();
-
-		/**
-		 * Métodos que o a interface Collections tem.
-		 * Checamos se as classes alvo contém eles uma vez que é
-		 * mais fácil assim do que usar checagens internas que foram depreciadas.
-		 */
-		this.collections.add("add");
-		this.collections.add("remove");
-		this.collections.add("size");
-		this.collections.add("iterator");
-		this.collections.add("contains");
 
 		this.mutatorBinary = new MutatorComposite(MutationSupporter.getFactory());
         this.mutatorBinary.getMutators().add(new SortInjectionMutator(this.mutatorBinary.getFactory()));
@@ -64,7 +48,7 @@ public class SortCollectionOp extends AutonomousOperator {
 		// Verifica se há pelo menos uma variável local que pareça ser coleção.
 		boolean hasCollectionVar = block.getElements(new TypeFilter<>(CtLocalVariable.class))
 			.stream()
-			.anyMatch(var -> isCollection(((CtLocalVariable) var).getType()));
+			.anyMatch(var -> isList(((CtLocalVariable) var).getType()));
 
 		// procuramos o primeiro assert que o teste pode ter.
 		boolean hasAssert = block.getElements(new TypeFilter<>(CtInvocation.class))
@@ -75,27 +59,14 @@ public class SortCollectionOp extends AutonomousOperator {
 	}
 
 	/**
-	 * Método helper para checar se um tipo é uma colećão
+	 * Método helper para checar se um tipo é uma lista
 	 * @param typeRef o tipo
-	 * @return 'true' se é uma colećão.
+	 * @return 'true' se é uma lista.
 	 */
-	private boolean isCollection(CtTypeReference<?> typeRef) {
-		if (typeRef == null) return false;
-		
-		try {
-			CtType<?> typeDecl = typeRef.getTypeDeclaration();
-			if (typeDecl == null) return false;
-
-			return typeDecl.getAllMethods().stream()
-				.map(m -> m.getSimpleName())
-				.anyMatch(this.collections::contains);
-
-		} catch (Exception e) {
-			// fallback por nome
-			String name = typeRef.getQualifiedName();
-			return name.contains("List") || name.contains("Collection") || name.contains("Set");
-		}
-	}
+    private boolean isList(CtTypeReference<?> typeRef) {
+        if (typeRef == null) return false;
+        return typeRef.isSubtypeOf(typeRef.getFactory().Type().createReference(java.util.List.class));
+    }
 
 	@Override
 	public boolean applyChangesInModel(OperatorInstance operation, ProgramVariant p) {

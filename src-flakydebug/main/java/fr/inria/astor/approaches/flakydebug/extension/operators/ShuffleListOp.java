@@ -1,11 +1,9 @@
 package fr.inria.astor.approaches.flakydebug.extension.operators;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.ShuffleCollectionMutator;
+import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.ShuffleListMutator;
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
 import fr.inria.astor.approaches.jmutrepair.operators.MutatorComposite;
 import fr.inria.astor.core.entities.ModificationPoint;
@@ -18,7 +16,6 @@ import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtVariableRead;
 import spoon.reflect.declaration.CtElement;
-import spoon.reflect.declaration.CtType;
 import spoon.reflect.reference.CtTypeReference;
 
 /**
@@ -31,26 +28,13 @@ import spoon.reflect.reference.CtTypeReference;
  * @author Pedro Itiro Nagao
  */
 @SuppressWarnings("rawtypes")
-public class ShuffleCollectionOp extends AutonomousOperator {
-	private Set<String> collections = new HashSet<>();
-
+public class ShuffleListOp extends AutonomousOperator {
 	MutatorComposite mutatorBinary = null;
-	public ShuffleCollectionOp() {
+	public ShuffleListOp() {
 		super();
 
-		/**
-		 * Métodos que o a interface Collections tem.
-		 * Checamos se as classes alvo contém eles uma vez que é
-		 * mais fácil assim do que usar checagens internas que foram depreciadas.
-		 */
-		this.collections.add("add");
-		this.collections.add("remove");
-		this.collections.add("size");
-		this.collections.add("iterator");
-		this.collections.add("contains");
-
 		this.mutatorBinary = new MutatorComposite(MutationSupporter.getFactory());
-        this.mutatorBinary.getMutators().add(new ShuffleCollectionMutator(this.mutatorBinary.getFactory()));
+        this.mutatorBinary.getMutators().add(new ShuffleListMutator(this.mutatorBinary.getFactory()));
 	}
 
 	@Override
@@ -64,37 +48,24 @@ public class ShuffleCollectionOp extends AutonomousOperator {
 		String methodName = invocation.getExecutable().getSimpleName().toLowerCase();
 
 		// 2. Filtra apenas métodos de asserção
-		if (!methodName.startsWith("assert")) return false;
+		//if (!methodName.startsWith("assert")) return false;
 
 		// 3. Checa se algum dos argumentos passados é uma variável do tipo coleção
 		List<CtExpression> args = invocation.getArguments();
 		return args.stream()
 				.filter(arg -> arg instanceof CtVariableRead)
-				.anyMatch(arg -> isCollection(arg.getType()));
+				.anyMatch(arg -> isList(arg.getType()));
 	}
 
 	/**
-	 * Método helper para checar se um tipo é uma colećão
+	 * Método helper para checar se um tipo é uma lista
 	 * @param typeRef o tipo
 	 * @return 'true' se é uma colećão.
 	 */
-	private boolean isCollection(CtTypeReference<?> typeRef) {
-		if (typeRef == null) return false;
-		
-		try {
-			CtType<?> typeDecl = typeRef.getTypeDeclaration();
-			if (typeDecl == null) return false;
-
-			return typeDecl.getAllMethods().stream()
-				.map(m -> m.getSimpleName())
-				.anyMatch(this.collections::contains);
-
-		} catch (Exception e) {
-			// fallback por nome
-			String name = typeRef.getQualifiedName();
-			return name.contains("List") || name.contains("Collection") || name.contains("Set");
-		}
-	}
+    private boolean isList(CtTypeReference<?> typeRef) {
+        if (typeRef == null) return false;
+        return typeRef.isSubtypeOf(typeRef.getFactory().Type().createReference(java.util.List.class));
+    }
 
 	@Override
 	public boolean applyChangesInModel(OperatorInstance operation, ProgramVariant p) {

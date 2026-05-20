@@ -23,7 +23,6 @@ import spoon.reflect.factory.Factory;
  */
 @SuppressWarnings("rawtypes")
 public class MethodConstraintMutator extends SpoonMutator<CtInvocation> {
-
     // Mapeia nomes de métodos que costumam impor ordem/contrato -> versões "relaxadas".
     private static Map<String, List<String>> methodReplacements = new HashMap<>();
 
@@ -32,15 +31,15 @@ public class MethodConstraintMutator extends SpoonMutator<CtInvocation> {
         // Exemplos reais de substituições observadas em PRs de projetos
         // https://github.com/hellokaton/30-seconds-of-java8/pull/5
         // https://github.com/hellokaton/30-seconds-of-java8/pull/6
-        methodReplacements.put("containsExactlyInAnyOrder", Arrays.asList("containsExactly"));
-        methodReplacements.put("containsOnly", Arrays.asList("containsExactly"));
+        methodReplacements.putIfAbsent("containsExactlyInAnyOrder", Arrays.asList("containsExactly"));
+        methodReplacements.putIfAbsent("containsExactlyInAnyOrderElementsOf", Arrays.asList("containsExactlyElementsOf"));
+        methodReplacements.putIfAbsent("containsOnly", Arrays.asList("containsExactly"));
         // https://github.com/apache/incubator-kie-drools/pull/6187\
         // https://github.com/apache/pulsar/pull/24871
         // https://github.com/AuthMe/AuthMeReloaded/pull/2386
-        methodReplacements.put("containOnly", Arrays.asList("containsExactlyInAnyOrder"));
-        methodReplacements.put("contains", Arrays.asList("containsExactly"));
+        methodReplacements.putIfAbsent("contains", Arrays.asList("containsExactly"));
         // https://github.com/apache/fory/pull/2738
-        methodReplacements.put("sortedCopyOf", Arrays.asList("copyOf"));
+        methodReplacements.putIfAbsent("sortedCopyOf", Arrays.asList("copyOf"));
     }
 
     public List<MutantCtElement> execute(CtElement toMutate) {

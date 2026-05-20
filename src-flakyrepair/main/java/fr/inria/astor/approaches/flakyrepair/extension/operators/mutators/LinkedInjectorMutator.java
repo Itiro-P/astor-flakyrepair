@@ -13,6 +13,7 @@ import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.declaration.CtElement;
+import spoon.reflect.declaration.CtType;
 import spoon.reflect.factory.Factory;
 import spoon.reflect.reference.CtTypeReference;
 
@@ -27,7 +28,7 @@ import spoon.reflect.reference.CtTypeReference;
 @SuppressWarnings("rawtypes")
 public class LinkedInjectorMutator extends SpoonMutator<CtInvocation> {
 
-    private static Map<String, List<String>> classReplacements = new HashMap<>();
+    private static Map<CtTypeReference, List<CtTypeReference>> classReplacements = new HashMap<>();
 
     public LinkedInjectorMutator(Factory factory) {
         super(factory);
@@ -36,9 +37,21 @@ public class LinkedInjectorMutator extends SpoonMutator<CtInvocation> {
         // Na maioria dos projetos onde foi usado HashMap, trocar para LinkedHashMap resolveu o rpoblema
         // https://github.com/alibaba/druid/pull/4717/
         // Uso de TreeMap em: https://github.com/apache/linkis/pull/5005
-        classReplacements.put("java.util.HashMap", Arrays.asList("java.util.LinkedHashMap", "java.util.TreeMap"));
+        classReplacements.putIfAbsent(
+            this.getFactory().createCtTypeReference(java.util.HashMap.class), 
+            Arrays.asList(
+                this.getFactory().createCtTypeReference(java.util.LinkedHashMap.class), 
+                this.getFactory().createCtTypeReference(java.util.TreeMap.class)
+            )
+        );
         // https://github.com/apache/iotdb/pull/13961
-        classReplacements.put("java.util.HashSet", Arrays.asList("java.util.LinkedHashSet"));
+        classReplacements.putIfAbsent(
+            this.getFactory().createCtTypeReference(java.util.HashSet.class), 
+            Arrays.asList(
+                this.getFactory().createCtTypeReference(java.util.LinkedHashSet.class), 
+                this.getFactory().createCtTypeReference(java.util.TreeSet.class)
+            )
+        );
     }
 
     public List<MutantCtElement> execute(CtElement toMutate) {
@@ -47,14 +60,13 @@ public class LinkedInjectorMutator extends SpoonMutator<CtInvocation> {
         // Pois chamar com 'new' é diferente de 'HashMap<K, V> a = ...' por exemplo.
         if (toMutate instanceof CtConstructorCall) {
             CtConstructorCall ctc = (CtConstructorCall) toMutate;
-            String className = ctc.getType().getQualifiedName();
+            CtTypeReference classType = ctc.getType();
 
-            if (classReplacements.containsKey(className)) {
-                for(String replacement: classReplacements.get(className)) {
-                    CtTypeReference replacementRef = this.getFactory().Type().createReference(replacement);             
+            if (classReplacements.containsKey(classType)) {
+                for(CtTypeReference replacement: classReplacements.get(classType)) {   
 
                     CtConstructorCall mutantCtc = ctc.clone();
-                    mutantCtc.setType(replacementRef);
+                    mutantCtc.setType(replacement);
 
                     MutantCtElement mutant = new MutantCtElement(mutantCtc, 1);
                     result.add(mutant);
@@ -62,15 +74,14 @@ public class LinkedInjectorMutator extends SpoonMutator<CtInvocation> {
             }
         } else if (toMutate instanceof CtLocalVariable) {
             CtLocalVariable ctl = (CtLocalVariable) toMutate;
-            String className = ctl.getAssignment().getType().getQualifiedName();
+            CtTypeReference classType = ctl.getType();
 
-            if (classReplacements.containsKey(className)) {
-                for(String replacement: classReplacements.get(className)) {
-                    CtTypeReference replacementRef = this.getFactory().Type().createReference(replacement);             
+            if (classReplacements.containsKey(classType)) {
+                for(CtTypeReference replacement: classReplacements.get(classType)) {          
 
                     CtLocalVariable mutantVar = ctl.clone();
                     CtExpression exp = mutantVar.getAssignment();
-                    exp.setType(replacementRef);
+                    exp.setType(replacement);
                     mutantVar.setAssignment(exp);
 
                     MutantCtElement mutant = new MutantCtElement(mutantVar, 1);

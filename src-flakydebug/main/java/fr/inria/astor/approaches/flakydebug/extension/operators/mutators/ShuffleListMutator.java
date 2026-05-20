@@ -1,15 +1,12 @@
 package fr.inria.astor.approaches.flakydebug.extension.operators.mutators;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
 import fr.inria.astor.approaches.jmutrepair.operators.SpoonMutator;
 import spoon.reflect.code.*;
 import spoon.reflect.declaration.CtElement;
-import spoon.reflect.declaration.CtType;
 import spoon.reflect.factory.Factory;
 import spoon.reflect.reference.CtExecutableReference;
 import spoon.reflect.reference.CtTypeReference;
@@ -18,19 +15,13 @@ import spoon.reflect.visitor.filter.TypeFilter;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 /**
- * Mutator que injeta flakiness ordenando coleções aleatoriamente antes da primeira asserção.
+ * Mutator que injeta flakiness ordenando listas aleatoriamente antes da primeira asserção.
  * @author Pedro Itiro Nagao
  */
-public class ShuffleCollectionMutator extends SpoonMutator<CtBlock> {
-    private Set<String> collections = new HashSet<>();
+public class ShuffleListMutator extends SpoonMutator<CtBlock> {
 
-    public ShuffleCollectionMutator(Factory factory) {
+    public ShuffleListMutator(Factory factory) {
         super(factory);
-        this.collections.add("add");
-        this.collections.add("remove");
-        this.collections.add("size");
-        this.collections.add("iterator");
-        this.collections.add("contains");
     }
 
     @Override
@@ -49,7 +40,7 @@ public class ShuffleCollectionMutator extends SpoonMutator<CtBlock> {
         List<CtExpression> args = assertion.getArguments();
         
         for (CtExpression arg : args) {
-            if (arg instanceof CtVariableRead && isCollection(arg.getType())) {
+            if (arg instanceof CtVariableRead && isList(arg.getType())) {
                 CtVariableRead varRead = (CtVariableRead) arg;
                 
                 // Criamos o clone do bloco para a variante
@@ -71,6 +62,7 @@ public class ShuffleCollectionMutator extends SpoonMutator<CtBlock> {
                     assertInClone.insertBefore(shuffleCall);
                     result.add(new MutantCtElement(mutatedBlock, 1.0));
                 }
+                break;
             }
         }
         return result;
@@ -92,18 +84,9 @@ public class ShuffleCollectionMutator extends SpoonMutator<CtBlock> {
         );
     }
 
-    private boolean isCollection(CtTypeReference<?> typeRef) {
+    private boolean isList(CtTypeReference<?> typeRef) {
         if (typeRef == null) return false;
-        try {
-            CtType<?> typeDecl = typeRef.getTypeDeclaration();
-            if (typeDecl == null) return false;
-            return typeDecl.getAllMethods().stream()
-                .map(m -> m.getSimpleName())
-                .anyMatch(this.collections::contains);
-        } catch (Exception e) {
-            String name = typeRef.getQualifiedName();
-            return name.contains("List") || name.contains("Collection");
-        }
+        return typeRef.isSubtypeOf(typeRef.getFactory().Type().createReference(java.util.List.class));
     }
 
     @Override

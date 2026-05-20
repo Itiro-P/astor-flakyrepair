@@ -36,10 +36,7 @@ public class EqualComparatorMutator extends SpoonMutator<CtMethod> {
     public List<MutantCtElement> execute(CtElement toMutate) {
         List<MutantCtElement> result = new ArrayList<>();
 
-        if (!(toMutate instanceof CtMethod)) {
-            log.debug("[EqualComparator] NÃO é CtMethod: " + toMutate.getClass().getSimpleName());
-            return result;
-        }
+        if (!(toMutate instanceof CtMethod)) return result;
 
         CtMethod<?> method = (CtMethod<?>) toMutate;
         CtMethod<?> mutated = factory.Core().clone(method);
@@ -48,8 +45,6 @@ public class EqualComparatorMutator extends SpoonMutator<CtMethod> {
             .stream()
             .filter(inv -> inv.getExecutable().getSimpleName().equals("assertEquals"))
             .collect(Collectors.toList());
-
-        log.debug("[EqualComparator] assertEquals encontrados: " + asserts.size());
 
         for (CtInvocation inv : asserts) {
             List<CtExpression<?>> args = inv.getArguments();
@@ -60,7 +55,6 @@ public class EqualComparatorMutator extends SpoonMutator<CtMethod> {
 
             for (CtExpression<?> arg : args) {
                 CtExpression<?> unwrapped = unwrapConverter(arg);
-                log.debug("[EqualComparator] unwrap [" + arg + "] -> " + unwrapped);
                 if (unwrapped != null) {
                     newArgs.add(unwrapped);
                     changed = true;
@@ -72,7 +66,6 @@ public class EqualComparatorMutator extends SpoonMutator<CtMethod> {
             if (changed) {
                 inv.setArguments(newArgs);
                 result.add(new MutantCtElement(mutated, 1));
-                log.debug("[EqualComparator] Mutante gerado: " + mutated);
                 break; // uma mutação por vez
             }
         }

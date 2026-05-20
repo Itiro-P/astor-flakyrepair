@@ -5,12 +5,12 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertEquals;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.is;
+
 
 public class ArrayTest {
     @Test
@@ -25,6 +25,7 @@ public class ArrayTest {
 
         // Flaky: assume ordem de inserção, que HashMap não preserva
         // Ordem de inserção não deve importar aqui
-        assertEquals(keys, keys2);
+        //assertEquals(keys, keys2);
+        assertThat(keys).containsExactlyInAnyOrderElementsOf(keys2);
     }
 }
