@@ -19,6 +19,9 @@ import spoon.reflect.reference.CtTypeReference;
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ShuffleSetMutator extends SpoonMutator<CtLocalVariable> {
+    private CtTypeReference setRef = this.getFactory().Type().createReference(java.util.Set.class);
+    private CtTypeReference replacementRef = this.getFactory().Type().createReference(ShuffledSet.class);
+
     public ShuffleSetMutator(Factory factory) {
         super(factory);
     }
@@ -27,10 +30,12 @@ public class ShuffleSetMutator extends SpoonMutator<CtLocalVariable> {
     public List<MutantCtElement> execute(CtElement toMutate) {
         List<MutantCtElement> result = new ArrayList<>();
 
+
         if (toMutate instanceof CtConstructorCall) {
             CtConstructorCall ctc = (CtConstructorCall) toMutate;
-
-            CtTypeReference replacementRef = this.getFactory().Type().createReference(ShuffledSet.class);             
+            if (ctc.getType() == null || !ctc.getType().isSubtypeOf(setRef)) {
+                return result;
+            }
 
             CtConstructorCall mutantCtc = ctc.clone();
             mutantCtc.setType(replacementRef);
@@ -39,9 +44,15 @@ public class ShuffleSetMutator extends SpoonMutator<CtLocalVariable> {
             result.add(mutant);
         } else if (toMutate instanceof CtLocalVariable) {
             CtLocalVariable ctl = (CtLocalVariable) toMutate;
-            CtLocalVariable mutantVar = ctl.clone();
+            CtTypeReference<?> varType = ctl.getType();
+            CtExpression assign = ctl.getAssignment();
+            CtTypeReference<?> assignType = assign != null ? assign.getType() : null;
 
-            CtTypeReference replacementRef = factory.Type().createReference(ShuffledSet.class);
+            if ((varType == null || !varType.isSubtypeOf(setRef)) && (assignType == null || !assignType.isSubtypeOf(setRef))) {
+                return result;
+            }
+
+            CtLocalVariable mutantVar = ctl.clone();
 
             if (mutantVar.getAssignment() instanceof CtConstructorCall) {
                 // new HashSet<>() → new ShuffledSet<>()

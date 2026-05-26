@@ -21,11 +21,9 @@ public class HashMapTest {
         map.put("a", 1);
         map.put("b", 2);
         map.put("c", 3);
- 
-        List<String> keys = new ArrayList<>(map.keySet());
-        Collections.shuffle(keys);
+
         // Flaky: assume ordem de inserção, que HashMap não preserva
         // Ordem de inserção não deve importar aqui
-        assertThat(keys, contains("a", "b", "c"));
+        assertThat(map.keySet(), containsExactly("a", "b", "c"));
     }
 }

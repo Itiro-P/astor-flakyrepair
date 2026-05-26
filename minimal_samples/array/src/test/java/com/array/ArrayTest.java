@@ -26,6 +26,6 @@ public class ArrayTest {
         // Flaky: assume ordem de inserção, que HashMap não preserva
         // Ordem de inserção não deve importar aqui
         //assertEquals(keys, keys2);
-        assertThat(keys).containsExactlyInAnyOrderElementsOf(keys2);
+        assertThat(keys).containsExactlyElementsOf(keys2);
     }
 }

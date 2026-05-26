@@ -3,7 +3,8 @@ package fr.inria.astor.approaches.flakydebug.extension.operators;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.ShuffleMapMutator;
+import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.SQLGeneralizationMutator;
+import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.SQLDisorderMutator;
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
 import fr.inria.astor.approaches.jmutrepair.operators.MutatorComposite;
 import fr.inria.astor.core.entities.ModificationPoint;
@@ -13,33 +14,33 @@ import fr.inria.astor.core.manipulation.MutationSupporter;
 import fr.inria.astor.core.solutionsearch.spaces.operators.AutonomousOperator;
 import spoon.reflect.code.*;
 import spoon.reflect.declaration.CtElement;
-import spoon.reflect.reference.CtTypeReference;
 
 /**
- * Operador que injeta flakiness em Maps embaralhando seus entries antes do ponto de uso.
+ * Operador que altera requisições SQL para simular resultados inconsistentes.
  * @author Pedro Itiro Nagao
  */
 @SuppressWarnings("rawtypes")
-public class ShuffleMapOp extends AutonomousOperator {
+public class SqlOp extends AutonomousOperator {
 
     MutatorComposite mutatorBinary = null;
 
-    public ShuffleMapOp() {
+    public SqlOp() {
         super();
         this.mutatorBinary = new MutatorComposite(MutationSupporter.getFactory());
-        this.mutatorBinary.getMutators().add(new ShuffleMapMutator(this.mutatorBinary.getFactory()));
+        this.mutatorBinary.getMutators().add(new SQLGeneralizationMutator(this.mutatorBinary.getFactory()));
+		this.mutatorBinary.getMutators().add(new SQLDisorderMutator(this.mutatorBinary.getFactory()));
     }
 
     @Override
     public boolean canBeAppliedToPoint(ModificationPoint point) {
         CtElement element = point.getCodeElement();
 		if(element instanceof CtLocalVariable) {
-            CtLocalVariable el = (CtLocalVariable) element;
-            return isMap(el.getAssignment().getType());
-        } else if(element instanceof CtConstructorCall) {
-			CtConstructorCall ctc = (CtConstructorCall) element;
-			return isMap(ctc.getType());
-		}
+            return isQuery(((CtLocalVariable) element).getAssignment().toString());
+        } else if(element instanceof CtVariableRead) {
+            return isQuery(((CtVariableRead) element).toString());
+        } else if(element instanceof CtLiteral) {
+            return isQuery(((CtLiteral) element).toString());
+        }
         return false;
     }
 
@@ -96,9 +97,8 @@ public class ShuffleMapOp extends AutonomousOperator {
 		}
 	}
 
-    private boolean isMap(CtTypeReference<?> typeRef) {
-        if (typeRef == null) return false;
-        return typeRef.isSubtypeOf(typeRef.getFactory().Type().createReference(java.util.Map.class));
+    private boolean isQuery(String str) {
+        return str != null && str.toUpperCase().startsWith("SELECT") && str.toUpperCase().contains("FROM");
     }
 
     public List<MutantCtElement> getMutants(CtElement element) {

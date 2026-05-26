@@ -40,8 +40,12 @@ public class ShuffleListMutator extends SpoonMutator<CtBlock> {
         List<CtExpression> args = assertion.getArguments();
         
         for (CtExpression arg : args) {
-            if (arg instanceof CtVariableRead && isList(arg.getType())) {
+            if (arg instanceof CtVariableRead) {
                 CtVariableRead varRead = (CtVariableRead) arg;
+                CtTypeReference<?> varDeclType = varRead.getVariable() != null ? varRead.getVariable().getType() : null;
+                if (!isList(arg.getType()) && (varDeclType == null || !isList(varDeclType))) {
+                    continue;
+                }
                 
                 // Criamos o clone do bloco para a variante
                 CtBlock mutatedBlock = parentBlock.clone();

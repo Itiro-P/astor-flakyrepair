@@ -19,6 +19,9 @@ public class ShuffledMap<K, V> implements Map<K, V> {
         inner.putAll(source);
     }
 
+    public ShuffledMap() {
+    }
+
     @Override
     public Set<Map.Entry<K, V>> entrySet() {
         List<Map.Entry<K, V>> entries = new ArrayList<>(inner.entrySet());
@@ -40,6 +43,14 @@ public class ShuffledMap<K, V> implements Map<K, V> {
         List<V> vals = new ArrayList<>();
         for (Map.Entry<K, V> e : entries) vals.add(e.getValue());
         return vals;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Map)) return false;
+        Map<?, ?> other = (Map<?, ?>) o;
+        return this.inner.equals(other);
     }
 
     // delega tudo o mais para inner

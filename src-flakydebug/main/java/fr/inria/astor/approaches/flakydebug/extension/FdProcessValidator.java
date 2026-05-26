@@ -49,6 +49,7 @@ public class FdProcessValidator extends ProgramVariantValidator {
 	private TestCaseVariantValidationResult validate(ProgramVariant mutatedVariant, ProjectRepairFacade projectFacade,
 			boolean forceExecuteRegression) {
 		try {
+			
 			ProjectConfiguration projConfig = projectFacade.getProperties();
 			List<URL> deps = projConfig.getDependencies();
 			String astorJar = ShuffledMap.class
@@ -57,8 +58,10 @@ public class FdProcessValidator extends ProgramVariantValidator {
 				.getLocation()
 				.getPath();
 			deps.add(new URL("file://" + astorJar));
+			log.debug("astorJar path: " + astorJar);
 			projConfig.setDependencies(deps);
 			projectFacade.setProperties(projConfig);
+
 			URL[] bc = createClassPath(mutatedVariant, projectFacade);
 
 			TestLauncher testProcessRunner = new TestLauncher();

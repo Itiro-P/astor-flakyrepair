@@ -121,6 +121,13 @@ public class JUnitRunner extends Runner {
                     log.error(e.getMessage());
                 }
             }
+            try {
+                File srcDir  = new File("target/classes/fr/inria/astor/approaches/flakydebug/extension/operators/utils/");
+                File destDir = new File(location + "/target/test-classes/fr/inria/astor/approaches/flakydebug/extension/operators/utils/");
+                org.apache.commons.io.FileUtils.copyDirectory(srcDir, destDir);
+            } catch (IOException e) {
+                log.error("Failed to copy utils package: " + e.getMessage());
+            }
         }
         String pomPath = ConfigurationProperties.getProperty("location") + "/pom.xml";
 
