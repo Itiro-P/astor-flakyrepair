@@ -19,7 +19,7 @@ import spoon.reflect.factory.Factory;
 public class SQLDisorderMutator extends SpoonMutator<CtElement> {
 
     // O (?si) ativa o case-insensitive (i) e permite que o .* leia quebras de linha (s)
-    private static final String SQL_CLAUSE_REGEX = "(?si)\\s*(ORDER\\s+BY|GROUP\\s+BY|HAVING)\\b.*";
+    private static final String SQL_CLAUSE_REGEX = "(?si)\\b(ORDER\\s+BY|GROUP\\s+BY|HAVING)\\b.*";
 
     public SQLDisorderMutator(Factory factory) {
         super(factory);
@@ -43,7 +43,7 @@ public class SQLDisorderMutator extends SpoonMutator<CtElement> {
         String original = (String) literal.getValue();
 
         // Verifica se a string contém alguma das cláusulas alvo
-        if (!original.toUpperCase().matches("(?s).*\\b(ORDER\\s+BY|GROUP\\s+BY|HAVING)\\b.*")) {
+        if (!original.toUpperCase().matches(SQL_CLAUSE_REGEX)) {
             return result;
         }
 

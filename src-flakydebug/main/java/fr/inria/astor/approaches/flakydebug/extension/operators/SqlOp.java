@@ -5,6 +5,7 @@ import java.util.List;
 
 import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.SQLGeneralizationMutator;
 import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.SQLDisorderMutator;
+import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.SQLOrderChangeMutator;
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
 import fr.inria.astor.approaches.jmutrepair.operators.MutatorComposite;
 import fr.inria.astor.core.entities.ModificationPoint;
@@ -21,7 +22,6 @@ import spoon.reflect.declaration.CtElement;
  */
 @SuppressWarnings("rawtypes")
 public class SqlOp extends AutonomousOperator {
-
     MutatorComposite mutatorBinary = null;
 
     public SqlOp() {
@@ -29,20 +29,49 @@ public class SqlOp extends AutonomousOperator {
         this.mutatorBinary = new MutatorComposite(MutationSupporter.getFactory());
         this.mutatorBinary.getMutators().add(new SQLGeneralizationMutator(this.mutatorBinary.getFactory()));
 		this.mutatorBinary.getMutators().add(new SQLDisorderMutator(this.mutatorBinary.getFactory()));
+		this.mutatorBinary.getMutators().add(new SQLOrderChangeMutator(this.mutatorBinary.getFactory()));
     }
 
-    @Override
-    public boolean canBeAppliedToPoint(ModificationPoint point) {
-        CtElement element = point.getCodeElement();
-		if(element instanceof CtLocalVariable) {
-            return isQuery(((CtLocalVariable) element).getAssignment().toString());
-        } else if(element instanceof CtVariableRead) {
-            return isQuery(((CtVariableRead) element).toString());
-        } else if(element instanceof CtLiteral) {
-            return isQuery(((CtLiteral) element).toString());
-        }
-        return false;
-    }
+	@Override
+	public boolean canBeAppliedToPoint(ModificationPoint point) {
+		CtElement element = point.getCodeElement();
+		
+		if (element == null) {
+			return false;
+		}
+
+		// Caso 1: A query é uma constante ou literal direta
+		if (element instanceof CtLiteral) {
+			Object value = ((CtLiteral<?>) element).getValue();
+			if (value instanceof String) {
+				return isQuery((String) value);
+			}
+		} 
+		
+		// Caso 2: Declaração de variável local (ex: String sql = "SELECT...")
+		else if (element instanceof CtLocalVariable) {
+			CtExpression<?> assignment = ((CtLocalVariable<?>) element).getAssignment();
+			if (assignment instanceof CtLiteral) {
+				Object value = ((CtLiteral<?>) assignment).getValue();
+				if (value instanceof String) {
+					return isQuery((String) value);
+				}
+			}
+		} 
+		
+		// Caso 3: Atribuição posterior (ex: sql = "SELECT...")
+		else if (element instanceof CtAssignment) {
+			CtExpression<?> assignment = ((CtAssignment<?, ?>) element).getAssignment();
+			if (assignment instanceof CtLiteral) {
+				Object value = ((CtLiteral<?>) assignment).getValue();
+				if (value instanceof String) {
+					return isQuery((String) value);
+				}
+			}
+		}
+
+		return false;
+	}
 
     @Override
 	public boolean applyChangesInModel(OperatorInstance operation, ProgramVariant p) {
@@ -98,7 +127,13 @@ public class SqlOp extends AutonomousOperator {
 	}
 
     private boolean isQuery(String str) {
-        return str != null && str.toUpperCase().startsWith("SELECT") && str.toUpperCase().contains("FROM");
+		if (str == null) {
+			return false;
+		}
+		// O .trim() mata espaços ou quebras de linha que jogam o SELECT para frente
+		String cleaned = str.trim().toUpperCase();
+		
+		return cleaned.startsWith("SELECT") && cleaned.contains("FROM");
     }
 
     public List<MutantCtElement> getMutants(CtElement element) {

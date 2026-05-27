@@ -16,11 +16,10 @@ import spoon.reflect.factory.Factory;
  *
  * @author Pedro Itiro Nagao
  */
-public class SQLGeneralizationMutator extends SpoonMutator<CtElement> {
+public class SQLOrderChangeMutator extends SpoonMutator<CtElement> {
+    private static final String CHECK_REGEX = "(?i)(SELECT)\\s(.+)\\s(FROM)\\s(.+)\\s(ORDER\\sBY)\\s(.+)\\s(ASC|DESC)";
 
-    private static final String CHECK_REGEX = "(?i)(SELECT)\\s(.+)\\s(FROM)\\s(.+)(\\s(ORDER\\sBY|GROUP\\sBY|HAVING)\\s(.+))?";
-
-    public SQLGeneralizationMutator(Factory factory) {
+    public SQLOrderChangeMutator(Factory factory) {
         super(factory);
     }
 
@@ -40,18 +39,15 @@ public class SQLGeneralizationMutator extends SpoonMutator<CtElement> {
 
         String original = (String) literal.getValue();
 
-        // 1. Verifica se a string bate com o padrão exato da regex
-        if (!original.matches(CHECK_REGEX)) {
-            return result;
-        }
 
-        // 2. Substitui as colunas (Grupo 2) por '*' e remonta a query com os outros grupos:
+        // 2. Substitui a ordenação por outra ao contrário
         // $1 = SELECT
+        // $2 = Colunas
         // $3 = FROM
         // $4 = Tabela e condições (WHERE)
-        // $5 = ORDER BY / GROUP BY / HAVING
-        // $6 = Restante da query
-        String mutated = original.replaceFirst(CHECK_REGEX, "$1 * $3 $4 $5 $6");
+        // $5 = ORDER BY
+        // $6 = reverOrder(ASC / DESC)
+        String mutated = original.replaceFirst(CHECK_REGEX, "$1 $2 $3 $4 $5 " + reverseOrder("$6"));
 
         if (mutated.equals(original)) {
             return result;
@@ -65,9 +61,23 @@ public class SQLGeneralizationMutator extends SpoonMutator<CtElement> {
         return result;
     }
 
+    /**
+     * Inverte a ordenação de ASC para DESC e vice-versa.
+     * @param order A ordem usada.
+     * @return A ordem invertida ou a mesma se não for ASC ou DESC.
+     */
+    private String reverseOrder(String order) {
+        if (order.equalsIgnoreCase("ASC")) {
+            return "DESC";
+        } else if (order.equalsIgnoreCase("DESC")) {
+            return "ASC";
+        }
+        return order; // Retorna o mesmo se não for ASC ou DESC
+    }
+
     @Override
     public String key() {
-        return "sqlGeneralizationMutator";
+        return "sqlOrderChangeMutator";
     }
 
     @Override
