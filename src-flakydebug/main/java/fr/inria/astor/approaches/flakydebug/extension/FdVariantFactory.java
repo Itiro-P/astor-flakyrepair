@@ -222,6 +222,7 @@ public class FdVariantFactory extends ProgramVariantFactory {
 			return null;
 		}
 
+		@SuppressWarnings("rawtypes")
 		List<CtVariable> contextOfPoint = null;
 		// We take the first element for getting the context (as the remaining
 		// have the same location, it's not necessary)

@@ -27,6 +27,7 @@ public class SqlOp extends AutonomousOperator {
     public SqlOp() {
         super();
         this.mutatorBinary = new MutatorComposite(MutationSupporter.getFactory());
+		
         this.mutatorBinary.getMutators().add(new SQLGeneralizationMutator(this.mutatorBinary.getFactory()));
 		this.mutatorBinary.getMutators().add(new SQLDisorderMutator(this.mutatorBinary.getFactory()));
 		this.mutatorBinary.getMutators().add(new SQLOrderChangeMutator(this.mutatorBinary.getFactory()));
