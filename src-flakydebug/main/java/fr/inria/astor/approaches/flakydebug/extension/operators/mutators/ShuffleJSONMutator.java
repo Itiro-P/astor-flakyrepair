@@ -44,7 +44,7 @@ public class ShuffleJSONMutator extends SpoonMutator<CtLocalVariable> {
         } else if (toMutate instanceof CtLocalVariable) {
             CtLocalVariable ctl = (CtLocalVariable) toMutate;
 
-            // check variable type or assignment type
+            // Vemos se o tipo e atribuição são JSON para evitar mutar variáveis que não são do tipo JSON
             CtTypeReference<?> varType = ctl.getType();
             CtExpression assign = ctl.getAssignment();
             CtTypeReference<?> assignType = assign != null ? assign.getType() : null;

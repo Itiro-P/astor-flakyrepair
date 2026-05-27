@@ -43,7 +43,7 @@ public class SqlExecutor {
     public List<Product> searchProducts(String sqlQuery) throws SQLException {
         List<Product> results = new ArrayList<>();
         try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(sqlQuery)) {
+            ResultSet rs = stmt.executeQuery(sqlQuery)) {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");

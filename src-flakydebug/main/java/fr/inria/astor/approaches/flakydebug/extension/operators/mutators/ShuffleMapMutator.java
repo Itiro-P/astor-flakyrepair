@@ -43,6 +43,7 @@ public class ShuffleMapMutator extends SpoonMutator<CtLocalVariable> {
             result.add(mutant);
         } else if (toMutate instanceof CtLocalVariable) {
             CtLocalVariable ctl = (CtLocalVariable) toMutate;
+            
             CtLocalVariable mutantVar = ctl.clone();
             CtTypeReference<?> varType = ctl.getType();
             CtExpression assign = ctl.getAssignment();
