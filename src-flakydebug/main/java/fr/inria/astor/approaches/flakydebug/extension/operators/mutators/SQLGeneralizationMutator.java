@@ -1,11 +1,15 @@
 package fr.inria.astor.approaches.flakydebug.extension.operators.mutators;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
 import fr.inria.astor.approaches.jmutrepair.operators.SpoonMutator;
+import spoon.reflect.code.CtAssignment;
+import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtLiteral;
+import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.factory.Factory;
 
@@ -18,7 +22,7 @@ import spoon.reflect.factory.Factory;
  */
 public class SQLGeneralizationMutator extends SpoonMutator<CtElement> {
 
-    private static final String CHECK_REGEX = "(?i)(SELECT)\\s(.+)\\s(FROM)\\s(.+)(\\s(ORDER\\sBY|GROUP\\sBY|HAVING)\\s(.+))?";
+    private static final String CHECK_REGEX = "(?i)(SELECT)\\s(.+?)\\s(FROM)\\s(.*?)(\\s(?:ORDER\\s+BY|GROUP\\s+BY|HAVING)\\s.+)?$";
 
     public SQLGeneralizationMutator(Factory factory) {
         super(factory);
@@ -28,41 +32,61 @@ public class SQLGeneralizationMutator extends SpoonMutator<CtElement> {
     public List<MutantCtElement> execute(CtElement toMutate) {
         List<MutantCtElement> result = new ArrayList<>();
 
-        if (!(toMutate instanceof CtLiteral)) {
-            return result;
+        // Caso 1: mod_point é o próprio literal — retorna literal clonado (tipo compatível)
+        if (toMutate instanceof CtLiteral) {
+            @SuppressWarnings("unchecked")
+            CtLiteral<String> literal = (CtLiteral<String>) toMutate;
+            String mutated = computeMutation(literal.getValue());
+            if (mutated != null) {
+                CtLiteral<String> clone = (CtLiteral<String>) literal.clone();
+                clone.setValue(mutated);
+                result.add(new MutantCtElement(clone, 1.0));
+            }
+        // Caso 2: mod_point é CtLocalVariable — deve-se retornar CtLocalVariable clonado
+        } else if (toMutate instanceof CtLocalVariable) {
+            CtExpression<?> rhs = ((CtLocalVariable<?>) toMutate).getAssignment();
+            if (rhs instanceof CtLiteral) {
+                @SuppressWarnings("unchecked")
+                CtLiteral<String> literal = (CtLiteral<String>) rhs;
+                String mutatedValue = computeMutation(literal.getValue());
+                if (mutatedValue != null) {
+                    @SuppressWarnings("unchecked")
+                    CtLocalVariable<String> cloneVar = (CtLocalVariable<String>) toMutate.clone();
+                    CtLiteral<String> cloneLit = (CtLiteral<String>) cloneVar.getAssignment();
+                    cloneLit.setValue(mutatedValue);
+                    result.add(new MutantCtElement(cloneVar, 1.0));
+                }
+            }
+
+        // Caso 3: mod_point é CtAssignment — deve-se retornar CtAssignment clonado
+        } else if (toMutate instanceof CtAssignment) {
+            CtExpression<?> rhs = ((CtAssignment<?, ?>) toMutate).getAssignment();
+            if (rhs instanceof CtLiteral) {
+                @SuppressWarnings("unchecked")
+                CtLiteral<String> literal = (CtLiteral<String>) rhs;
+                String mutatedValue = computeMutation(literal.getValue());
+                if (mutatedValue != null) {
+                    @SuppressWarnings("unchecked")
+                    CtAssignment<String, String> cloneAssign = (CtAssignment<String, String>) toMutate.clone();
+                    CtLiteral<String> cloneLit = (CtLiteral<String>) cloneAssign.getAssignment();
+                    cloneLit.setValue(mutatedValue);
+                    result.add(new MutantCtElement(cloneAssign, 1.0));
+                }
+            }
         }
-
-        CtLiteral<?> literal = (CtLiteral<?>) toMutate;
-
-        if (!(literal.getValue() instanceof String)) {
-            return result;
-        }
-
-        String original = (String) literal.getValue();
-
-        // 1. Verifica se a string bate com o padrão exato da regex
-        if (!original.matches(CHECK_REGEX)) {
-            return result;
-        }
-
-        // 2. Substitui as colunas (Grupo 2) por '*' e remonta a query com os outros grupos:
-        // $1 = SELECT
-        // $3 = FROM
-        // $4 = Tabela e condições (WHERE)
-        // $5 = ORDER BY / GROUP BY / HAVING
-        // $6 = Restante da query
-        String mutated = original.replaceFirst(CHECK_REGEX, "$1 * $3 $4 $5 $6");
-
-        if (mutated.equals(original)) {
-            return result;
-        }
-
-        @SuppressWarnings("unchecked")
-        CtLiteral<String> clone = (CtLiteral<String>) literal.clone();
-        clone.setValue(mutated);
-
-        result.add(new MutantCtElement(clone, 1.0));
         return result;
+    }
+
+    private String computeMutation(String query) {
+        if (query == null) return null;
+        if(!query.matches(CHECK_REGEX)) return null;
+
+        List<String> groups = new ArrayList<>(Arrays.asList(query.trim().split(" ")));
+
+        // Substitui o grupo 2 (colunas) por "*"
+        if(groups.get(1).equals("*")) return null; // Já é generalizado, não gera mutante
+        groups.set(1, "*");
+        return String.join(" ", groups);
     }
 
     @Override

@@ -2,22 +2,30 @@ package fr.inria.astor.approaches.flakydebug.extension.operators.mutators;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
 import fr.inria.astor.approaches.jmutrepair.operators.SpoonMutator;
+import spoon.reflect.code.CtAssignment;
+import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtLiteral;
+import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.factory.Factory;
 
 /**
- * Mutator que altera requisições SQL substituindo colunas explícitas por SELECT *,
- * potencialmente expondo falhas relacionadas à dependência da ordem ou número de colunas
- * retornadas.
+ * Mutator que inverte a direção de ORDER BY em queries SQL (ASC↔DESC),
+ * expondo falhas relacionadas à dependência da ordem de resultados.
  *
  * @author Pedro Itiro Nagao
  */
 public class SQLOrderChangeMutator extends SpoonMutator<CtElement> {
-    private static final String CHECK_REGEX = "(?i)(SELECT)\\s(.+)\\s(FROM)\\s(.+)\\s(ORDER\\sBY)\\s(.+)\\s(ASC|DESC)";
+
+    private static final Pattern CHECK_PATTERN = Pattern.compile(
+        "(SELECT)\\s(.+)\\s(FROM)\\s(.+)\\s(ORDER\\s+BY)\\s(.+)\\s(ASC|DESC)\\s*$",
+        Pattern.CASE_INSENSITIVE | Pattern.DOTALL
+    );
 
     public SQLOrderChangeMutator(Factory factory) {
         super(factory);
@@ -27,65 +35,91 @@ public class SQLOrderChangeMutator extends SpoonMutator<CtElement> {
     public List<MutantCtElement> execute(CtElement toMutate) {
         List<MutantCtElement> result = new ArrayList<>();
 
-        if (!(toMutate instanceof CtLiteral)) {
-            return result;
+        // Caso 1: mod_point é o próprio literal — retorna literal clonado (tipo compatível)
+        if (toMutate instanceof CtLiteral) {
+            @SuppressWarnings("unchecked")
+            CtLiteral<String> literal = (CtLiteral<String>) toMutate;
+            MutantCtElement mutant = mutateLiteralInPlace(literal);
+            if (mutant != null) result.add(mutant);
+
+        // Caso 2: mod_point é CtLocalVariable — deve-se retornar CtLocalVariable clonado
+        } else if (toMutate instanceof CtLocalVariable) {
+            CtExpression<?> rhs = ((CtLocalVariable<?>) toMutate).getAssignment();
+            if (rhs instanceof CtLiteral) {
+                @SuppressWarnings("unchecked")
+                CtLiteral<String> literal = (CtLiteral<String>) rhs;
+                String mutatedValue = computeMutation(literal.getValue());
+                if (mutatedValue != null) {
+                    @SuppressWarnings("unchecked")
+                    CtLocalVariable<String> cloneVar = (CtLocalVariable<String>) toMutate.clone();
+                    CtLiteral<String> cloneLit = (CtLiteral<String>) cloneVar.getAssignment();
+                    cloneLit.setValue(mutatedValue);
+                    result.add(new MutantCtElement(cloneVar, 1.0));
+                }
+            }
+
+        // Caso 3: mod_point é CtAssignment — deve-se retornar CtAssignment clonado
+        } else if (toMutate instanceof CtAssignment) {
+            CtExpression<?> rhs = ((CtAssignment<?, ?>) toMutate).getAssignment();
+            if (rhs instanceof CtLiteral) {
+                @SuppressWarnings("unchecked")
+                CtLiteral<String> literal = (CtLiteral<String>) rhs;
+                String mutatedValue = computeMutation(literal.getValue());
+                if (mutatedValue != null) {
+                    @SuppressWarnings("unchecked")
+                    CtAssignment<String, String> cloneAssign = (CtAssignment<String, String>) toMutate.clone();
+                    CtLiteral<String> cloneLit = (CtLiteral<String>) cloneAssign.getAssignment();
+                    cloneLit.setValue(mutatedValue);
+                    result.add(new MutantCtElement(cloneAssign, 1.0));
+                }
+            }
         }
 
-        CtLiteral<?> literal = (CtLiteral<?>) toMutate;
-
-        if (!(literal.getValue() instanceof String)) {
-            return result;
-        }
-
-        String original = (String) literal.getValue();
-
-
-        // 2. Substitui a ordenação por outra ao contrário
-        // $1 = SELECT
-        // $2 = Colunas
-        // $3 = FROM
-        // $4 = Tabela e condições (WHERE)
-        // $5 = ORDER BY
-        // $6 = reverOrder(ASC / DESC)
-        String mutated = original.replaceFirst(CHECK_REGEX, "$1 $2 $3 $4 $5 " + reverseOrder("$6"));
-
-        if (mutated.equals(original)) {
-            return result;
-        }
-
-        @SuppressWarnings("unchecked")
-        CtLiteral<String> clone = (CtLiteral<String>) literal.clone();
-        clone.setValue(mutated);
-
-        result.add(new MutantCtElement(clone, 1.0));
         return result;
     }
 
     /**
-     * Inverte a ordenação de ASC para DESC e vice-versa.
-     * @param order A ordem usada.
-     * @return A ordem invertida ou a mesma se não for ASC ou DESC.
+     * Usado apenas no Caso 1, onde o mod_point já é o literal e pode ser
+     * retornado diretamente como mutante (tipos compatíveis com o replace).
+     */
+    private MutantCtElement mutateLiteralInPlace(CtLiteral<String> original) {
+        String mutatedValue = computeMutation(original.getValue());
+        if (mutatedValue == null) return null;
+        CtLiteral<String> clone = (CtLiteral<String>) original.clone();
+        clone.setValue(mutatedValue);
+        return new MutantCtElement(clone, 1.0);
+    }
+
+    /**
+     * Aplica a mutação na string da query: inverte ASC↔DESC.
+     * Usa Matcher.group() para capturar o valor real do grupo — não "$7" literal.
+     *
+     * @return a query mutada, ou null se o padrão não casar ou a mutação for idêntica.
+     */
+    private String computeMutation(String query) {
+        if (query == null) return null;
+        Matcher m = CHECK_PATTERN.matcher(query);
+        if (!m.find()) return null;
+
+        // grupo 7 contém o valor real de ASC ou DESC
+        String currentOrder = m.group(7);
+        String newOrder = reverseOrder(currentOrder);
+
+        // Reconstrói a query preservando os grupos 1–6 e substituindo apenas o 7
+        String mutated = m.replaceFirst("$1 $2 $3 $4 $5 $6 " + newOrder).trim();
+        return mutated.equals(query) ? null : mutated;
+    }
+
+    /**
+     * Inverte ASC para DESC e vice-versa.
      */
     private String reverseOrder(String order) {
-        if (order.equalsIgnoreCase("ASC")) {
-            return "DESC";
-        } else if (order.equalsIgnoreCase("DESC")) {
-            return "ASC";
-        }
-        return order; // Retorna o mesmo se não for ASC ou DESC
+        if (order.equalsIgnoreCase("ASC")) return "DESC";
+        if (order.equalsIgnoreCase("DESC")) return "ASC";
+        return order;
     }
 
-    @Override
-    public String key() {
-        return "sqlOrderChangeMutator";
-    }
-
-    @Override
-    public void setup() {
-    }
-
-    @Override
-    public int levelMutation() {
-        return 1;
-    }
+    @Override public String key()            { return "sqlOrderChangeMutator"; }
+    @Override public void setup()            { }
+    @Override public int levelMutation()     { return 1; }
 }
