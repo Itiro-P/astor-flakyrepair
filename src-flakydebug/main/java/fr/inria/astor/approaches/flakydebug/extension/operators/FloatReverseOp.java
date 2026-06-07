@@ -1,12 +1,9 @@
 package fr.inria.astor.approaches.flakydebug.extension.operators;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.LiteralMultiplierMutator;
+import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.FloatReverseMutator;
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
 import fr.inria.astor.approaches.jmutrepair.operators.MutatorComposite;
 import fr.inria.astor.core.entities.ModificationPoint;
@@ -14,8 +11,8 @@ import fr.inria.astor.core.entities.OperatorInstance;
 import fr.inria.astor.core.entities.ProgramVariant;
 import fr.inria.astor.core.manipulation.MutationSupporter;
 import fr.inria.astor.core.solutionsearch.spaces.operators.AutonomousOperator;
+import spoon.reflect.code.CtBinaryOperator;
 import spoon.reflect.code.CtBlock;
-import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.declaration.CtElement;
 
@@ -25,26 +22,20 @@ import spoon.reflect.declaration.CtElement;
  * @author Pedro Itiro Nagao
  */
 @SuppressWarnings("rawtypes")
-public class LiteralMultiplierOp extends AutonomousOperator {
-	private Set<String> allowedMethods = new HashSet<>(Arrays.asList("sleep", "wait", "join", "countDown", "incrementAndGet", "decrementAndGet"));
-
+public class FloatReverseOp extends AutonomousOperator {
 	MutatorComposite mutatorBinary = null;
-	public LiteralMultiplierOp() {
+	public FloatReverseOp() {
 		super();
 
 		this.mutatorBinary = new MutatorComposite(MutationSupporter.getFactory());
-        this.mutatorBinary.getMutators().add(new LiteralMultiplierMutator(this.mutatorBinary.getFactory()));
+        this.mutatorBinary.getMutators().add(new FloatReverseMutator(this.mutatorBinary.getFactory()));
 	}
 
 	@Override
 	public boolean canBeAppliedToPoint(ModificationPoint point) {
 		CtElement element = point.getCodeElement();
-		// Vemos se é um literal.
-		if (!(element instanceof CtLiteral)) return false;
-        CtLiteral literal = (CtLiteral) element;
-		// Agora vemos se é uma invocaćão e é um dos métodos mutáveis.
-		return literal.getParent() instanceof CtInvocation
-            && allowedMethods.contains(((CtInvocation) literal.getParent()).getExecutable().getSimpleName());
+		// Vemos se é um opareando.
+		return (element instanceof CtBinaryOperator);
 	}
 
 	@Override

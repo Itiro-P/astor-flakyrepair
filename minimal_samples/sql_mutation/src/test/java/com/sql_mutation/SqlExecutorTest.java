@@ -35,7 +35,7 @@ public class SqlExecutorTest {
             executor.insertProduct(product);
         }
 
-        String sql = "SELECT * FROM products ORDER BY price DESC";
+        String sql = "SELECT id, name, price, active FROM products ORDER BY price DESC";
         
         List<Product> productsSearch = executor.searchProducts(sql);
         

@@ -103,6 +103,11 @@
 	</dependencyManagement>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.github.jsqlparser</groupId>
+			<artifactId>jsqlparser</artifactId>
+			<version>4.9</version>
+		</dependency>
 		<!-- Spoon for AST manipulation -->
 		<dependency>
 			<groupId>fr.inria.gforge.spoon</groupId>
@@ -195,10 +200,6 @@
 			<artifactId>javassist</artifactId>
 			<version>3.30.2-GA</version>
 		</dependency>
-
-		<!-- NonDex for flaky test detection and validation -->
-		<!-- NonDex is integrated via Maven plugin execution -->
-		<!-- See build section for NonDex plugin configuration -->
 	</dependencies>
 
 	<build>

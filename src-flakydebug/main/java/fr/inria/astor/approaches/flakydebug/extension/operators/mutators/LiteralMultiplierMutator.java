@@ -15,7 +15,7 @@ import spoon.reflect.factory.Factory;
  * Útil para lidar com testes flaky causados por valores limite ou condições de corrida que dependem de tempos ou contagens específicas.
  * @author Pedro Itiro Nagao
  */
-public class LiteralMultiplierMutator extends SpoonMutator<CtLiteral<?>> {
+public class LiteralMultiplierMutator extends SpoonMutator<CtLiteral<Number>> {
     // Lista de fatores para multiplicar o literal alvo.
     private static final List<Double> multiplicationFactors = Arrays.asList(0.1, 0.4, 0.5, 0.9, 1.1, 1.5, 2.0, 5.0, 10.0);
 
