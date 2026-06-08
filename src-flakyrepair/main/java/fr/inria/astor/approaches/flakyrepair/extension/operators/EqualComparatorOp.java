@@ -18,7 +18,7 @@ import spoon.reflect.code.CtInvocation;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtMethod;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class EqualComparatorOp extends AutonomousOperator {
     private static HashSet<String> allowedMethods = new HashSet<>(Arrays.asList("toString", "toArray"));
 

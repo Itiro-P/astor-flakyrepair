@@ -23,7 +23,7 @@ import spoon.reflect.declaration.CtMethod;
  *
  * @author: Pedro I. Nagao
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class FinalModifierInjectionOp extends AutonomousOperator {
 
 	MutatorComposite mutatorBinary = null;

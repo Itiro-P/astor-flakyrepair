@@ -7,7 +7,6 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 
-import fr.inria.astor.core.validation.results.TestResult;
 import fr.inria.astor.approaches.flakydebug.extension.FdTestResult;
 import fr.inria.astor.core.setup.ConfigurationProperties;
 

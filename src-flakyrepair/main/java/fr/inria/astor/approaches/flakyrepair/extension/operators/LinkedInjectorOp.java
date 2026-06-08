@@ -22,7 +22,7 @@ import spoon.reflect.declaration.CtElement;
  * a partir das mutações encontradas (construtores e variáveis locais).
  * @author Pedro Itiro Nagao
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class LinkedInjectorOp extends AutonomousOperator {
 
 	MutatorComposite mutatorBinary = null;

@@ -21,7 +21,7 @@ import spoon.reflect.declaration.CtElement;
  * Útil para lidar com testes flaky causados por valores limite ou condições de corrida que dependem de tempos ou contagens específicas.
  * @author Pedro Itiro Nagao
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class FloatReverseOp extends AutonomousOperator {
 	MutatorComposite mutatorBinary = null;
 	public FloatReverseOp() {

@@ -12,6 +12,7 @@ import spoon.reflect.factory.Factory;
 /**
  * Mutator que troca operandos Float de lado. Isso pode levar a erros de imprecisão que (talvez) não foram considerados.
  */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class FloatReverseMutator extends SpoonMutator<CtBinaryOperator<Float>> {
     public FloatReverseMutator(Factory factory) {
         super(factory);
@@ -21,9 +22,9 @@ public class FloatReverseMutator extends SpoonMutator<CtBinaryOperator<Float>> {
         List<MutantCtElement> result = new ArrayList<>();
         if (!(toMutate instanceof CtBinaryOperator)) return result;
 
-        CtBinaryOperator<Float> operation = (CtBinaryOperator<Float>) toMutate;
+        CtBinaryOperator operation = (CtBinaryOperator) toMutate;
 
-        CtBinaryOperator<Float> cloned = operation.clone();
+        CtBinaryOperator cloned = operation.clone();
 
         cloned.setLeftHandOperand(operation.getRightHandOperand());
         cloned.setRightHandOperand(operation.getLeftHandOperand());

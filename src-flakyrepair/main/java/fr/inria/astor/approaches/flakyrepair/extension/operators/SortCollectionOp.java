@@ -27,7 +27,7 @@ import spoon.reflect.visitor.filter.TypeFilter;
  * da asserção, corrigindo flakiness por ordem não determinística.
  * @author Pedro Itiro Nagao
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class SortCollectionOp extends AutonomousOperator {
 	MutatorComposite mutatorBinary = null;
 	public SortCollectionOp() {

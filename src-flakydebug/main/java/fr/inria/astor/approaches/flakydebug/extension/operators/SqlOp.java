@@ -20,7 +20,7 @@ import spoon.reflect.declaration.CtElement;
  * Operador que altera requisições SQL para simular resultados inconsistentes.
  * @author Pedro Itiro Nagao
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class SqlOp extends AutonomousOperator {
     MutatorComposite mutatorBinary = null;
 

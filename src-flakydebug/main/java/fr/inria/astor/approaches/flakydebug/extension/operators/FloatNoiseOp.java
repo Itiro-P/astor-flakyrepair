@@ -1,7 +1,10 @@
 package fr.inria.astor.approaches.flakydebug.extension.operators;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.FloatReverseMutator;
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
@@ -15,9 +18,16 @@ import spoon.reflect.code.CtBinaryOperator;
 import spoon.reflect.code.CtBlock;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.declaration.CtElement;
+import spoon.reflect.reference.CtTypeReference;
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class FloatNoiseOp extends AutonomousOperator {
 	MutatorComposite mutatorBinary = null;
+	final Set<CtTypeReference> types = new HashSet<>(Arrays.asList(
+		this.mutatorBinary.getFactory().Type().createReference(java.lang.Float.class),
+		this.mutatorBinary.getFactory().Type().createReference(java.lang.Double.class)
+	));
+
 	public FloatNoiseOp() {
 		super();
 
@@ -29,7 +39,17 @@ public class FloatNoiseOp extends AutonomousOperator {
 	public boolean canBeAppliedToPoint(ModificationPoint point) {
 		CtElement element = point.getCodeElement();
 		// Vemos se é um opareando.
-		return (element instanceof CtBinaryOperator);
+		if(!(element instanceof CtBinaryOperator)) return false;
+		CtBinaryOperator operator = (CtBinaryOperator) element;
+
+
+		return this.types.stream().anyMatch(type -> {
+			return (
+				operator.getRightHandOperand().getType().isSubtypeOf(type) ||
+				operator.getLeftHandOperand().getType().isSubtypeOf(type) ||
+				operator.getType().isSubtypeOf(type)
+			);
+		});
 	}
 
 	@Override

@@ -27,7 +27,7 @@ import spoon.reflect.reference.CtTypeReference;
  * Operador unificado que agrega os diversos mutators de "shuffle" (List, Set, Map, JSON)
  * e pode ser aplicado nos mesmos pontos onde os operadores específicos aplicavam.
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ShuffleCollectionOp extends AutonomousOperator {
 
     MutatorComposite mutatorComposite = null;

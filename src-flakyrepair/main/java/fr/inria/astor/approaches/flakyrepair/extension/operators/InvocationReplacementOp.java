@@ -20,7 +20,7 @@ import spoon.reflect.declaration.CtElement;
  * @author Pedro Itiro Nagao
  *
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class InvocationReplacementOp extends AutonomousOperator {
 
 	MutatorComposite mutatorBinary = null;

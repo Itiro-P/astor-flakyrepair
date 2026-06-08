@@ -9,7 +9,9 @@ import spoon.reflect.code.CtLiteral;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.factory.Factory;
 
-public class FloatNoiseMutator extends SpoonMutator<CtLiteral<Float>> {
+@SuppressWarnings({ "rawtypes", "unchecked" })
+public class FloatNoiseMutator extends SpoonMutator<CtLiteral<Number>> {
+    final static float FACTOR = 1.01f;
     public FloatNoiseMutator(Factory factory) {
         super(factory);
     }
@@ -17,13 +19,19 @@ public class FloatNoiseMutator extends SpoonMutator<CtLiteral<Float>> {
     public List<MutantCtElement> execute(CtElement toMutate) {
         List<MutantCtElement> result = new ArrayList<>();
         if (!(toMutate instanceof CtLiteral)) return result;
-        CtLiteral<Float> literal = (CtLiteral<Float>) toMutate;
+        CtLiteral<Number> literal = (CtLiteral<Number>) toMutate;
 
-        CtLiteral mutatedLiteral = factory.Core().clone(literal);
-        if (mutatedLiteral.getValue() instanceof Float) {
-            Float originalValue = (Float) mutatedLiteral.getValue();
-            float newValue = originalValue.floatValue() * 1.01f;
-            mutatedLiteral.setValue(newValue);
+        CtLiteral mutatedLiteral = literal.clone();
+        if (mutatedLiteral.getValue() instanceof Number) {
+            Number originalValue = (Number) mutatedLiteral.getValue();
+            // Preserva o tipo original do literal (int, long, float, double)
+            if (originalValue instanceof Double) {
+                double newValue = originalValue.doubleValue() * FloatNoiseMutator.FACTOR;
+                mutatedLiteral.setValue((double) newValue);
+            } else if (originalValue instanceof Float) {
+                float newValue = originalValue.floatValue() * FloatNoiseMutator.FACTOR;
+                mutatedLiteral.setValue((float) newValue);
+            }
             result.add(new MutantCtElement(mutatedLiteral, 1));
         }
         return result;

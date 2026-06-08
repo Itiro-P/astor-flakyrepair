@@ -221,7 +221,8 @@ public class FrVariantFactory extends ProgramVariantFactory {
 		if (ctSuspects.isEmpty()) {
 			return null;
 		}
-
+		
+		@SuppressWarnings("rawtypes")
 		List<CtVariable> contextOfPoint = null;
 		// We take the first element for getting the context (as the remaining
 		// have the same location, it's not necessary)

@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import fr.inria.astor.approaches.flakydebug.extension.FdProcessValidator;
 import fr.inria.astor.approaches.flakydebug.extension.FdTestResult;
-import fr.inria.astor.approaches.flakydebug.extension.operators.utils.ShuffledMap;
 import fr.inria.astor.core.setup.ConfigurationProperties;
 
 public class JUnitRunner extends Runner {

@@ -24,7 +24,7 @@ import spoon.reflect.declaration.CtElement;
  * Útil para lidar com testes flaky causados por valores limite ou condições de corrida que dependem de tempos ou contagens específicas.
  * @author Pedro Itiro Nagao
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class LiteralMultiplierOp extends AutonomousOperator {
 	private Set<String> allowedMethods = new HashSet<>(Arrays.asList("sleep", "wait", "join", "countDown", "incrementAndGet", "decrementAndGet"));
 
