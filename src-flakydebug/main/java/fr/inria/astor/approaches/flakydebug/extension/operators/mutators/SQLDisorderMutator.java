@@ -3,8 +3,8 @@ package fr.inria.astor.approaches.flakydebug.extension.operators.mutators;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.shufflemutators.Mutator;
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
-import fr.inria.astor.approaches.jmutrepair.operators.SpoonMutator;
 import spoon.reflect.code.CtAssignment;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtLiteral;
@@ -19,7 +19,7 @@ import spoon.reflect.factory.Factory;
  *
  * @author Pedro Itiro Nagao
  */
-public class SQLDisorderMutator extends SpoonMutator<CtElement> {
+public class SQLDisorderMutator extends Mutator<CtElement> {
 
     // O (?si) ativa o case-insensitive (i) e permite que o .* leia quebras de linha (s)
     private static final String SQL_CLAUSE_REGEX = "(?si)(.*?)\\b(ORDER\\s+BY|GROUP\\s+BY|HAVING)\\b.*";
@@ -82,19 +82,5 @@ public class SQLDisorderMutator extends SpoonMutator<CtElement> {
         String cleaned = query.replaceFirst(SQL_CLAUSE_REGEX, "$1").trim();
         if (cleaned.equals(query)) return null;
         return cleaned;
-    }
-
-    @Override
-    public String key() {
-        return "sqlDisorderMutator";
-    }
-
-    @Override
-    public void setup() {
-    }
-
-    @Override
-    public int levelMutation() {
-        return 1;
     }
 }

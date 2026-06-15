@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.shufflemutators.Mutator;
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
-import fr.inria.astor.approaches.jmutrepair.operators.SpoonMutator;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.factory.Factory;
@@ -16,7 +16,7 @@ import spoon.reflect.factory.Factory;
  * @author Pedro Itiro Nagao
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public class LiteralMultiplierMutator extends SpoonMutator<CtLiteral<Number>> {
+public class LiteralMultiplierMutator extends Mutator<CtLiteral<Number>> {
     // Lista de fatores para multiplicar o literal alvo.
     private static final List<Double> multiplicationFactors = Arrays.asList(0.1, 0.4, 0.5, 0.9, 1.1, 1.5, 2.0, 5.0, 10.0);
 
@@ -50,19 +50,4 @@ public class LiteralMultiplierMutator extends SpoonMutator<CtLiteral<Number>> {
         }
         return result;
     }
-
-    @Override
-	public String key() {
-		return "literalMultiplierMutator";
-	}
-
-	@Override
-	public void setup() {
-	}
-
-
-    @Override
-	public int levelMutation() {
-		return 1;
-	}
 }

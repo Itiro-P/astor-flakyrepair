@@ -175,3 +175,18 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
   -bintestfolder target/test-classes \
   -location "$(pwd)/minimal_samples/sql_mutation" \
   -dependencies "$(pwd)/minimal_samples/sql_mutation/lib"
+
+// Floatty
+(cd "$(pwd)/minimal_samples/floatty" && \
+mvn clean compile test-compile package dependency:copy-dependencies \
+  -DskipTests=true -DoutputDirectory=lib -DincludeScope=test) && \
+java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
+  -mode custom \
+  -customengine fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
+  -javacompliancelevel 11 \
+  -srcjavafolder src/main/java \
+  -srctestfolder src/test/java  \
+  -binjavafolder target/classes \
+  -bintestfolder target/test-classes \
+  -location "$(pwd)/minimal_samples/floatty" \
+  -dependencies "$(pwd)/minimal_samples/floatty/lib"

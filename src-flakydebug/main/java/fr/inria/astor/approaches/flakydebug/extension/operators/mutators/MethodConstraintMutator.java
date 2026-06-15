@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.shufflemutators.Mutator;
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
-import fr.inria.astor.approaches.jmutrepair.operators.SpoonMutator;
 import spoon.reflect.code.CtInvocation;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.factory.Factory;
@@ -22,7 +22,7 @@ import spoon.reflect.factory.Factory;
  * @author Pedro Itiro Nagao
  */
 @SuppressWarnings("rawtypes")
-public class MethodConstraintMutator extends SpoonMutator<CtInvocation> {
+public class MethodConstraintMutator extends Mutator<CtInvocation> {
     // Mapeia nomes de métodos que costumam impor ordem/contrato -> versões "relaxadas".
     private static Map<String, List<String>> methodReplacements = new HashMap<>();
 
@@ -59,19 +59,4 @@ public class MethodConstraintMutator extends SpoonMutator<CtInvocation> {
         }
         return result;
     }
-
-    @Override
-	public String key() {
-		return "methodConstraintMutator";
-	}
-
-	@Override
-	public void setup() {
-	}
-
-
-    @Override
-	public int levelMutation() {
-		return 1;
-	}
 }

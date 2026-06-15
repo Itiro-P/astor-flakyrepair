@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static org.junit.Assert.assertEquals;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 
@@ -24,6 +23,6 @@ public class HashMapTest {
 
         // Flaky: assume ordem de inserção, que HashMap não preserva
         // Ordem de inserção não deve importar aqui
-        assertThat(map.keySet(), containsExactly("a", "b", "c"));
+        assertThat(map.keySet()).containsExactly("a", "b", "c");
     }
 }

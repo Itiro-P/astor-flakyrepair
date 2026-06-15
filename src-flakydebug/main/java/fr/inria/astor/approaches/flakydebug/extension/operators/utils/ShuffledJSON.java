@@ -14,12 +14,16 @@ import java.util.Set;
  * Tipo especial de JSONObject onde seus elementos internos são embaralhados
  * na serialização, simulando order-dependent flakiness.
  */
+@SuppressWarnings("unchecked")
 public class ShuffledJSON extends JSONObject {
+	public ShuffledJSON(JSONObject obj) {
+		super();
+		if(obj != null) this.putAll(obj);
+	}
 
     @Override
-    @SuppressWarnings("unchecked")
     public Set<Map.Entry<?, ?>> entrySet() {
-        List<Map.Entry<?, ?>> entries = new ArrayList<>(super.entrySet());
+		List<Map.Entry<?, ?>> entries = new ArrayList<>(super.entrySet());
         Collections.shuffle(entries);
         return new LinkedHashSet<>(entries);
     }

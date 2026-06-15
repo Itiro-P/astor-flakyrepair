@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.shufflemutators.Mutator;
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
-import fr.inria.astor.approaches.jmutrepair.operators.SpoonMutator;
 import spoon.reflect.code.CtAssignment;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtLiteral;
@@ -20,7 +20,7 @@ import spoon.reflect.factory.Factory;
  *
  * @author Pedro Itiro Nagao
  */
-public class SQLOrderChangeMutator extends SpoonMutator<CtElement> {
+public class SQLOrderChangeMutator extends Mutator<CtElement> {
 
     private static final Pattern CHECK_PATTERN = Pattern.compile(
         "(SELECT)\\s(.+)\\s(FROM)\\s(.+)\\s(ORDER\\s+BY)\\s(.+)\\s(ASC|DESC)\\s*$",
@@ -118,8 +118,4 @@ public class SQLOrderChangeMutator extends SpoonMutator<CtElement> {
         if (order.equalsIgnoreCase("DESC")) return "ASC";
         return order;
     }
-
-    @Override public String key()            { return "sqlOrderChangeMutator"; }
-    @Override public void setup()            { }
-    @Override public int levelMutation()     { return 1; }
 }

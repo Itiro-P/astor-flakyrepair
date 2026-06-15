@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.shufflemutators.Mutator;
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
-import fr.inria.astor.approaches.jmutrepair.operators.SpoonMutator;
 import spoon.reflect.code.CtAssignment;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtLiteral;
@@ -20,7 +20,7 @@ import spoon.reflect.factory.Factory;
  *
  * @author Pedro Itiro Nagao
  */
-public class SQLGeneralizationMutator extends SpoonMutator<CtElement> {
+public class SQLGeneralizationMutator extends Mutator<CtElement> {
 
     private static final String CHECK_REGEX = "(?i)(SELECT)\\s(.+?)\\s(FROM)\\s(.*?)(\\s(?:ORDER\\s+BY|GROUP\\s+BY|HAVING)\\s.+)?$";
 
@@ -87,19 +87,5 @@ public class SQLGeneralizationMutator extends SpoonMutator<CtElement> {
         if(groups.get(1).equals("*")) return null; // Já é generalizado, não gera mutante
         groups.set(1, "*");
         return String.join(" ", groups);
-    }
-
-    @Override
-    public String key() {
-        return "sqlGeneralizationMutator";
-    }
-
-    @Override
-    public void setup() {
-    }
-
-    @Override
-    public int levelMutation() {
-        return 1;
     }
 }

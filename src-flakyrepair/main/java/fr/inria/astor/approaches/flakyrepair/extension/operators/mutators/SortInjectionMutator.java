@@ -90,7 +90,7 @@ public class SortInjectionMutator extends SpoonMutator<CtBlock> {
     }
 
     @Override
-    public String key() { return "sortedInjectionMutator"; }
+    public String key() { return "sortInjectionMutator"; }
 
     @Override
     public void setup() {}
