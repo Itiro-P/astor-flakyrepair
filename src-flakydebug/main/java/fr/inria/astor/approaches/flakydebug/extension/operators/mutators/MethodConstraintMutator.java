@@ -16,9 +16,6 @@ import spoon.reflect.factory.Factory;
  * Mutator que substitui chamadas de métodos por versões "restritas" que impõem mais restrições
  * (ex: `containsOnly` -> `containsExactly`). Útil para lidar com testes flaky causados por
  * verificações de conteúdo que não exigem ordem ou presença exata.
- *
- * Clona a invocação original e altera seu nome para a versão relaxada, retornando a mutação
- * como um `MutantCtElement`.
  * @author Pedro Itiro Nagao
  */
 @SuppressWarnings("rawtypes")
@@ -31,15 +28,15 @@ public class MethodConstraintMutator extends Mutator<CtInvocation> {
         // Exemplos reais de substituições observadas em PRs de projetos
         // https://github.com/hellokaton/30-seconds-of-java8/pull/5
         // https://github.com/hellokaton/30-seconds-of-java8/pull/6
-        methodReplacements.putIfAbsent("containsExactlyInAnyOrder", Arrays.asList("containsExactly"));
-        methodReplacements.putIfAbsent("containsExactlyInAnyOrderElementsOf", Arrays.asList("containsExactlyElementsOf"));
-        methodReplacements.putIfAbsent("containsOnly", Arrays.asList("containsExactly"));
+        methodReplacements.put("containsExactlyInAnyOrder", Arrays.asList("containsExactly"));
+        methodReplacements.put("containsExactlyInAnyOrderElementsOf", Arrays.asList("containsExactlyElementsOf"));
+        methodReplacements.put("containsOnly", Arrays.asList("containsExactly"));
         // https://github.com/apache/incubator-kie-drools/pull/6187\
         // https://github.com/apache/pulsar/pull/24871
         // https://github.com/AuthMe/AuthMeReloaded/pull/2386
-        methodReplacements.putIfAbsent("contains", Arrays.asList("containsExactly"));
+        methodReplacements.put("contains", Arrays.asList("containsExactly"));
         // https://github.com/apache/fory/pull/2738
-        methodReplacements.putIfAbsent("sortedCopyOf", Arrays.asList("copyOf"));
+        methodReplacements.put("sortedCopyOf", Arrays.asList("copyOf"));
     }
 
     public List<MutantCtElement> execute(CtElement toMutate) {

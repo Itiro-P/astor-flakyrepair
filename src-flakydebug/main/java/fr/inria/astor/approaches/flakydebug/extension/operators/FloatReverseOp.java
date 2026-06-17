@@ -2,6 +2,7 @@ package fr.inria.astor.approaches.flakydebug.extension.operators;
 
 import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.FloatReverseMutator;
 import fr.inria.astor.core.entities.ModificationPoint;
+import spoon.reflect.code.BinaryOperatorKind;
 import spoon.reflect.code.CtBinaryOperator;
 import spoon.reflect.declaration.CtElement;
 
@@ -20,6 +21,8 @@ public class FloatReverseOp extends Operator {
 	@Override
 	public boolean canBeAppliedToPoint(ModificationPoint point) {
 		CtElement element = point.getCodeElement();
+		// A operação deve ser de adição.
+		if(((CtBinaryOperator<?>) element).getKind() != BinaryOperatorKind.PLUS) return false;
 		// Vemos se é um opareando.
 		return (element instanceof CtBinaryOperator);
 	}

@@ -25,7 +25,6 @@ public class FloatReverseMutator extends Mutator<CtBinaryOperator<Float>> {
         if (!(toMutate instanceof CtBinaryOperator)) return result;
 
         CtBinaryOperator operation = (CtBinaryOperator) toMutate;
-
         CtBinaryOperator cloned = operation.clone();
 
         // Só trocamos os operandos de lado.
