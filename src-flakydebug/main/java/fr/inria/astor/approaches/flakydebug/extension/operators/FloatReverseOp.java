@@ -6,6 +6,8 @@ import spoon.reflect.code.CtBinaryOperator;
 import spoon.reflect.declaration.CtElement;
 
 /**
+ * Mutator que troca operandos Float de lado. Isso pode levar a erros de imprecisão que (talvez) não foram considerados.
+ * (Até agora), não há um PR que demonstre esta instabilidade. Mas o IEEE 754 não garante associatividade.
  * @author Pedro Itiro Nagao
  */
 @SuppressWarnings("unchecked")

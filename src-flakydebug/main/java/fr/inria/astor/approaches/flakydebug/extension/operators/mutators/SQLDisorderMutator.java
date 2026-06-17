@@ -16,7 +16,7 @@ import spoon.reflect.factory.Factory;
  * Mutator que altera requisições SQL removendo cláusulas ORDER BY, GROUP BY e HAVING,
  * o que pode causar alterações na ordem dos resultados retornados, potencialmente
  * expondo falhas relacionadas à ordem dos dados.
- *
+ * Exemplo de PR afetado: https://github.com/apache/iotdb/pull/4459
  * @author Pedro Itiro Nagao
  */
 public class SQLDisorderMutator extends Mutator<CtElement> {

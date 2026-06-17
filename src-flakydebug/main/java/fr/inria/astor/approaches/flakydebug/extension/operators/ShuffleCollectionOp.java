@@ -21,8 +21,9 @@ import spoon.reflect.factory.TypeFactory;
 import spoon.reflect.reference.CtTypeReference;
 
 /**
- * Operador unificado que agrega os diversos mutators de "shuffle" (List, Set, Map, JSON)
- * e pode ser aplicado nos mesmos pontos onde os operadores específicos aplicavam.
+ * @brief Operador que troca implementações de coleções por versões que embaralham seus elementos.
+ * Exemplo de PR afetado: https://github.com/apache/fory/pull/2738
+ * @author Pedro Itiro Nagao.
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ShuffleCollectionOp extends Operator {

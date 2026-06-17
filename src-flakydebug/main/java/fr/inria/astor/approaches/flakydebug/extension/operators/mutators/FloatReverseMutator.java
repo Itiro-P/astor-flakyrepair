@@ -11,6 +11,8 @@ import spoon.reflect.factory.Factory;
 
 /**
  * Mutator que troca operandos Float de lado. Isso pode levar a erros de imprecisão que (talvez) não foram considerados.
+ * (Até agora), não há um PR que demonstre esta instabilidade. Mas o IEEE 754 não garante associatividade.
+ * @author Pedro Itiro Nagao
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class FloatReverseMutator extends Mutator<CtBinaryOperator<Float>> {
@@ -26,6 +28,7 @@ public class FloatReverseMutator extends Mutator<CtBinaryOperator<Float>> {
 
         CtBinaryOperator cloned = operation.clone();
 
+        // Só trocamos os operandos de lado.
         cloned.setLeftHandOperand(operation.getRightHandOperand());
         cloned.setRightHandOperand(operation.getLeftHandOperand());
 

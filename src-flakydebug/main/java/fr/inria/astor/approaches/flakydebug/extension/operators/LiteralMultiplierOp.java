@@ -11,8 +11,9 @@ import spoon.reflect.code.CtLiteral;
 import spoon.reflect.declaration.CtElement;
 
 /**
- * Operator que multiplica literais numéricos de certos métodos por um fator (ex: 2x). 
+ * Operador que multiplica literais numéricos de certos métodos por um fator (ex: 2x). 
  * Útil para lidar com testes flaky causados por valores limite ou condições de corrida que dependem de tempos ou contagens específicas.
+ * (Até agora) não foi constatado um PR que sofre desta instabilidade.
  * @author Pedro Itiro Nagao
  */
 @SuppressWarnings({"rawtypes", "unchecked"})

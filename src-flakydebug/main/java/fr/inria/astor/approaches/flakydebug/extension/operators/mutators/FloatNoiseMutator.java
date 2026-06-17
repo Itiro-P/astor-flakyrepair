@@ -9,6 +9,12 @@ import spoon.reflect.code.CtLiteral;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.factory.Factory;
 
+/**
+ * @brief Mutator que injeta ruído em números de ponto flutuante.
+ * Alguns testes são instáveis por prezarem demais por precisão que muitas vezes é desnecessária.
+ * Exemplo de PR afetado: https://github.com/apache/commons-math/pull/162
+ * @author Pedro Itiro Nagao
+ */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class FloatNoiseMutator extends Mutator<CtLiteral<Number>> {
     final static float FACTOR = 1.001f;
@@ -24,7 +30,7 @@ public class FloatNoiseMutator extends Mutator<CtLiteral<Number>> {
         CtLiteral mutatedLiteral = literal.clone();
         if (mutatedLiteral.getValue() instanceof Number) {
             Number originalValue = (Number) mutatedLiteral.getValue();
-            // Preserva o tipo original do literal (int, long, float, double)
+            // Preserva o tipo original do literal (float, double)
             if (originalValue instanceof Double) {
                 double newValue = originalValue.doubleValue() * FloatNoiseMutator.FACTOR;
                 mutatedLiteral.setValue((double) newValue);

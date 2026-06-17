@@ -17,7 +17,7 @@ import spoon.reflect.factory.Factory;
 /**
  * Mutator que inverte a direção de ORDER BY em queries SQL (ASC↔DESC),
  * expondo falhas relacionadas à dependência da ordem de resultados.
- *
+ * Exemplo de (possível) PR afetado: https://github.com/apache/iotdb/pull/4459
  * @author Pedro Itiro Nagao
  */
 public class SQLOrderChangeMutator extends Mutator<CtElement> {

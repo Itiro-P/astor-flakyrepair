@@ -7,8 +7,8 @@ import spoon.reflect.code.CtInvocation;
 /**
  * Operator que substitui invocações por variantes mais restritivas (ex.:
  * métodos que exigem ordem).
+ * De certa forma, talvez não seja um operador válido uma vez que consideração de ordem se refere mais ao `ShuffleCollectionOp`.
  * @author Pedro Itiro Nagao
- *
  */
 @SuppressWarnings("unchecked")
 public class InvocationReplacementOp extends Operator {

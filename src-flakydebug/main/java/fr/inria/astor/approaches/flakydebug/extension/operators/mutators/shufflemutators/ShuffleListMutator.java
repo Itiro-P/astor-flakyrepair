@@ -4,8 +4,8 @@ import fr.inria.astor.approaches.flakydebug.extension.operators.utils.ShuffledLi
 import spoon.reflect.factory.Factory;
 
 /**
- * Mutator que injeta flakiness trocando `List<T>` por `ArrayList<T>`
- * Exemplo de PR afetado: 
+ * Mutator que injeta flakiness trocando `List<T>` por `ShuffledList<T>` para forçar embaralhamento de elementos.
+ * Exemplo de PR afetado: https://github.com/apache/struts/pull/458
  * @author Pedro Itiro Nagao
 */
 public class ShuffleListMutator extends ShuffleMutator {

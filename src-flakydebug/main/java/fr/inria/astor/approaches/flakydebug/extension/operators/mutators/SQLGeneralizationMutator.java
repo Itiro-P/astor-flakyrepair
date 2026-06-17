@@ -17,7 +17,7 @@ import spoon.reflect.factory.Factory;
  * Mutator que altera requisições SQL substituindo colunas explícitas por SELECT *,
  * potencialmente expondo falhas relacionadas à dependência da ordem ou número de colunas
  * retornadas.
- *
+ * Exemplo de (possível) PR afetado: https://github.com/apache/iotdb/pull/4459
  * @author Pedro Itiro Nagao
  */
 public class SQLGeneralizationMutator extends Mutator<CtElement> {

@@ -10,6 +10,12 @@ import spoon.reflect.declaration.CtElement;
 import spoon.reflect.factory.TypeFactory;
 import spoon.reflect.reference.CtTypeReference;
 
+/**
+ * @brief Operador que injeta ruído em números de ponto flutuante.
+ * Alguns testes são instáveis por prezarem demais por precisão que muitas vezes é desnecessária.
+ * Exemplo de PR afetado: https://github.com/apache/commons-math/pull/162
+ * @author Pedro Itiro Nagao
+ */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class FloatNoiseOp extends Operator {
 	Set<CtTypeReference> types;
@@ -32,6 +38,7 @@ public class FloatNoiseOp extends Operator {
 		if(!(element instanceof CtBinaryOperator)) return false;
 		CtBinaryOperator operator = (CtBinaryOperator) element;
 
+		// Vemos se algum dos números é um número de ponto flututante (float ou double)
 		boolean firstMatch = this.types.stream().anyMatch(type -> {
 			return (
 				operator.getRightHandOperand().getType().isSubtypeOf(type) ||

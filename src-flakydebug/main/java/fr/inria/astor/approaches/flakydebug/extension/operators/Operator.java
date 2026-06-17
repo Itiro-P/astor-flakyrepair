@@ -12,6 +12,10 @@ import fr.inria.astor.core.manipulation.MutationSupporter;
 import fr.inria.astor.core.solutionsearch.spaces.operators.AutonomousOperator;
 import spoon.reflect.declaration.CtElement;
 
+/**
+ * @brief Classe base para implementação de operadores.
+ * @author Pedro Itiro Nagao
+ */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class Operator extends AutonomousOperator {
     protected MutatorComposite mutatorComposite = new MutatorComposite(MutationSupporter.getFactory());

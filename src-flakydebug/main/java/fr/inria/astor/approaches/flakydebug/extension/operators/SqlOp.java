@@ -9,6 +9,7 @@ import spoon.reflect.declaration.CtElement;
 
 /**
  * Operador que altera requisições SQL para simular resultados inconsistentes.
+ * Exemplo de PR afetado: https://github.com/apache/iotdb/pull/4459
  * @author Pedro Itiro Nagao
  */
 @SuppressWarnings("unchecked")

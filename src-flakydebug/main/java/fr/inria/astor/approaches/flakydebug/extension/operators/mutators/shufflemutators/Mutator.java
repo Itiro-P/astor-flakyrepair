@@ -3,6 +3,10 @@ package fr.inria.astor.approaches.flakydebug.extension.operators.mutators.shuffl
 import fr.inria.astor.approaches.jmutrepair.operators.SpoonMutator;
 import spoon.reflect.factory.Factory;
 
+/**
+ * @brief Classe base para mutators
+ * @author Pedro Itiro Nagao
+ */
 public abstract class Mutator<T> extends SpoonMutator<T> {
     public Mutator(Factory factory) {
         super(factory);

@@ -4,8 +4,7 @@ import fr.inria.astor.approaches.flakydebug.extension.operators.utils.ShuffledSe
 import spoon.reflect.factory.Factory;
 
 /**
- * Mutator que injeta flakiness em Sets embaralhando seus entries antes do primeiro
- * statement que passa a variável para outro método (ponto de consumo).
+ * Mutator que injeta flakiness em Sets embaralhando seus entries.
  *
  * @author Pedro Itiro Nagao
  */
