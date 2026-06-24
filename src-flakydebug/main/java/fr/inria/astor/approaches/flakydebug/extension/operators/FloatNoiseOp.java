@@ -36,14 +36,14 @@ public class FloatNoiseOp extends Operator {
 		CtElement element = point.getCodeElement();
 		// Vemos se é um opareando.
 		if(!(element instanceof CtBinaryOperator)) return false;
-		CtBinaryOperator operator = (CtBinaryOperator) element;
+		CtBinaryOperator operation = (CtBinaryOperator) element;
 
 		// Vemos se algum dos números é um número de ponto flututante (float ou double)
 		boolean firstMatch = this.types.stream().anyMatch(type -> {
 			return (
-				operator.getRightHandOperand().getType().isSubtypeOf(type) ||
-				operator.getLeftHandOperand().getType().isSubtypeOf(type) ||
-				operator.getType().isSubtypeOf(type)
+				operation.getRightHandOperand().getType().isSubtypeOf(type) ||
+				operation.getLeftHandOperand().getType().isSubtypeOf(type) ||
+				operation.getType().isSubtypeOf(type)
 			);
 		});
 		return firstMatch;

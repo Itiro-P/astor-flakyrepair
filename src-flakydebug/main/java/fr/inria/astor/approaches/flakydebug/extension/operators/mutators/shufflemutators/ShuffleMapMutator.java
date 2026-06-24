@@ -1,6 +1,10 @@
 package fr.inria.astor.approaches.flakydebug.extension.operators.mutators.shufflemutators;
 
+import java.util.List;
+
 import fr.inria.astor.approaches.flakydebug.extension.operators.utils.ShuffledMap;
+import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
+import spoon.reflect.declaration.CtElement;
 import spoon.reflect.factory.Factory;
 
 /**
@@ -9,9 +13,14 @@ import spoon.reflect.factory.Factory;
  * @author Pedro Itiro Nagao
  */
 public class ShuffleMapMutator extends ShuffleMutator {
-
     public ShuffleMapMutator(Factory factory) {
-        super(factory, 
+        super(factory);
+    }
+
+    @Override
+    public List<MutantCtElement> execute(CtElement toMutate) {
+        return super.compute(
+            toMutate, 
             factory.Type().createReference(ShuffledMap.class), 
             factory.Type().createReference(java.util.Map.class)
         );

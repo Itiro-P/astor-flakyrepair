@@ -17,17 +17,21 @@ import spoon.reflect.reference.CtTypeReference;
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class ShuffleMutator extends Mutator<CtElement> {
-    private CtTypeReference replacementType = null;
-    private CtTypeReference targetType = null;
-
-    public ShuffleMutator(Factory factory, CtTypeReference rep, CtTypeReference target) {
+    public ShuffleMutator(Factory factory) {
         super(factory);
-        this.replacementType = rep;
-        this.targetType = target;
     }
 
-    @Override
-    public List<MutantCtElement> execute(CtElement toMutate) {
+    /**
+     * @brief Computa a mutação para um certo tipo alvo.
+     * @param toMutate O elemento a ser mutado.
+     * @param replacementType O tipo a ser trocado.
+     * @param targetType O tipo original alvo.
+     * @return Uma lista de mutantes.
+     */
+    public List<MutantCtElement> compute(CtElement toMutate,
+        CtTypeReference replacementType,
+        CtTypeReference targetType
+    ) {
         List<MutantCtElement> result = new ArrayList<>();
             
         if(toMutate == null) return result;
@@ -43,11 +47,11 @@ public abstract class ShuffleMutator extends Mutator<CtElement> {
             originalType = ctc.getType();
             args = ctc.getArguments();
 
-            if(!this.isValid(originalType)) return result;
+            if(!this.isValid(originalType, targetType)) return result;
 
             // Criamos o novo construtor com os argumentos do alvo (para casos como `HashMap<int>(construtorAntigo)`)
             CtConstructorCall<?> wrapped = factory.createConstructorCall();
-            wrapped.setType(this.replacementType);
+            wrapped.setType(replacementType);
             wrapped.setArguments(args);
             result.add(new MutantCtElement(wrapped, 1));
         } else if(toMutate instanceof CtLocalVariable) {
@@ -57,11 +61,11 @@ public abstract class ShuffleMutator extends Mutator<CtElement> {
             originalType = localVar.getType();
             args = Arrays.asList(localVar.getDefaultExpression().clone());
 
-            if(!this.isValid(originalType)) return result;
+            if(!this.isValid(originalType, targetType)) return result;
 
             // Criamos o novo construtor com os argumentos do alvo
             CtConstructorCall<?> wrapped = factory.createConstructorCall();
-            wrapped.setType(this.replacementType);
+            wrapped.setType(replacementType);
             wrapped.setArguments(args);
 
             // Como é uma variável, precisamos mudar a ATRIBUIÇÃO dela
@@ -79,7 +83,7 @@ public abstract class ShuffleMutator extends Mutator<CtElement> {
      * @param typeRef O tipo
      * @return Se o tipo é uma implementação (ou subtipo) de `targetype`.
      */
-    private boolean isValid(CtTypeReference<?> typeRef) {
+    private boolean isValid(CtTypeReference<?> typeRef, CtTypeReference targetType) {
         if (typeRef == null) return false;
         return typeRef.isSubtypeOf(targetType);
     }
