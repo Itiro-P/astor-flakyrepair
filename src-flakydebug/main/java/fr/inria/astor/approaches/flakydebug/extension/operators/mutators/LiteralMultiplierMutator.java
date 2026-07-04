@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.shufflemutators.Mutator;
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.declaration.CtElement;

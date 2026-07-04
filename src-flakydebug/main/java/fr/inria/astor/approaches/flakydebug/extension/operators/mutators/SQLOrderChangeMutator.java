@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.shufflemutators.Mutator;
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
 import spoon.reflect.code.CtAssignment;
 import spoon.reflect.code.CtExpression;

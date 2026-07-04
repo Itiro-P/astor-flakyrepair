@@ -1,4 +1,4 @@
-package fr.inria.astor.approaches.flakydebug.extension.operators.mutators.shufflemutators;
+package fr.inria.astor.approaches.flakydebug.extension.operators.mutators;
 
 import fr.inria.astor.approaches.jmutrepair.operators.SpoonMutator;
 import spoon.reflect.factory.Factory;

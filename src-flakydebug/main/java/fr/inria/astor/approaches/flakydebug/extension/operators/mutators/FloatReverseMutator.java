@@ -3,7 +3,6 @@ package fr.inria.astor.approaches.flakydebug.extension.operators.mutators;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.shufflemutators.Mutator;
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
 import spoon.reflect.code.CtBinaryOperator;
 import spoon.reflect.declaration.CtElement;

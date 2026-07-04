@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.shufflemutators.Mutator;
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
 import spoon.reflect.code.CtInvocation;
 import spoon.reflect.declaration.CtElement;

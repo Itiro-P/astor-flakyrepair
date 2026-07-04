@@ -21,6 +21,14 @@ public class ShuffledJSON extends JSONObject {
 		if(obj != null) this.putAll(obj);
 	}
 
+	public ShuffledJSON(String jsonString) {
+		super();
+		if(jsonString != null) {
+			JSONObject obj = (JSONObject) JSONValue.parse(jsonString);
+			if(obj != null) this.putAll(obj);
+		}
+	}
+
     @Override
     public Set<Map.Entry<?, ?>> entrySet() {
 		List<Map.Entry<?, ?>> entries = new ArrayList<>(super.entrySet());
