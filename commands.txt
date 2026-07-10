@@ -135,7 +135,7 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
 (cd "$(pwd)/minimal_samples/array" && \
 mvn clean compile test-compile package dependency:copy-dependencies \
   -DskipTests=true -DoutputDirectory=lib -DincludeScope=test) && \
-java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
+JAVA_HOME=/usr/lib/jvm/java-11-openjdk java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
   -customengine fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
   -javacompliancelevel 11 \
@@ -165,7 +165,7 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
 (cd "$(pwd)/minimal_samples/sql_mutation" && \
 mvn clean compile test-compile package dependency:copy-dependencies \
   -DskipTests=true -DoutputDirectory=lib -DincludeScope=test) && \
-java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
+JAVA_HOME=/usr/lib/jvm/java-11-openjdk java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
   -customengine fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
   -javacompliancelevel 11 \
@@ -178,7 +178,7 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
 
 // Floatty
 (cd "$(pwd)/minimal_samples/floatty" && \
-mvn clean compile test-compile package dependency:copy-dependencies \
+JAVA_HOME=/usr/lib/jvm/java-11-openjdk mvn clean compile test-compile package dependency:copy-dependencies \
   -DskipTests=true -DoutputDirectory=lib -DincludeScope=test) && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \

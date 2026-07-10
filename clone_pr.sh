@@ -8,8 +8,8 @@ REPO="${REPO%.git}"
 BASE_DEST="${2:-.}"
 DEST="$BASE_DEST/$REPO"
 
-mkdir -p "$BASE_DEST" || exit 1
+(mkdir -p "$BASE_DEST" &> /dev/null) || exit 1
 
-git clone --single-branch --depth 2 "$URL" "$DEST" || exit 1
+(git clone --single-branch "$URL" "$DEST" &> /dev/null) || exit 1
 cd "$DEST" || exit 1
-git checkout HEAD~1
+git checkout HEAD~1  &> /dev/null

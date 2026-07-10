@@ -19,7 +19,7 @@ import spoon.reflect.factory.Factory;
  */
 @SuppressWarnings("rawtypes")
 public class MethodConstraintMutator extends Mutator<CtInvocation> {
-    // Mapeia nomes de métodos que costumam impor ordem/contrato -> versões "relaxadas".
+    // Mapeia nomes de métodos que costumam impor ordem/contrato -> versões "restritas".
     private static Map<String, List<String>> methodReplacements = new HashMap<>();
 
     public MethodConstraintMutator(Factory factory) {
