@@ -34,3 +34,4 @@ examples/Math-issue-280/target/
 .dtfixingtools
 *.log
 diffSolutions/
+results/

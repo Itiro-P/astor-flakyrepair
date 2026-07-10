@@ -190,3 +190,19 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
   -bintestfolder target/test-classes \
   -location "$(pwd)/minimal_samples/floatty" \
   -dependencies "$(pwd)/minimal_samples/floatty/lib"
+
+// Docker
+// Build
+docker build -t astor .
+// Rodar
+docker run --rm \
+  -v $(pwd)/minimal_samples/array:/target-project \
+  -v $(pwd)/results/array-$(date +%Y%m%d_%H%M%S):/astor/output_astor \
+  -e JAVA_VERSION=11 \
+  -e TARGET_DIR=/target-project \
+  -e ENGINE_CLASS=fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
+  astor
+
+JAVA_VERSION = Versão do java usado.
+TARGET_DIR = Diretório onde o programa alvo está.
+ENGINE_CLASS = Método do ASTOR a ser usado.

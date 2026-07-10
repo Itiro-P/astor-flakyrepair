@@ -44,6 +44,11 @@ public class ShuffledList<T> implements List<T> {
     }
     
     @Override
+    public String toString() {
+        return this.shuffle().toString();
+    }
+    
+    @Override
     public boolean containsAll(Collection<?> var1) {
         return this.shuffle().containsAll(var1);
     }

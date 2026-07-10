@@ -1,14 +1,9 @@
 #!/bin/bash
 set -e
 
+LOG_FILE="$/astor/output_astor/execution.log"
 JAVA_VERSION="${JAVA_VERSION:-8}"
-
-case "$JAVA_VERSION" in
-  8)  export JAVA_HOME=/usr/lib/jvm/temurin-8-jdk-amd64 ;;
-  11) export JAVA_HOME=/usr/lib/jvm/temurin-11-jdk-amd64 ;;
-  17) export JAVA_HOME=/usr/lib/jvm/temurin-17-jdk-amd64 ;;
-  *) echo "JAVA_VERSION inválido: use 8, 11 ou 17"; exit 1 ;;
-esac
+export JAVA_HOME=/usr/lib/jvm/temurin-26-jdk-amd64
 export PATH="$JAVA_HOME/bin:$PATH"
 
 echo ">> Usando JDK $JAVA_VERSION"
@@ -31,4 +26,5 @@ exec java -cp /astor/astor.jar fr.inria.main.evolution.AstorMain \
   -bintestfolder target/test-classes/ \
   -location "$TARGET_DIR" \
   -dependencies "$TARGET_DIR/lib" \
+  -out /astor/output_astor \
   "$@"
