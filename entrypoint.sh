@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 
-LOG_FILE="$/astor/output_astor/execution.log"
 JAVA_VERSION="${JAVA_VERSION:-8}"
 export JAVA_HOME=/usr/lib/jvm/temurin-26-jdk-amd64
 export PATH="$JAVA_HOME/bin:$PATH"
@@ -26,5 +25,4 @@ exec java -cp /astor/astor.jar fr.inria.main.evolution.AstorMain \
   -bintestfolder target/test-classes/ \
   -location "$TARGET_DIR" \
   -dependencies "$TARGET_DIR/lib" \
-  -out /astor/output_astor \
-  "$@"
+  -out /astor/output_astor "$@"
