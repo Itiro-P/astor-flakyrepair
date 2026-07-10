@@ -133,9 +133,9 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
 
 // array
 (cd "$(pwd)/minimal_samples/array" && \
-mvn clean compile test-compile package dependency:copy-dependencies \
+JAVA_HOME=/usr/lib/jvm/java-11-openjdk mvn clean compile test-compile package dependency:copy-dependencies \
   -DskipTests=true -DoutputDirectory=lib -DincludeScope=test) && \
-JAVA_HOME=/usr/lib/jvm/java-11-openjdk java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
+java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
   -customengine fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
   -javacompliancelevel 11 \

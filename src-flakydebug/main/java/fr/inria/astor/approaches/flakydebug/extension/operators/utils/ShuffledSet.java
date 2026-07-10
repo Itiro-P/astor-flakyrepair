@@ -50,6 +50,12 @@ public class ShuffledSet<T> implements Set<T> {
     }
 
     @Override
+    public String toString() {
+        return this.shuffled_entries().toString();
+    }
+
+
+    @Override
     public boolean equals(Object var1) {
         if (this == var1) return true;
         if (!(var1 instanceof Set)) return false;

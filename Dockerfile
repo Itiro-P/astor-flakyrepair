@@ -1,5 +1,6 @@
 FROM maven:3.9.16-eclipse-temurin-26 AS astor_build
 
+
 WORKDIR /astor
 COPY . .
 RUN mvn clean package -DskipTests=true
@@ -15,9 +16,10 @@ RUN apt-get install -y --no-install-recommends temurin-8-jdk temurin-11-jdk temu
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /astor
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod a+x /usr/local/bin/entrypoint.sh
+USER 1000:1000
 COPY --from=astor_build /astor/target/astor-*-jar-with-dependencies.jar ./astor.jar
 COPY --from=astor_build /astor/target/classes ./target/classes
 COPY --from=astor_build /astor/target/test-classes /astor/target/test-classes
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["entrypoint.sh"]

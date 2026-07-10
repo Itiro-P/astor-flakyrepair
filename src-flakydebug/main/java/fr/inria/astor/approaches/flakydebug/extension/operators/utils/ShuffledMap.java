@@ -55,6 +55,11 @@ public class ShuffledMap<K, V> implements Map<K, V> {
     }
 
     @Override
+    public String toString() {
+        return this.shuffled_keys().toString();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Map)) return false;
