@@ -33,12 +33,12 @@ public class JUnitRunner extends Runner {
         testResult.casesExecuted = K;
         testResult.failures = 0;
 
-        for (int i = 0; i < K; i++) {
+        for(int i = 0; i < K; i++) {
             try {
                 File ftemp = File.createTempFile("junit-out", ".txt");
                 ProcessBuilder pb;
 
-                if (isWindows) {
+                if(isWindows) {
                     // No Windows, chama o PowerShell direto com o comando
                     pb = new ProcessBuilder("powershell", "-Command", commandToString(command));
                 } else {
@@ -65,7 +65,7 @@ public class JUnitRunner extends Runner {
                 boolean finished = p.waitFor(waitTime, TimeUnit.MILLISECONDS);
                 int exitCode = 0;
 
-                if (!finished) {
+                if(!finished) {
                     log.info("Test exceeded wait time.\n");
                     p.destroyForcibly();
                     p.waitFor();
@@ -74,8 +74,12 @@ public class JUnitRunner extends Runner {
                     exitCode = p.exitValue();
                 }
 
-                if (exitCode != 0) {
+                if(exitCode != 0) {
                     testResult.failures++;
+                    String classification = classifyTestResult(location, test);
+                    log.info("[JUnit] Execution " + (i+1) + " failed. Classification: " + classification);
+                } else {
+                    log.info("[JUnit] Execution " + (i+1) + " passed.");
                 }
                 
                 ftemp.delete();

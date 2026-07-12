@@ -1,6 +1,7 @@
 package fr.inria.astor.approaches.flakydebug.extension.testRunner.runners;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Random;
@@ -45,5 +46,29 @@ public abstract class Runner {
                 ? cmd.substring(0, trunk) + "..AND " + (cmd.length() - trunk) + " CHARS MORE..."
                 : cmd;
         log.debug("Executing process: (timeout" + waitTime / 1000 + "secs) \n" + toPrint);
+    }
+
+    protected String classifyTestResult(String location, String test) {
+        // extrai o nome da classe (ex: "com.example.MeuTeste#metodoTeste" -> "com.example.MeuTeste")
+        String className = test.contains("#") ? test.substring(0, test.indexOf("#")) : test;
+        File reportFile = new File(location + "/target/surefire-reports/TEST-" + className + ".xml");
+
+        if (!reportFile.exists()) {
+            return "UNKNOWN";
+        }
+
+        try {
+            String content = org.apache.commons.io.FileUtils.readFileToString(reportFile, "UTF-8");
+            if (content.contains("<error ") || content.contains("<error>")) {
+                return "ERROR";
+            } else if (content.contains("<failure ") || content.contains("<failure>")) {
+                return "FAILURE";
+            } else {
+                return "SUCCESS";
+            }
+        } catch (IOException e) {
+            log.error("Failed to read surefire report: " + e.getMessage());
+            return "UNKNOWN";
+        }
     }
 }
