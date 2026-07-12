@@ -2,7 +2,7 @@ FROM maven:3.9.16-eclipse-temurin-26 AS astor_build
 
 WORKDIR /astor
 COPY . .
-RUN mvn clean package -DskipTests=true
+RUN mvn package -DskipTests=true
 
 FROM eclipse-temurin:26 AS final_stage
 
