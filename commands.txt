@@ -193,7 +193,11 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
 
 // Docker
 // Build
-docker build -t astor .
+docker build \
+  --build-arg USER_UID=$(id -u) \
+  --build-arg USER_GID=$(id -g) \
+  -t astor .
+
 // Rodar
 CONTAINER_NAME="astor-run" && \
 RESULT_PATH="$(pwd)/results/array/latest" && \
