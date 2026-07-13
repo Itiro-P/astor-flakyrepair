@@ -2,7 +2,7 @@ FROM maven:3.9.16-eclipse-temurin-26 AS astor_build
 
 WORKDIR /astor
 COPY . .
-RUN mvn package -DskipTests=true
+RUN --mount=type=cache,target=/root/.m2/repository mvn clean package -DskipTests=true -B
 
 FROM eclipse-temurin:26 AS final_stage
 
@@ -18,21 +18,25 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 ARG USER_UID=1000
 ARG USER_GID=1000
 
-RUN groupadd -g "$USER_GID" astoruser \
-  && useradd -u "$USER_UID" -g "$USER_GID" -m -s /bin/bash astoruser
+RUN groupadd -f -g "$USER_GID" astoruser 2>/dev/null || true \
+  && if id -u "$USER_UID" > /dev/null 2>&1; then \
+       echo "UID $USER_UID já existe, reaproveitando usuário existente"; \
+     else \
+       useradd -u "$USER_UID" -g "$USER_GID" -m -s /bin/bash astoruser; \
+     fi
 
 WORKDIR /astor
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod a+x /usr/local/bin/entrypoint.sh
 
-COPY --from=astor_build /astor/target/astor-*-jar-with-dependencies.jar ./astor.jar
+COPY --from=astor_build /astor/target/astor-*-jar-with-dependencies.jar ./target/astor.jar
 COPY --from=astor_build /astor/target/classes ./target/classes
-COPY --from=astor_build /astor/target/test-classes /astor/target/test-classes
+COPY --from=astor_build /astor/target/test-classes ./target/test-classes
 
 # garante que as pastas usadas pelo entrypoint (destino do docker cp e do volume de saída)
 # já nasçam com o dono certo, antes de trocar pro usuário não-root
 RUN mkdir -p /target-project /astor/output_astor \
   && chown -R "$USER_UID:$USER_GID" /astor /target-project
 
-USER astoruser
+USER $USER_UID:$USER_GID
 ENTRYPOINT ["entrypoint.sh"]
