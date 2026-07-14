@@ -32,4 +32,5 @@ java -cp /astor/target/astor.jar fr.inria.main.evolution.AstorMain \
 -location "$TARGET_DIR" \
 -dependencies "$TARGET_DIR/lib" \
 -out /astor/output_astor "$@" \
+--stopfirst false \
 2>&1 | tee "$LOG_DIR/astor-run.log"

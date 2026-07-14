@@ -6,13 +6,20 @@ From IDOFT:
   - docker build --build-arg USER_UID=$(id -u) --build-arg USER_GID=$(id -g) -t astor .
   - ./scripts/run_astor_docker.sh edn-java 8 samples/edn-java
 
-- https://github.com/google/guava/pull/8035
-  - https://github.com/annhchen89/guava.git
-
-- https://github.com/flowable/flowable-engine/pull/2197
-  - https://github.com/cpugputpu/flowable-engine.git
 
 - https://github.com/amzn/amazon-pay-api-sdk-java/pull/21
   - https://github.com/Sujishark/amazon-pay-api-sdk-java.git
+
+  - ./scripts/clone_pr.sh https://github.com/Sujishark/amazon-pay-api-sdk-java.git samples
+  - docker build --build-arg USER_UID=$(id -u) --build-arg USER_GID=$(id -g) -t astor .
+  - ./scripts/run_astor_docker.sh amazon-pay-api-sdk-java 8 samples/amazon-pay-api-sdk-java
+
+- https://github.com/eclipse-vertx/vert.x/pull/4998
+  - https://github.com/219sansim/vert.x.git
+
+  - ./scripts/clone_pr.sh https://github.com/219sansim/vert.x.git samples
+  - docker build --build-arg USER_UID=$(id -u) --build-arg USER_GID=$(id -g) -t astor .
+  - ./scripts/run_astor_docker.sh vert-x 11 samples/vert.x
+
 
 Open-source projects with no revealed flaky tests:
