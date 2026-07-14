@@ -17,7 +17,7 @@ echo ">> Compilando projeto-alvo..." | tee -a "$LOG_DIR/entrypoint.log"
   cd "$TARGET_DIR"
   mvn clean compile test-compile dependency:copy-dependencies \
     ${TARGET_POM:+-f "$TARGET_POM"} \
-    -DskipTests=true -DoutputDirectory=lib -DincludeScope=test
+    -DskipTests -DoutputDirectory=lib -DincludeScope=test
 ) 2>&1 | tee "$LOG_DIR/maven-build.log"
 
 echo ">> Rodando Astor..." | tee -a "$LOG_DIR/entrypoint.log"

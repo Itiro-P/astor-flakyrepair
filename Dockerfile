@@ -2,7 +2,7 @@ FROM maven:3.9.16-eclipse-temurin-26 AS astor_build
 
 WORKDIR /astor
 COPY . .
-RUN --mount=type=cache,target=/root/.m2/repository mvn clean package -DskipTests=true -B
+RUN --mount=type=cache,target=/root/.m2/repository mvn clean package -DskipTests -B
 
 FROM eclipse-temurin:26 AS final_stage
 

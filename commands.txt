@@ -1,6 +1,6 @@
 // Compilar o projeto
 
-mvn clean package -DskipTests=true
+mvn clean package -DskipTests
 
 // Compilar um projeto
 mvn clean test-compile -f "$(pwd)/samples/30-seconds-of-java8/pom.xml"
@@ -13,7 +13,7 @@ mvn dependency:copy-dependencies -f "$(pwd)/samples/30-seconds-of-java8/pom.xml"
 // 30-seconds-of-java8 (java 8)
 mvn clean compile test-compile dependency:copy-dependencies \
   -f "$(pwd)/samples/30-seconds-of-java8/pom.xml" \
-  -DskipTests=true -DoutputDirectory=lib \
+  -DskipTests -DoutputDirectory=lib \
   -DincludeScope=test && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
@@ -29,7 +29,7 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
 // druid (java 8)
 mvn clean compile test-compile dependency:copy-dependencies \
   -f "$(pwd)/samples/druid/pom.xml" \
-  -DskipTests=true -DoutputDirectory=lib \
+  -DskipTests -DoutputDirectory=lib \
   -DincludeScope=test && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
@@ -48,7 +48,7 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
 mvn clean compile test-compile dependency:copy-dependencies \
   -f "$(pwd)/samples/Mapper/pom.xml" \
   -pl solon-plugin \
-  -am -DskipTests=true -DoutputDirectory=lib -DincludeScope=test &&
+  -am -DskipTests -DoutputDirectory=lib -DincludeScope=test &&
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
   -customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
@@ -65,7 +65,7 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
 (cd "$(pwd)/samples/cloudstack" && \
 mvn clean compile test-compile package dependency:copy-dependencies \
   -pl plugins/network-elements/tungsten \
-  -am -DskipTests=true -DoutputDirectory=lib -DincludeScope=test) && \
+  -am -DskipTests -DoutputDirectory=lib -DincludeScope=test) && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
   -customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
@@ -82,7 +82,7 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
 (cd "$(pwd)/samples/cloudstack" && \
 mvn clean compile test-compile package dependency:copy-dependencies \
   -pl api \
-  -am -DskipTests=true -DoutputDirectory=lib -DincludeScope=test) && \
+  -am -DskipTests -DoutputDirectory=lib -DincludeScope=test) && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
   -customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
@@ -102,7 +102,7 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
 (cd "$(pwd)/samples/cloudstack" && \
 mvn clean compile test-compile package dependency:copy-dependencies \
   -pl plugins/network-elements/tungsten \
-  -am -DskipTests=true -DoutputDirectory=lib -DincludeScope=test) && \
+  -am -DskipTests -DoutputDirectory=lib -DincludeScope=test) && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
   -customengine fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
@@ -114,12 +114,27 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
   -location "$(pwd)/samples/cloudstack/plugins/network-elements/tungsten" \
   -dependencies "$(pwd)/samples/cloudstack/plugins/network-elements/tungsten/lib"
 
+// amazon-pay-api-sdk-java
+(cd "$(pwd)/samples/amazon-pay-api-sdk-java" && \
+mvn clean compile test-compile package dependency:copy-dependencies \
+  -DskipTests -DoutputDirectory=lib -DincludeScope=test) && \
+java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
+  -mode custom \
+  -customengine fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
+  -javacompliancelevel 8 \
+  -srcjavafolder src/com/amazon/pay/api/ \
+  -srctestfolder tst/com/amazon/pay/api/  \
+  -binjavafolder target/classes/ \
+  -bintestfolder target/test-classes/ \
+  -location "$(pwd)/samples/amazon-pay-api-sdk-java" \
+  -dependencies "$(pwd)/samples/amazon-pay-api-sdk-java/lib"
+
 // Projetos mínimos (todos com Java 11)
 
 // hash_map
 (cd "$(pwd)/minimal_samples/hash_map" && \
 mvn clean compile test-compile package dependency:copy-dependencies \
-  -DskipTests=true -DoutputDirectory=lib -DincludeScope=test) && \
+  -DskipTests -DoutputDirectory=lib -DincludeScope=test) && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
   -customengine fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
@@ -134,7 +149,7 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
 // array
 (cd "$(pwd)/minimal_samples/array" && \
 JAVA_HOME=/usr/lib/jvm/java-11-openjdk mvn clean compile test-compile package dependency:copy-dependencies \
-  -DskipTests=true -DoutputDirectory=lib -DincludeScope=test) && \
+  -DskipTests -DoutputDirectory=lib -DincludeScope=test) && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
   -customengine fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
@@ -149,7 +164,7 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
 // JSON
 (cd "$(pwd)/minimal_samples/json_object" && \
 mvn clean compile test-compile package dependency:copy-dependencies \
-  -DskipTests=true -DoutputDirectory=lib -DincludeScope=test) && \
+  -DskipTests -DoutputDirectory=lib -DincludeScope=test) && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
   -customengine fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
@@ -164,7 +179,7 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
 // SQL
 (cd "$(pwd)/minimal_samples/sql_mutation" && \
 mvn clean compile test-compile package dependency:copy-dependencies \
-  -DskipTests=true -DoutputDirectory=lib -DincludeScope=test) && \
+  -DskipTests -DoutputDirectory=lib -DincludeScope=test) && \
 JAVA_HOME=/usr/lib/jvm/java-11-openjdk java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
   -customengine fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
@@ -179,7 +194,7 @@ JAVA_HOME=/usr/lib/jvm/java-11-openjdk java -cp target/astor-*-jar-with-dependen
 // Floatty
 (cd "$(pwd)/minimal_samples/floatty" && \
 JAVA_HOME=/usr/lib/jvm/java-11-openjdk mvn clean compile test-compile package dependency:copy-dependencies \
-  -DskipTests=true -DoutputDirectory=lib -DincludeScope=test) && \
+  -DskipTests -DoutputDirectory=lib -DincludeScope=test) && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
   -customengine fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
