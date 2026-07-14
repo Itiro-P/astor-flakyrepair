@@ -5,7 +5,7 @@ set -euo pipefail
 PROJECT_NAME="${1:?Uso: $0 <PROJECT_NAME> [JAVA_VERSION] [PROJECT_PATH] [RESULT_PATH] [SRC_JAVA] [SRC_TEST]}"
 JAVA_VERSION="${2:-11}"
 PROJECT_PATH="${3:-$(pwd)/samples/${PROJECT_NAME}}"
-RESULT_PATH="${4:-$(pwd)/results/${PROJECT_NAME}/latest}"
+RESULT_PATH="${4:-$(pwd)/results/${PROJECT_NAME}}"
 # Fallback para o layout padrão do Maven quando o projeto não segue outra convenção
 SRC_JAVA="${5:-src/main/java/}"
 SRC_TEST="${6:-src/test/java/}"

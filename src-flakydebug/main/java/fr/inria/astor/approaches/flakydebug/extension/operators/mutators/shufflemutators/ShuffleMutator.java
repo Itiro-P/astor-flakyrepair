@@ -73,28 +73,13 @@ public abstract class ShuffleMutator extends Mutator<CtElement> {
             CtLocalVariable mutant = localVar.clone();
             mutant.setAssignment(wrapped);
             result.add(new MutantCtElement(mutant, 1));
-        } else if (toMutate instanceof CtExpression) {
-            // Qualquer outra expressão cujo tipo já seja o alvo — ex: retorno de um
-            // método usado diretamente como argumento (getRawResponse() dentro de
-            // assertEquals(...)). Envolvemos a própria expressão num novo construtor
-            // da versão embaralhada: new ShuffledJSON(expr.clone())
-            CtExpression<?> expr = (CtExpression<?>) toMutate;
-            originalType = expr.getType();
-
-            if (!this.isValid(originalType, targetType)) return result;
-
-            CtConstructorCall<?> wrapped = factory.createConstructorCall();
-            wrapped.setType(replacementType);
-            wrapped.setArguments(Arrays.asList(expr.clone()));
-            result.add(new MutantCtElement(wrapped, 1));
         }
-
         return result;
     }
 
     /**
      * @brief Verifica se o tipo é uma implementação da interface `targetType`.
-     * Ex: Se `targetype = Map`, então `HasMap -> true` e `ArrayList - false`.
+     * Ex: Se `targetype = Map`, então `HashMap -> true` e `ArrayList - false`.
      * @param typeRef O tipo
      * @return Se o tipo é uma implementação (ou subtipo) de `targetype`.
      */

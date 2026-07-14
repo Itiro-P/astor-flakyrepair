@@ -13,13 +13,12 @@ import fr.inria.astor.approaches.flakydebug.extension.operators.utils.ShuffledLi
 import fr.inria.astor.approaches.flakydebug.extension.operators.utils.ShuffledMap;
 import fr.inria.astor.approaches.flakydebug.extension.operators.utils.ShuffledSet;
 import fr.inria.astor.core.entities.ModificationPoint;
-import spoon.reflect.code.CtExpression;
+import spoon.reflect.code.CtConstructorCall;
 import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.factory.Factory;
 import spoon.reflect.factory.TypeFactory;
 import spoon.reflect.reference.CtTypeReference;
-import spoon.reflect.visitor.filter.TypeFilter;
 
 /**
  * @brief Operador que troca implementações de coleções por versões que embaralham seus elementos.
@@ -54,33 +53,13 @@ public class ShuffleCollectionOp extends Operator {
     @Override
     public boolean canBeAppliedToPoint(ModificationPoint point) {
         CtElement element = point.getCodeElement();
-        return findApplicableType(element) != null;
-    }
-
-    private CtTypeReference<?> findApplicableType(CtElement element) {
-        // Caso direto: o próprio elemento já é do tipo alvo
-        CtTypeReference<?> direct = extractType(element);
-        log.info(element.toStringDebug());
-        if (isCandidate(direct)) return direct;
-
-        // Caso indireto: o tipo está enterrado em alguma sub-expressão
-        // (ex: argumento de uma chamada tipo assertEquals(a.getRawResponse(), ...))
-        for (CtExpression<?> sub : element.getElements(new TypeFilter<>(CtExpression.class))) {
-            CtTypeReference<?> subType = sub.getType();
-            log.info(subType.toStringDebug());
-            if (isCandidate(subType)) return subType;
+        CtTypeReference<?> type = null;
+        if (element instanceof CtConstructorCall) {
+            type = ((CtConstructorCall) element).getType();
+        } else if(element instanceof CtLocalVariable) {
+            type = ((CtLocalVariable) element).getType();
         }
-        return null;
-    }
-
-    private CtTypeReference<?> extractType(CtElement element) {
-        if (element instanceof CtLocalVariable) {
-            return ((CtLocalVariable<?>) element).getType();
-        } else if (element instanceof CtExpression) {
-            // Cobre CtConstructorCall E CtInvocation, já que ambos são CtExpression
-            return ((CtExpression<?>) element).getType();
-        }
-        return null;
+        return isCandidate(type);
     }
 
     private boolean isCandidate(CtTypeReference<?> type) {
