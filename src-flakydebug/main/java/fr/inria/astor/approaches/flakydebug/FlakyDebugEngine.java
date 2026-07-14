@@ -67,6 +67,7 @@ public class FlakyDebugEngine extends jMutRepairExhaustive {
 		dateInitEvolution = new Date();
 		// We don't evolve variants, so the generation is always one.
 		generationsExecuted = 1;
+		this.saveVariant(this.originalVariant);
 		// For each variant (one is enough)
 		int maxMinutes = ConfigurationProperties.getPropertyInt("maxtime");
 
