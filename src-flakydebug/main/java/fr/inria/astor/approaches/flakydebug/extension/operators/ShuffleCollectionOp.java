@@ -46,7 +46,7 @@ public class ShuffleCollectionOp extends Operator {
             typeFactory.createReference(ShuffledSet.class));
         mappings.put(typeFactory.createReference(java.util.Map.class),
             typeFactory.createReference(ShuffledMap.class));
-        mappings.put(typeFactory.createReference(org.json.simple.JSONObject.class),
+        mappings.put(typeFactory.createReference(org.json.JSONObject.class),
             typeFactory.createReference(ShuffledJSON.class));
     }
 

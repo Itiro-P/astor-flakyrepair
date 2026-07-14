@@ -22,7 +22,7 @@ public class ShuffleJSONMutator extends ShuffleMutator {
         return super.compute(
             toMutate, 
             factory.Type().createReference(ShuffledJSON.class), 
-            factory.Type().createReference(org.json.simple.JSONObject.class)
+            factory.Type().createReference(org.json.JSONObject.class)
         );
     }
 }

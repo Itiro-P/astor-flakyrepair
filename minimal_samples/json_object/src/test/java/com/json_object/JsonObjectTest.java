@@ -1,7 +1,7 @@
 package com.json_object;
 
 import org.junit.Test;
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 
 import static org.junit.Assert.assertEquals;
 
@@ -17,6 +17,6 @@ public class JsonObjectTest {
         obj2.put("age", 30);
         obj2.put("name", "alice");
 
-        assertEquals(obj1.toJSONString(), obj2.toJSONString());
+        assertEquals(obj1.toString(), obj2.toString());
     }
 }
