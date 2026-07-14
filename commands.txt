@@ -199,33 +199,21 @@ docker build \
   -t astor .
 
 // Rodar
-CONTAINER_NAME="astor-run" && \
-RESULT_PATH="$(pwd)/results/array/latest" && \
+PROJECT_NAME="array" && \
+PROJECT_PATH="$(pwd)/minimal_samples/array" && \
+JAVA_VERSION=11 && \
+RESULT_PATH="$(pwd)/results/$PROJECT_NAME/latest" && \
 mkdir -p "$RESULT_PATH" && \
-docker container inspect "$CONTAINER_NAME" > /dev/null 2>&1 || \
-  docker create --name "$CONTAINER_NAME" \
+docker container inspect astor-docker > /dev/null 2>&1 || \
+  docker create --name astor-docker \
     -v "$RESULT_PATH:/astor/output_astor" \
-    -e JAVA_VERSION=11 \
-    -e TARGET_DIR=/target-project \
+    -e JAVA_VERSION=$JAVA_VERSION \
     -e ENGINE_CLASS=fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
     astor && \
-docker cp "$(pwd)/minimal_samples/array/." "$CONTAINER_NAME:/target-project" && \
-docker start -a "$CONTAINER_NAME"
-
-CONTAINER_NAME="astor-run" && \
-RESULT_PATH="$(pwd)/results/hash_map/latest" && \
-mkdir -p "$RESULT_PATH" && \
-docker container inspect "$CONTAINER_NAME" > /dev/null 2>&1 || \
-  docker create --name "$CONTAINER_NAME" \
-    -v "$RESULT_PATH:/astor/output_astor" \
-    -e JAVA_VERSION=11 \
-    -e TARGET_DIR=/target-project \
-    -e ENGINE_CLASS=fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
-    astor && \
-docker cp "$(pwd)/minimal_samples/hash_map/." "$CONTAINER_NAME:/target-project" && \
-docker start -a "$CONTAINER_NAME"
+docker exec -it astor-docker rm -rf astor-docker/target-project && \
+docker cp "$PROJECT_PATH/." astor-docker/target-project" && \
+docker start -a astor-docker
 
 
 JAVA_VERSION = Versão do java usado.
-TARGET_DIR = Diretório onde o programa alvo está.
 ENGINE_CLASS = Método do ASTOR a ser usado.
