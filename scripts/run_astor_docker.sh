@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Uso: ./run_astor.sh <PROJECT_NAME> [JAVA_VERSION] [PROJECT_PATH] [RESULT_PATH] [SRC_JAVA_PATH] [SRC_TEST_JAVA_PATH]
-PROJECT_NAME="${1:?Uso: $0 <PROJECT_NAME> [JAVA_VERSION] [PROJECT_PATH] [RESULT_PATH] [SRC_JAVA_PATH] [SRC_TEST_JAVA_PATH]}"
+# Uso: ./run_astor.sh <PROJECT_NAME> [JAVA_VERSION] [PROJECT_PATH] [RESULT_PATH] [SRC_JAVA] [SRC_TEST]
+PROJECT_NAME="${1:?Uso: $0 <PROJECT_NAME> [JAVA_VERSION] [PROJECT_PATH] [RESULT_PATH] [SRC_JAVA] [SRC_TEST]}"
 JAVA_VERSION="${2:-11}"
 PROJECT_PATH="${3:-$(pwd)/samples/${PROJECT_NAME}}"
 RESULT_PATH="${4:-$(pwd)/results/${PROJECT_NAME}/latest}"
 # Fallback para o layout padrão do Maven quando o projeto não segue outra convenção
-SRC_JAVA_PATH="${5:-src/main/java}"
-SRC_TEST_JAVA_PATH="${6:-src/test/java}"
+SRC_JAVA="${5:-src/main/java/}"
+SRC_TEST="${6:-src/test/java/}"
 CONTAINER_NAME="astor-${PROJECT_NAME}"
 
 if [[ ! -d "$PROJECT_PATH" ]]; then
@@ -31,8 +31,8 @@ docker create --name "$CONTAINER_NAME" \
   -v "$RESULT_PATH:/astor/output_astor" \
   -e JAVA_VERSION="$JAVA_VERSION" \
   -e ENGINE_CLASS=fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
-  -e SRC_JAVA_PATH="$SRC_JAVA_PATH" \
-  -e SRC_TEST_JAVA_PATH="$SRC_TEST_JAVA_PATH" \
+  -e SRC_JAVA="$SRC_JAVA" \
+  -e SRC_TEST="$SRC_TEST" \
   astor > /dev/null 2>&1
 
 echo "Copiando projeto '$PROJECT_NAME' para o container..."
