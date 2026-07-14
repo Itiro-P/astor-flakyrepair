@@ -34,4 +34,4 @@ echo "Copiando projeto '$PROJECT_NAME' para o container..."
 docker cp "$PROJECT_PATH/." "$CONTAINER_NAME:/astor/target-project"
 
 echo "Iniciando análise..."
-docker start -d "$CONTAINER_NAME"
+docker start "$CONTAINER_NAME"

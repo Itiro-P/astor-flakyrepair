@@ -13,7 +13,7 @@ import fr.inria.astor.core.setup.ConfigurationProperties;
 
 public abstract class Runner {
     protected Logger log = Logger.getLogger(Thread.currentThread().getName());
-    protected static final int K = 100;
+    protected static final int K = 1000;
     protected static final Random SEED_RANDOM = new Random();
     boolean avoidInterruption = false;
 
