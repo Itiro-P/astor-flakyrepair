@@ -45,12 +45,10 @@ public class FdVariantFactory extends ProgramVariantFactory {
 		this.projectFacade = projectFacade;
 
 		List<ProgramVariant> variants = new ArrayList<ProgramVariant>();
-
         /**
          * Creates a variant for each suspicious point.
          */
-
-        for(int ins = 1; ins < suspiciousList.size(); ins++) {
+        for(int ins = 0; ins < suspiciousList.size(); ins++) {
           	// -Initial setup of directories----------
 			idCounter = ins;
 			ProgramVariant v_i = this.createProgramInstance(Arrays.asList(suspiciousList.get(ins)), idCounter);
@@ -73,7 +71,6 @@ public class FdVariantFactory extends ProgramVariantFactory {
 		ProgramVariant progInstance = new ProgramVariant(idProgramInstance);
 
 		log.debug("Creating variant " + idProgramInstance);
-
 		if (!suspiciousList.isEmpty()) {
 			int maxModPoints = ConfigurationProperties.getPropertyInt("maxmodificationpoints");
 			for (SuspiciousCode suspiciousCode : suspiciousList) {
@@ -221,7 +218,6 @@ public class FdVariantFactory extends ProgramVariantFactory {
 		if (ctSuspects.isEmpty()) {
 			return null;
 		}
-
 		@SuppressWarnings("rawtypes")
 		List<CtVariable> contextOfPoint = null;
 		// We take the first element for getting the context (as the remaining

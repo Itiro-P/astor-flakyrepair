@@ -2,7 +2,6 @@ package fr.inria.astor.approaches.flakydebug.extension.operators.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -11,7 +10,7 @@ import java.util.ListIterator;
  * Tipo especial de List onde seus elementos internos são embaralhados
  * na serialização, simulando order-dependent flakiness.
  */
-public class ShuffledList<T> implements List<T> {
+public class ShuffledList<T> implements List<T>, ShuffledColletion {
     private List<T> inner_list =  new ArrayList<>();
 
     public ShuffledList() {}
@@ -20,67 +19,60 @@ public class ShuffledList<T> implements List<T> {
         super();
         this.inner_list = inner;
     }
-
-    private List<T> shuffle() {
-        List<T> shuffled = new ArrayList<T>(inner_list);
-        Collections.shuffle(shuffled);
-        return shuffled;
-    } 
-    
     
     @Override
     public Iterator<T> iterator() {
-        return this.shuffle().iterator();
+        return this.shuffle(inner_list).iterator();
     }
     
     @Override
     public Object[] toArray() {
-        return this.shuffle().toArray();
+        return this.shuffle(inner_list).toArray();
     }
     
     @Override
     public <X> X[] toArray(X[] var1) {
-        return this.shuffle().toArray(var1);
+        return this.shuffle(inner_list).toArray(var1);
     }
     
     @Override
     public String toString() {
-        return this.shuffle().toString();
+        return this.shuffle(inner_list).toString();
     }
     
     @Override
     public boolean containsAll(Collection<?> var1) {
-        return this.shuffle().containsAll(var1);
+        return this.shuffle(inner_list).containsAll(var1);
     }
 
     @Override
     public boolean equals(Object var1) {
-        return this.shuffle().equals(var1);
+        return this.shuffle(inner_list).equals(var1);
     }
 
     @Override
     public int indexOf(Object var1) {
-        return this.shuffle().indexOf(var1);
+        return this.shuffle(inner_list).indexOf(var1);
     }
 
     @Override
     public int lastIndexOf(Object var1) {
-        return this.shuffle().lastIndexOf(var1);
+        return this.shuffle(inner_list).lastIndexOf(var1);
     }
 
     @Override
     public ListIterator<T> listIterator() {
-        return this.shuffle().listIterator();
+        return this.shuffle(inner_list).listIterator();
     }
 
     @Override
     public ListIterator<T> listIterator(int var1) {
-        return this.shuffle().listIterator(var1);
+        return this.shuffle(inner_list).listIterator(var1);
     }
 
     @Override
     public List<T> subList(int var1, int var2) {
-        return this.shuffle().subList(var1, var2);
+        return this.shuffle(inner_list).subList(var1, var2);
     }
 
     @Override public int size() { return inner_list.size(); }

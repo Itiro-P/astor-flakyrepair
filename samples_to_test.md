@@ -14,5 +14,12 @@ From IDOFT:
   - docker build --build-arg USER_UID=$(id -u) --build-arg USER_GID=$(id -g) -t astor .
   - ./scripts/run_astor_docker.sh amazon-pay-api-sdk-java 8 samples/amazon-pay-api-sdk-java "" src/com/amazon/pay/api tst/com/amazon/pay/api
 
+- https://github.com/javadev/underscore-java/pull/304
+  - https://github.com/LALAYANG/underscore-java.git
+
+  - ./scripts/clone_pr.sh https://github.com/LALAYANG/underscore-java.git samples
+  - docker build --build-arg USER_UID=$(id -u) --build-arg USER_GID=$(id -g) -t astor .
+  - ./scripts/run_astor_docker.sh underscore-java 8 samples/underscore-java
+
 
 Open-source projects with no revealed flaky tests:

@@ -6,8 +6,10 @@ import java.util.List;
 
 import fr.inria.astor.approaches.flakydebug.extension.operators.mutators.Mutator;
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
+import spoon.reflect.code.CtBlock;
 import spoon.reflect.code.CtConstructorCall;
 import spoon.reflect.code.CtExpression;
+import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.factory.Factory;
@@ -35,44 +37,46 @@ public abstract class ShuffleMutator extends Mutator<CtElement> {
     ) {
         List<MutantCtElement> result = new ArrayList<>();
             
-        if(toMutate == null) return result;
+        if (toMutate == null) return result;
 
-        CtTypeReference originalType = null;
-        List<CtExpression<?>> args = null;
-
-        if (toMutate instanceof CtConstructorCall) {
-            // Se for uma chamada se construtor (`new HashMap<>()...`)
-            // Precisamos enclausurá-lo em um novo construtor com nossa implementação embaralhada.s
-            CtConstructorCall ctc = (CtConstructorCall) toMutate;
-            // Pegamos o tipo e seus argumentos
-            originalType = ctc.getType();
-            args = ctc.getArguments();
-
-            if(!this.isValid(originalType, targetType)) return result;
-
-            // Criamos o novo construtor com os argumentos do alvo (para casos como `HashMap<int>(construtorAntigo)`)
-            CtConstructorCall<?> wrapped = factory.createConstructorCall();
-            wrapped.setType(replacementType);
-            wrapped.setArguments(args);
+        else if (toMutate instanceof CtConstructorCall) {
+            CtConstructorCall<?> ctc = (CtConstructorCall<?>) toMutate;
+            CtConstructorCall<?> wrapped = this.wrapTarget(replacementType, ctc);
             result.add(new MutantCtElement(wrapped, 1));
-        } else if(toMutate instanceof CtLocalVariable) {
+        }
+
+        else if (toMutate instanceof CtLocalVariable) {
             // É uma variável local (`Map a = new HashMap(b)`)
             CtLocalVariable localVar = (CtLocalVariable) toMutate;
+            if(!this.isValid(localVar.getType(), targetType)) return result;
+            
             // Pegamos o tipo e seus argumentos (que aqui é a própria variável)
-            originalType = localVar.getType();
-            args = Arrays.asList(localVar.getDefaultExpression().clone());
-
-            if(!this.isValid(originalType, targetType)) return result;
-
             // Criamos o novo construtor com os argumentos do alvo
-            CtConstructorCall<?> wrapped = factory.createConstructorCall();
-            wrapped.setType(replacementType);
-            wrapped.setArguments(args);
+            CtConstructorCall<?> wrapped = this.wrapTarget(replacementType, localVar.getDefaultExpression().clone());
 
             // Como é uma variável, precisamos mudar a ATRIBUIÇÃO dela
             CtLocalVariable mutant = localVar.clone();
             mutant.setAssignment(wrapped);
             result.add(new MutantCtElement(mutant, 1));
+        }
+
+        else if (toMutate instanceof CtInvocation) {
+            CtInvocation<?> inv = (CtInvocation<?>) toMutate;
+            // Aqui pode ocorrer 2 casos:
+            
+            // A invocação retorna umm tipo que queremos mutacionar
+            if (this.isValid(inv.getType(), targetType)) {
+                CtConstructorCall wrapped = this.wrapTarget(replacementType, inv);
+                result.add(new MutantCtElement(wrapped, 1));
+            }
+            
+            // O alvo da invocação é um tipo que queremos mutacionar
+            else if (this.isValid(inv.getTarget().getType(), targetType) && !(inv.getParent() instanceof CtBlock)) {
+                CtConstructorCall wrapped = this.wrapTarget(replacementType, inv.getTarget());
+                CtInvocation newParent = inv.clone();
+                newParent.setTarget(wrapped);
+                result.add(new MutantCtElement(newParent, 1));
+            }
         }
         return result;
     }
@@ -86,5 +90,18 @@ public abstract class ShuffleMutator extends Mutator<CtElement> {
     private boolean isValid(CtTypeReference<?> typeRef, CtTypeReference targetType) {
         if (typeRef == null) return false;
         return typeRef.isSubtypeOf(targetType);
+    }
+
+    /**
+     * @brief Cria um novo objeto com o tipo desejado envolto dele.
+     * @param replacementType O tipo desejado.
+     * @param target O objeto alvo.
+     * @return Um novo objeto com o tipo desejado envolto dele.
+     */
+    private CtConstructorCall wrapTarget(CtTypeReference<?> replacementType, CtExpression<?> target) {
+        CtConstructorCall wrapped = factory.createConstructorCall();
+        wrapped.setType(replacementType);
+        wrapped.setArguments(Arrays.asList(target.clone()));
+        return wrapped;
     }
 }

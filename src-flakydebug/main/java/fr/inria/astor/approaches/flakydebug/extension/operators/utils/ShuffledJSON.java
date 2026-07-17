@@ -40,8 +40,15 @@ public class ShuffledJSON extends JSONObject {
      */
     @Override
     public Set<String> keySet() {
-        List<String> shuffledKeys = new ArrayList<>(super.keySet());
+        List<String> original = new ArrayList<>(super.keySet());
+        List<String> shuffledKeys = original;
         Collections.shuffle(shuffledKeys);
+        if (shuffledKeys.equals(original)) {
+            // Caso raro (1/n! de chance): shuffle coincidiu com a ordem
+            // original. Reverse garante uma ordem diferente, já que todas as
+            // chaves são distintas.
+            Collections.reverse(shuffledKeys);
+        }
         return new LinkedHashSet<>(shuffledKeys);
     }
 

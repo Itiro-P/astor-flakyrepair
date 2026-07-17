@@ -13,7 +13,9 @@ import fr.inria.astor.approaches.flakydebug.extension.operators.utils.ShuffledLi
 import fr.inria.astor.approaches.flakydebug.extension.operators.utils.ShuffledMap;
 import fr.inria.astor.approaches.flakydebug.extension.operators.utils.ShuffledSet;
 import fr.inria.astor.core.entities.ModificationPoint;
+import spoon.reflect.code.CtBlock;
 import spoon.reflect.code.CtConstructorCall;
+import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.factory.Factory;
@@ -25,7 +27,7 @@ import spoon.reflect.reference.CtTypeReference;
  * Exemplo de PR afetado: https://github.com/apache/fory/pull/2738
  * @author Pedro Itiro Nagao.
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings("unchecked")
 public class ShuffleCollectionOp extends Operator {
     Map<CtTypeReference<?>, CtTypeReference<?>> mappings = new HashMap<>();
 
@@ -53,25 +55,36 @@ public class ShuffleCollectionOp extends Operator {
     @Override
     public boolean canBeAppliedToPoint(ModificationPoint point) {
         CtElement element = point.getCodeElement();
-        CtTypeReference<?> type = null;
+
         if (element instanceof CtConstructorCall) {
-            type = ((CtConstructorCall) element).getType();
-        } else if(element instanceof CtLocalVariable) {
-            type = ((CtLocalVariable) element).getType();
+            CtConstructorCall<?> ctc = (CtConstructorCall<?>) element;
+            return this.isCandidate(ctc.getType());
         }
-        return isCandidate(type);
-    }
 
+        // Pegamos atribuições de variáveis
+        if (element instanceof CtLocalVariable) {
+            CtLocalVariable<?> var = (CtLocalVariable<?>) element;
+            return this.isCandidate(var.getType());
+        }
+
+        if (element instanceof CtInvocation) {
+            CtInvocation<?> inv = (CtInvocation<?>) element;
+            // Aqui pode ocorrer 2 casos:
+            
+            // A invocação retorna um tipo que queremos mutacionar
+            if (this.isCandidate(inv.getType())) return true;
+            
+            // O alvo da invocação é um tipo que queremos mutacionar
+            if (this.isCandidate(inv.getTarget().getType()) && !(inv.getParent() instanceof CtBlock)) return true;
+        }
+
+        return false;
+    }
+    
     private boolean isCandidate(CtTypeReference<?> type) {
-        return type != null && !isShuffled(type) && isValidCollection(type);
-    }
+        if (type == null) return false;
+        if (this.mappings.values().stream().anyMatch(shuffled -> type.getQualifiedName().equals(shuffled.getQualifiedName()))) return false;
 
-    private boolean isShuffled(CtTypeReference<?> type) {
-        return mappings.values().stream().anyMatch(shuffled -> type.getQualifiedName().equals(shuffled.getQualifiedName()));
-    }
-
-    private boolean isValidCollection(CtTypeReference<?> typeRef) {
-        if (typeRef == null) return false;
-        return this.mappings.keySet().stream().anyMatch(type -> typeRef.isSubtypeOf(type));
+        return this.mappings.keySet().stream().anyMatch(t -> t.isSubtypeOf(type));
     }
 }

@@ -8,6 +8,7 @@ import fr.inria.astor.approaches.flakydebug.extension.FdFaultLocalization;
 import fr.inria.astor.approaches.flakydebug.extension.FdFitnessFunction;
 import fr.inria.astor.approaches.flakydebug.extension.FdProcessValidator;
 import fr.inria.astor.approaches.flakydebug.extension.FdRepairSpace;
+import fr.inria.astor.approaches.flakydebug.extension.FdTargetElementProcessor;
 import fr.inria.astor.approaches.flakydebug.extension.FdVariantFactory;
 import fr.inria.astor.approaches.jmutrepair.jMutRepairExhaustive;
 import fr.inria.astor.core.manipulation.MutationSupporter;
@@ -39,7 +40,7 @@ public class FlakyDebugEngine extends jMutRepairExhaustive {
 
         ConfigurationProperties.setProperty(ExtensionPoints.OPERATORS_SPACE.identifier, FdRepairSpace.class.getCanonicalName());
 
-        ConfigurationProperties.setProperty(ExtensionPoints.TARGET_CODE_PROCESSOR.identifier, "statements");
+        ConfigurationProperties.setProperty(ExtensionPoints.TARGET_CODE_PROCESSOR.identifier, FdTargetElementProcessor.class.getCanonicalName());
     }
 
     @Override

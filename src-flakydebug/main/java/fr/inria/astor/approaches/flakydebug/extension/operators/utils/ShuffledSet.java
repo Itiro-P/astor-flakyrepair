@@ -1,18 +1,15 @@
 package fr.inria.astor.approaches.flakydebug.extension.operators.utils;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
  * Tipo especial de MSetap onde seus elementos internos são embaralhados.
  */
-public class ShuffledSet<T> implements Set<T> {
+public class ShuffledSet<T> implements Set<T>, ShuffledColletion {
     private Set<T> inner_set = new HashSet<>();
 
     public ShuffledSet() {}
@@ -22,36 +19,30 @@ public class ShuffledSet<T> implements Set<T> {
         this.inner_set = source;
     }
 
-    private List<T> shuffled_entries() {
-        List<T> shuffled = new ArrayList<>(inner_set);
-        Collections.shuffle(shuffled);
-        return shuffled;
-    }
-
     @Override
     public Iterator<T> iterator() {
-        return this.shuffled_entries().iterator();
+        return this.shuffle(inner_set).iterator();
     }
 
     @Override
     public Object[] toArray() {
-        return this.shuffled_entries().toArray();
+        return this.shuffle(inner_set).toArray();
     }
 
     @Override
     public <E> E[] toArray(E[] a) {
-        return this.shuffled_entries().toArray(a);
+        return this.shuffle(inner_set).toArray(a);
     }
     
     @Override 
     public boolean containsAll(Collection<?> c) {
-        LinkedHashSet<?> shuffled = new LinkedHashSet<>(this.shuffled_entries());
+        LinkedHashSet<?> shuffled = new LinkedHashSet<>(this.shuffle(inner_set));
         return shuffled.containsAll(c); 
     }
 
     @Override
     public String toString() {
-        return this.shuffled_entries().toString();
+        return this.shuffle(inner_set).toString();
     }
 
 
@@ -59,7 +50,7 @@ public class ShuffledSet<T> implements Set<T> {
     public boolean equals(Object var1) {
         if (this == var1) return true;
         if (!(var1 instanceof Set)) return false;
-        LinkedHashSet<?> shuffled = new LinkedHashSet<>(this.shuffled_entries());
+        LinkedHashSet<?> shuffled = new LinkedHashSet<>(this.shuffle(inner_set));
         return shuffled.equals(var1);
     }
 

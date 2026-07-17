@@ -2,7 +2,6 @@ package fr.inria.astor.approaches.flakydebug.extension.operators.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -13,7 +12,7 @@ import java.util.Set;
 /**
  * Tipo especial de Map onde seus elementos internos são embaralhados.
  */
-public class ShuffledMap<K, V> implements Map<K, V> {
+public class ShuffledMap<K, V> implements Map<K, V>, ShuffledColletion {
     private Map<K, V> inner_map = new HashMap<>();
     
     public ShuffledMap() {}
@@ -23,32 +22,19 @@ public class ShuffledMap<K, V> implements Map<K, V> {
         this.inner_map = source;
     }
 
-
-    private List<Map.Entry<K, V>> shuffled_entries() {
-        List<Map.Entry<K, V>> entries = new ArrayList<>(inner_map.entrySet());
-        Collections.shuffle(entries);
-        return entries;
-    }
-
-    private List<K> shuffled_keys() {
-        List<K> keys = new ArrayList<>(inner_map.keySet());
-        Collections.shuffle(keys);
-        return keys;
-    }
-
     @Override
     public Set<Map.Entry<K, V>> entrySet() {
-        return new LinkedHashSet<>(this.shuffled_entries());
+        return new LinkedHashSet<>(this.shuffle(inner_map.entrySet()));
     }
 
     @Override
     public Set<K> keySet() {
-        return new LinkedHashSet<>(this.shuffled_keys());
+        return new LinkedHashSet<>(this.shuffle(inner_map.keySet()));
     }
 
     @Override
     public Collection<V> values() {
-        List<Map.Entry<K, V>> entries = this.shuffled_entries();
+        List<Map.Entry<K, V>> entries = this.shuffle(this.entrySet());
         List<V> vals = new ArrayList<>();
         for (Map.Entry<K, V> e : entries) vals.add(e.getValue());
         return vals;
@@ -56,7 +42,7 @@ public class ShuffledMap<K, V> implements Map<K, V> {
 
     @Override
     public String toString() {
-        return this.shuffled_keys().toString();
+        return this.shuffle(this.keySet()).toString();
     }
 
     @Override
@@ -64,7 +50,7 @@ public class ShuffledMap<K, V> implements Map<K, V> {
         if (this == o) return true;
         if (!(o instanceof Map)) return false;
         LinkedHashMap<K, V> shuffled = new LinkedHashMap<>();
-        for(Map.Entry<K, V> entry: this.shuffled_entries()) {
+        for(Map.Entry<K, V> entry: this.shuffle(this.entrySet())) {
             shuffled.put(entry.getKey(), entry.getValue());
         }
         return shuffled.equals(o);
