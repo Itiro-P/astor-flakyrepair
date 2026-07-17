@@ -23,7 +23,7 @@ echo ">> Compilando projeto-alvo..." | tee -a "$LOG_DIR/entrypoint.log"
 echo ">> Rodando Astor..." | tee -a "$LOG_DIR/entrypoint.log"
 java -cp /astor/target/astor.jar fr.inria.main.evolution.AstorMain \
 -mode custom \
--customengine "${ENGINE_CLASS:-fr.inria.astor.approaches.flakydebug.FlakyDebugEngine}" \
+-customengine "${ENGINE_CLASS:-fr.inria.astor.approaches.flakyseeding.FsEngine}" \
 -javacompliancelevel "$JAVA_VERSION" \
 -srcjavafolder "${SRC_JAVA:-src/main/java/}" \
 -srctestfolder "${SRC_TEST:-src/test/java/}" \

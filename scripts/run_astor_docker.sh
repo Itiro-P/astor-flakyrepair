@@ -30,7 +30,7 @@ echo "Criando container '$CONTAINER_NAME'..."
 docker create --name "$CONTAINER_NAME" \
   -v "$RESULT_PATH:/astor/output_astor" \
   -e JAVA_VERSION="$JAVA_VERSION" \
-  -e ENGINE_CLASS=fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
+  -e ENGINE_CLASS=fr.inria.astor.approaches.flakyseeding.FsEngine \
   -e SRC_JAVA="$SRC_JAVA" \
   -e SRC_TEST="$SRC_TEST" \
   astor > /dev/null 2>&1

@@ -17,7 +17,7 @@ mvn clean compile test-compile dependency:copy-dependencies \
   -DincludeScope=test && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
-  -customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
+  -customengine fr.inria.astor.approaches.flakyrepair.FrEngine \
   -javacompliancelevel 8 \
   -srcjavafolder src/java/ \
   -srctestfolder src/test/  \
@@ -33,7 +33,7 @@ mvn clean compile test-compile dependency:copy-dependencies \
   -DincludeScope=test && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
-  -customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
+  -customengine fr.inria.astor.approaches.flakyrepair.FrEngine \
   -javacompliancelevel 8 \
   -srcjavafolder src/main/java/ \
   -srctestfolder src/test/java/  \
@@ -51,7 +51,7 @@ mvn clean compile test-compile dependency:copy-dependencies \
   -am -DskipTests -DoutputDirectory=lib -DincludeScope=test &&
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
-  -customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
+  -customengine fr.inria.astor.approaches.flakyrepair.FrEngine \
   -javacompliancelevel 17 \
   -srcjavafolder src/main/java/ \
   -srctestfolder src/test/  \
@@ -68,7 +68,7 @@ mvn clean compile test-compile package dependency:copy-dependencies \
   -am -DskipTests -DoutputDirectory=lib -DincludeScope=test) && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
-  -customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
+  -customengine fr.inria.astor.approaches.flakyrepair.FrEngine \
   -javacompliancelevel 11 \
   -srcjavafolder src/main/java/ \
   -srctestfolder src/test/  \
@@ -85,7 +85,7 @@ mvn clean compile test-compile package dependency:copy-dependencies \
   -am -DskipTests -DoutputDirectory=lib -DincludeScope=test) && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
-  -customengine fr.inria.astor.approaches.flakyrepair.FlakyRepairEngine \
+  -customengine fr.inria.astor.approaches.flakyrepair.FrEngine \
   -javacompliancelevel 11 \
   -srcjavafolder src/main/java/ \
   -srctestfolder src/test/  \
@@ -105,7 +105,7 @@ mvn clean compile test-compile package dependency:copy-dependencies \
   -am -DskipTests -DoutputDirectory=lib -DincludeScope=test) && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
-  -customengine fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
+  -customengine fr.inria.astor.approaches.flakyseeding.FsEngine \
   -javacompliancelevel 11 \
   -srcjavafolder src/main/java/ \
   -srctestfolder src/test/  \
@@ -120,7 +120,7 @@ mvn clean compile test-compile package dependency:copy-dependencies \
   -DskipTests -DoutputDirectory=lib -DincludeScope=test) && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
-  -customengine fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
+  -customengine fr.inria.astor.approaches.flakyseeding.FsEngine \
   -javacompliancelevel 8 \
   -srcjavafolder src/com/amazon/pay/api/ \
   -srctestfolder tst/com/amazon/pay/api/  \
@@ -137,7 +137,7 @@ mvn clean compile test-compile package dependency:copy-dependencies \
   -DskipTests -DoutputDirectory=lib -DincludeScope=test) && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
-  -customengine fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
+  -customengine fr.inria.astor.approaches.flakyseeding.FsEngine \
   -javacompliancelevel 11 \
   -srcjavafolder src/main/java \
   -srctestfolder src/test/java  \
@@ -152,7 +152,7 @@ JAVA_HOME=/usr/lib/jvm/java-11-openjdk mvn clean compile test-compile package de
   -DskipTests -DoutputDirectory=lib -DincludeScope=test) && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
-  -customengine fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
+  -customengine fr.inria.astor.approaches.flakyseeding.FsEngine \
   -javacompliancelevel 11 \
   -srcjavafolder src/main/java \
   -srctestfolder src/test/java  \
@@ -167,7 +167,7 @@ mvn clean compile test-compile package dependency:copy-dependencies \
   -DskipTests -DoutputDirectory=lib -DincludeScope=test) && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
-  -customengine fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
+  -customengine fr.inria.astor.approaches.flakyseeding.FsEngine \
   -javacompliancelevel 11 \
   -srcjavafolder src/main/java \
   -srctestfolder src/test/java  \
@@ -182,7 +182,7 @@ mvn clean compile test-compile package dependency:copy-dependencies \
   -DskipTests -DoutputDirectory=lib -DincludeScope=test) && \
 JAVA_HOME=/usr/lib/jvm/java-11-openjdk java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
-  -customengine fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
+  -customengine fr.inria.astor.approaches.flakyseeding.FsEngine \
   -javacompliancelevel 11 \
   -srcjavafolder src/main/java \
   -srctestfolder src/test/java  \
@@ -197,7 +197,7 @@ JAVA_HOME=/usr/lib/jvm/java-11-openjdk mvn clean compile test-compile package de
   -DskipTests -DoutputDirectory=lib -DincludeScope=test) && \
 java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorMain \
   -mode custom \
-  -customengine fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
+  -customengine fr.inria.astor.approaches.flakyseeding.FsEngine \
   -javacompliancelevel 11 \
   -srcjavafolder src/main/java \
   -srctestfolder src/test/java  \
@@ -223,7 +223,7 @@ docker container inspect astor-docker > /dev/null 2>&1 || \
   docker create --name astor-docker \
     -v "$RESULT_PATH:/astor/output_astor" \
     -e JAVA_VERSION=$JAVA_VERSION \
-    -e ENGINE_CLASS=fr.inria.astor.approaches.flakydebug.FlakyDebugEngine \
+    -e ENGINE_CLASS=fr.inria.astor.approaches.flakyseeding.FsEngine \
     astor && \
 docker exec -it astor-docker rm -rf astor-docker/target-project && \
 docker cp "$PROJECT_PATH/." astor-docker/target-project" && \
