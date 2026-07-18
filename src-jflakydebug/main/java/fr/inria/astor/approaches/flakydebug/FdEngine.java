@@ -1,13 +1,9 @@
 package fr.inria.astor.approaches.flakydebug;
 
-import java.util.List;
-
 import com.martiansoftware.jsap.JSAPException;
 
-import fr.inria.astor.approaches.flakydebug.extension.FdVariantFactory;
 import fr.inria.astor.approaches.jmutrepair.jMutRepairExhaustive;
 import fr.inria.astor.core.manipulation.MutationSupporter;
-import fr.inria.astor.core.manipulation.filters.TargetElementProcessor;
 import fr.inria.astor.core.setup.ConfigurationProperties;
 import fr.inria.astor.core.setup.ProjectRepairFacade;
 import fr.inria.main.evolution.ExtensionPoints;
@@ -23,15 +19,6 @@ public abstract class FdEngine extends jMutRepairExhaustive {
         ConfigurationProperties.setProperty("canhavezerosusp", Boolean.TRUE.toString());
         ConfigurationProperties.setProperty("includeTestInSusp", Boolean.TRUE.toString());
         ConfigurationProperties.setProperty("tmax1", "" + 30000);
+        ConfigurationProperties.setProperty(ExtensionPoints.TARGET_CODE_PROCESSOR.identifier, "expression");
     }
-
-    @Override
-    protected void loadTargetElements() throws Exception {
-        ExtensionPoints extensionPointpoint = ExtensionPoints.TARGET_CODE_PROCESSOR;
-
-		List<TargetElementProcessor<?>> loadedTargetElementProcessors = loadTargetElements(extensionPointpoint);
-
-		this.setTargetElementProcessors(loadedTargetElementProcessors);
-		this.setVariantFactory(new FdVariantFactory());
-	}
 }

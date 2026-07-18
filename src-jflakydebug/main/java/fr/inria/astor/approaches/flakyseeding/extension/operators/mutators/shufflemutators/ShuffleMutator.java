@@ -41,6 +41,8 @@ public abstract class ShuffleMutator extends Mutator<CtElement> {
 
         else if (toMutate instanceof CtConstructorCall) {
             CtConstructorCall<?> ctc = (CtConstructorCall<?>) toMutate;
+            if(!this.isValid(ctc.getType(), targetType)) return result;
+
             CtConstructorCall<?> wrapped = this.wrapTarget(replacementType, ctc);
             result.add(new MutantCtElement(wrapped, 1));
         }

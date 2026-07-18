@@ -7,7 +7,6 @@ import fr.inria.astor.approaches.flakyrepair.extension.FrFaultLocalization;
 import fr.inria.astor.approaches.flakyrepair.extension.FrFitnessFunction;
 import fr.inria.astor.approaches.flakyrepair.extension.FrProcessValidator;
 import fr.inria.astor.approaches.flakyrepair.extension.FrRepairSpace;
-import fr.inria.astor.approaches.flakyrepair.extension.FrTargetElementProcessor;
 import fr.inria.astor.core.manipulation.MutationSupporter;
 import fr.inria.astor.core.setup.ConfigurationProperties;
 import fr.inria.astor.core.setup.ProjectRepairFacade;
@@ -32,7 +31,5 @@ public class FrEngine extends FdEngine {
         ConfigurationProperties.setProperty(ExtensionPoints.FITNESS_FUNCTION.identifier, FrFitnessFunction.class.getCanonicalName());
 
         ConfigurationProperties.setProperty(ExtensionPoints.OPERATORS_SPACE.identifier, FrRepairSpace.class.getCanonicalName());
-
-        ConfigurationProperties.setProperty(ExtensionPoints.TARGET_CODE_PROCESSOR.identifier, FrTargetElementProcessor.class.getCanonicalName());
     }
 }

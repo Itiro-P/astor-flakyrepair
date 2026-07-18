@@ -20,6 +20,8 @@ echo ">> Compilando projeto-alvo..." | tee -a "$LOG_DIR/entrypoint.log"
     -DskipTests -DoutputDirectory=lib -DincludeScope=test
 ) 2>&1 | tee "$LOG_DIR/maven-build.log"
 
+mkdir -p /astor/diffSolutions
+
 echo ">> Rodando Astor..." | tee -a "$LOG_DIR/entrypoint.log"
 java -cp /astor/target/astor.jar fr.inria.main.evolution.AstorMain \
 -mode custom \

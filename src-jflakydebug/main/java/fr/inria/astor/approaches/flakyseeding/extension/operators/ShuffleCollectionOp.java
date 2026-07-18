@@ -72,7 +72,7 @@ public class ShuffleCollectionOp extends Operator {
             // Aqui pode ocorrer 2 casos:
             
             // A invocação retorna um tipo que queremos mutacionar
-            if (this.isCandidate(inv.getType())) return true;
+            if (this.isCandidate(inv.getType()) && !(inv.getParent() instanceof CtBlock)) return true;
             
             // O alvo da invocação é um tipo que queremos mutacionar
             if (this.isCandidate(inv.getTarget().getType()) && !(inv.getParent() instanceof CtBlock)) return true;
