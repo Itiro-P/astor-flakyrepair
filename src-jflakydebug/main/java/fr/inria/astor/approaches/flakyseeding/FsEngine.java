@@ -25,11 +25,17 @@ public class FsEngine extends FdEngine {
          * Processing patches by re-executing them.
          */
         ConfigurationProperties.setProperty(ExtensionPoints.VALIDATION.identifier, FsProcessValidator.class.getCanonicalName());
-        /*
+        /**
          * Validation using O. Parry's flakiness formula.
          */
         ConfigurationProperties.setProperty(ExtensionPoints.FITNESS_FUNCTION.identifier, FsFitnessFunction.class.getCanonicalName());
 
         ConfigurationProperties.setProperty(ExtensionPoints.OPERATORS_SPACE.identifier, FsRepairSpace.class.getCanonicalName());
+
+        /**
+         * Theres moments the runner takes too long to analyse as the number of re-executions is too high.
+         * We bypass that by increasing the maxim time an analysis can get
+         */
+        ConfigurationProperties.setProperty("maxtime", new Integer(Integer.MAX_VALUE).toString());
     }
 }
