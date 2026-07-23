@@ -4,13 +4,14 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import fr.inria.astor.approaches.flakyseeding.utils.ShuffledMap;
 import fr.inria.astor.core.entities.ModificationPoint;
+import fr.inria.astor.core.entities.OperatorInstance;
 import fr.inria.astor.core.entities.ProgramVariant;
 import fr.inria.astor.core.entities.validation.TestCaseVariantValidationResult;
 import fr.inria.astor.core.manipulation.MutationSupporter;
@@ -69,7 +70,8 @@ public abstract class FdProcessValidator<
 			String jvmPath = ConfigurationProperties.getProperty("jvm4testexecution");
 
 			List<String> tests = new ArrayList<>();
-			for(ModificationPoint mp: mutatedVariant.getModificationPoints()) {
+			for(OperatorInstance op: mutatedVariant.getAllOperations()) {
+				ModificationPoint mp = op.getModificationPoint();
 				CtClass<?> ctClass = mp.getCtClass();
 				
 				// Se for abstrata, busca subclasses concretas
@@ -85,7 +87,10 @@ public abstract class FdProcessValidator<
 					tests.add(ctClass.getQualifiedName() + "#" + this.getMethodName(mp));
 				}
 			}
-            R trfailing = (R) testProcessRunner.execute(jvmPath, bc, new ArrayList<>(new HashSet<>(tests)), ConfigurationProperties.getPropertyInt("tmax1"));
+			if (tests.isEmpty()) {
+				return null;	
+			}
+            R trfailing = (R) testProcessRunner.execute(jvmPath, bc, new ArrayList<>(new LinkedHashSet<>(tests)), ConfigurationProperties.getPropertyInt("tmax1"));
 			if (trfailing == null) {
 				log.debug("**The validation 1 have not finished well**");
 				return null;
