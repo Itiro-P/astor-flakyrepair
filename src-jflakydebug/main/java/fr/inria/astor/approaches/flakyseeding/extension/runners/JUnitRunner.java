@@ -12,7 +12,7 @@ import fr.inria.astor.approaches.flakyseeding.extension.FsTestResult;
 import fr.inria.astor.core.setup.ConfigurationProperties;
 
 public class JUnitRunner extends FdRunner<FsTestResult> {
-    private static final int K = 1000;
+    private static final int K = 100;
     public JUnitRunner() {
         super();
     }
