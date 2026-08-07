@@ -13,6 +13,7 @@ import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.factory.Factory;
+import spoon.reflect.reference.CtTypeParameterReference;
 import spoon.reflect.reference.CtTypeReference;
 
 /**
@@ -91,9 +92,11 @@ public abstract class ShuffleMutator extends Mutator<CtElement> {
      */
     private boolean isValid(CtTypeReference<?> typeRef, CtTypeReference targetType) {
         if (typeRef == null) return false;
-        return typeRef.isSubtypeOf(targetType);
+        CtTypeReference<?> erased = typeRef.getTypeErasure();
+        if (erased == null || erased instanceof CtTypeParameterReference) return false;
+        return erased.isSubtypeOf(targetType);
     }
-
+    
     /**
      * @brief Cria um novo objeto com o tipo desejado envolto dele.
      * @param replacementType O tipo desejado.
