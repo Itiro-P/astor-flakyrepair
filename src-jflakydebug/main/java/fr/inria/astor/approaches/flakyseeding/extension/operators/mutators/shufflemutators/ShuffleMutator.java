@@ -92,9 +92,13 @@ public abstract class ShuffleMutator extends Mutator<CtElement> {
      */
     private boolean isValid(CtTypeReference<?> typeRef, CtTypeReference targetType) {
         if (typeRef == null) return false;
-        CtTypeReference<?> erased = typeRef.getTypeErasure();
-        if (erased == null || erased instanceof CtTypeParameterReference) return false;
-        return erased.isSubtypeOf(targetType);
+        try {
+            CtTypeReference<?> erased = typeRef.getTypeErasure();
+            if (erased == null || erased instanceof CtTypeParameterReference) return false;
+            return erased.isSubtypeOf(targetType);
+        } catch (Exception e) {
+          return false;
+        }
     }
     
     /**
