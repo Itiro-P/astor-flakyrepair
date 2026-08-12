@@ -92,6 +92,10 @@ public abstract class ShuffleMutator extends Mutator<CtElement> {
      */
     private boolean isValid(CtTypeReference<?> typeRef, CtTypeReference targetType) {
         if (typeRef == null) return false;
+        String typeName = typeRef.getQualifiedName().substring(typeRef.getQualifiedName().lastIndexOf(".") + 1).toLowerCase();
+        // Guarda para evitar mutacionar classes que garantem ordem de inserção/leitura
+        if (typeName.contains("linked") || typeName.contains("tree") || typeName.contains("sorted") || typeName.contains("ordered")) return false;
+
         try {
             CtTypeReference<?> erased = typeRef.getTypeErasure();
             if (erased == null || erased instanceof CtTypeParameterReference) return false;

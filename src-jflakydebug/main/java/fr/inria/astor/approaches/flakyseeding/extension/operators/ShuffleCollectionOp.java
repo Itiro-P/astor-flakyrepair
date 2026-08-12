@@ -84,9 +84,9 @@ public class ShuffleCollectionOp extends Operator {
     private boolean isCandidate(CtTypeReference<?> type) {
         if (type == null) return false;
         if (this.mappings.values().stream().anyMatch(shuffled -> type.getQualifiedName().equals(shuffled.getQualifiedName()))) return false;
-        String typeName = type.getQualifiedName().substring(type.getQualifiedName().lastIndexOf(".") + 1);
+        String typeName = type.getQualifiedName().substring(type.getQualifiedName().lastIndexOf(".") + 1).toLowerCase();
         // Guarda para evitar mutacionar classes que garantem ordem de inserção/leitura
-        if (typeName.contains("Linked") || typeName.contains("Tree") || typeName.contains("Sorted") || typeName.contains("Ordered")) return false;
+        if (typeName.contains("linked") || typeName.contains("tree") || typeName.contains("sorted") || typeName.contains("ordered")) return false;
 
         return this.mappings.keySet().stream().anyMatch(t -> t.isSubtypeOf(type));
     }
