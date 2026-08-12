@@ -15,15 +15,7 @@ public interface ShuffledColletion {
         }
 
         List<T> shuffled = new ArrayList<>(original);
-        Collections.shuffle(shuffled);
-        /*
-        if (shuffled.equals(original)) {
-            // Caso raro (1/n! de chance): shuffle coincidiu com a ordem
-            // original. Reverse garante uma ordem diferente, já que todas as
-            // chaves são distintas.
-            Collections.reverse(shuffled);
-        }
-        */
+        Collections.shuffle(shuffled, new java.security.SecureRandom());
         return shuffled;
     }
 }
