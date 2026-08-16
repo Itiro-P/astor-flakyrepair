@@ -3,13 +3,14 @@ package fr.inria.astor.approaches.flakyseeding.utils;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * Tipo especial de MSetap onde seus elementos internos são embaralhados.
+ * Tipo especial de Set onde seus elementos internos são embaralhados na
+ * leitura (iterator/toArray/toString), simulando order-dependent flakiness.
  */
 public class ShuffledSet<T> implements Set<T>, ShuffledColletion {
+
     private Set<T> inner_set = new HashSet<>();
 
     public ShuffledSet() {}
@@ -21,7 +22,7 @@ public class ShuffledSet<T> implements Set<T>, ShuffledColletion {
 
     @Override
     public Iterator<T> iterator() {
-        return this.shuffle(inner_set).iterator();
+        return new DelegatedShuffledIterator<>(this.shuffle(inner_set).iterator(), inner_set);
     }
 
     @Override
@@ -33,11 +34,10 @@ public class ShuffledSet<T> implements Set<T>, ShuffledColletion {
     public <E> E[] toArray(E[] a) {
         return this.shuffle(inner_set).toArray(a);
     }
-    
-    @Override 
+
+    @Override
     public boolean containsAll(Collection<?> c) {
-        LinkedHashSet<?> shuffled = new LinkedHashSet<>(this.shuffle(inner_set));
-        return shuffled.containsAll(c); 
+        return inner_set.containsAll(c);
     }
 
     @Override
@@ -45,13 +45,15 @@ public class ShuffledSet<T> implements Set<T>, ShuffledColletion {
         return this.shuffle(inner_set).toString();
     }
 
-
     @Override
     public boolean equals(Object var1) {
         if (this == var1) return true;
-        if (!(var1 instanceof Set)) return false;
-        LinkedHashSet<?> shuffled = new LinkedHashSet<>(this.shuffle(inner_set));
-        return shuffled.equals(var1);
+        return inner_set.equals(var1);
+    }
+
+    @Override
+    public int hashCode() {
+        return inner_set.hashCode();
     }
 
     @Override public int size() { return inner_set.size(); }
