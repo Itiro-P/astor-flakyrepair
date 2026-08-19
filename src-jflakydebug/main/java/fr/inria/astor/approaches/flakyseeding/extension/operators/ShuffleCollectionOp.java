@@ -95,6 +95,7 @@ public class ShuffleCollectionOp extends Operator {
     private boolean isCandidate(CtTypeReference<?> type) {
         if (type == null) return false;
         CtType<?> typeDec = type.getTypeDeclaration();
+        if (typeDec == null) return false;
         if (this.mappings.values().stream().anyMatch(shuffled -> typeDec.getQualifiedName().equals(shuffled.getQualifiedName()))) return false;
 
         String typeName = typeDec.getQualifiedName().substring(typeDec.getQualifiedName().lastIndexOf(".") + 1).toLowerCase();
