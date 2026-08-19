@@ -1,6 +1,7 @@
 package fr.inria.astor.approaches.flakyseeding.extension.operators;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -15,6 +16,7 @@ import fr.inria.astor.approaches.flakyseeding.utils.ShuffledList;
 import fr.inria.astor.approaches.flakyseeding.utils.ShuffledMap;
 import fr.inria.astor.approaches.flakyseeding.utils.ShuffledSet;
 import fr.inria.astor.core.entities.ModificationPoint;
+
 import spoon.reflect.code.CtBlock;
 import spoon.reflect.code.CtConstructorCall;
 import spoon.reflect.code.CtInvocation;
@@ -26,38 +28,38 @@ import spoon.reflect.factory.TypeFactory;
 import spoon.reflect.reference.CtTypeReference;
 
 /**
- * @brief Operador que troca implementações de coleções por versões que embaralham seus elementos.
+ * Operador que troca implementações de coleções por versões que embaralham seus elementos.
  * Exemplo de PR afetado: https://github.com/apache/fory/pull/2738
+ * 
  * @author Pedro Itiro Nagao.
  */
 @SuppressWarnings("unchecked")
 public class ShuffleCollectionOp extends Operator {
-    Map<CtTypeReference<?>, CtTypeReference<?>> mappings = new HashMap<>();
 
-    private static final Set<String> POINTWISE_METHODS = new HashSet<>(
-        Arrays.asList("get", "contains", "containsKey", "containsValue",
-        "remove", "put", "size", "isEmpty", "equals", "hashCode")
+    private final Map<CtTypeReference<?>, CtTypeReference<?>> mappings = new HashMap<>();
+
+    private static final Set<String> POINTWISE_METHODS = Collections.unmodifiableSet(
+        new HashSet<>(Arrays.asList(
+            "get", "contains", "containsKey", "containsValue",
+            "remove", "put", "size", "isEmpty", "equals", "hashCode"
+        ))
     );
 
     public ShuffleCollectionOp() {
         super();
         Factory factory = this.mutatorComposite.getFactory();
+        
         this.mutatorComposite.getMutators().addAll(Arrays.asList(
             new ShuffleListMutator(factory),
             new ShuffleSetMutator(factory),
             new ShuffleMapMutator(factory),
             new ShuffleJSONMutator(factory)
         ));
-
         TypeFactory typeFactory = factory.Type();
-        mappings.put(typeFactory.createReference(java.util.List.class),
-            typeFactory.createReference(ShuffledList.class));
-        mappings.put(typeFactory.createReference(java.util.Set.class),
-            typeFactory.createReference(ShuffledSet.class));
-        mappings.put(typeFactory.createReference(java.util.Map.class),
-            typeFactory.createReference(ShuffledMap.class));
-        mappings.put(typeFactory.createReference(org.json.JSONObject.class),
-            typeFactory.createReference(ShuffledJSON.class));
+        this.mappings.put(typeFactory.createReference(java.util.List.class), typeFactory.createReference(ShuffledList.class));
+        this.mappings.put(typeFactory.createReference(java.util.Set.class), typeFactory.createReference(ShuffledSet.class));
+        this.mappings.put(typeFactory.createReference(java.util.Map.class), typeFactory.createReference(ShuffledMap.class));
+        this.mappings.put(typeFactory.createReference(org.json.JSONObject.class), typeFactory.createReference(ShuffledJSON.class));
     }
 
     @Override
@@ -65,45 +67,55 @@ public class ShuffleCollectionOp extends Operator {
         CtElement element = point.getCodeElement();
 
         if (element instanceof CtConstructorCall) {
-            CtConstructorCall<?> ctc = (CtConstructorCall<?>) element;
-            return this.isCandidate(ctc.getType());
+            return isCandidate(((CtConstructorCall<?>) element).getType());
         }
 
-        // Pegamos atribuições de variáveis
         if (element instanceof CtLocalVariable) {
-            CtLocalVariable<?> var = (CtLocalVariable<?>) element;
-            return this.isCandidate(var.getType());
+            return isCandidate(((CtLocalVariable<?>) element).getType());
         }
 
         if (element instanceof CtInvocation) {
-            CtInvocation<?> inv = (CtInvocation<?>) element;
-
-            // A invocação retorna um tipo que queremos mutacionar
-            if (this.isCandidate(inv.getType()) && !(inv.getParent() instanceof CtBlock)) return true;
-            // O alvo da invocação é um tipo que queremos mutacionar
-            if (inv.getTarget() != null && this.isCandidate(inv.getTarget().getType())
-                && !(inv.getParent() instanceof CtBlock)) {
-                // Filtramos métodos pontuais que não introduzem instabilidade (get(), add() por exemplo)
-                String methodName = inv.getExecutable().getSimpleName();
-                return !POINTWISE_METHODS.contains(methodName);
-            }
+            return checkInvocation((CtInvocation<?>) element);
         }
 
         return false;
     }
-    
+
+    private boolean checkInvocation(CtInvocation<?> inv) {
+        CtTypeReference<?> type = inv.getType();
+        if (type == null) return false;
+
+        CtType<?> typeDec = type.getTypeDeclaration();
+        if (typeDec == null || inv.getParent() instanceof CtBlock) return false;
+
+        // A invocação retorna um tipo candidato a mutação
+        if (isCandidate(type)) {
+            return this.mappings.keySet().stream().anyMatch(t -> typeDec.getReference().isSubtypeOf(t));
+        }
+
+        // O alvo (target) da invocação é um tipo candidato a mutação
+        if (inv.getTarget() != null && isCandidate(inv.getTarget().getType())) {
+            String typeName = typeDec.getSimpleName().toLowerCase();
+            boolean isHashBased = typeName.contains("hash") && !typeName.contains("linkedhash");
+            
+            String methodName = inv.getExecutable().getSimpleName();
+            return isHashBased && !POINTWISE_METHODS.contains(methodName);
+        }
+
+        return false;
+    }
+
     private boolean isCandidate(CtTypeReference<?> type) {
         if (type == null) return false;
+
         CtType<?> typeDec = type.getTypeDeclaration();
         if (typeDec == null) return false;
-        if (this.mappings.values().stream().anyMatch(shuffled -> typeDec.getQualifiedName().equals(shuffled.getQualifiedName()))) return false;
 
-        String typeName = typeDec.getQualifiedName().substring(typeDec.getQualifiedName().lastIndexOf(".") + 1).toLowerCase();
-        // Só mutacionamos implementações cuja ordem de iteração é hash-based e
-        // não especificada pelo contrato (HashMap, HashSet, Hashtable, ...).
-        // ArrayList, LinkedList, Vector, Stack, TreeMap, LinkedHashSet etc. têm
-        // ordem determinística garantida e não devem ser candidatas.
-        boolean isHashBased = typeName.contains("hash") && !typeName.contains("linkedhash");
-        return isHashBased && this.mappings.keySet().stream().anyMatch(t -> typeDec.getReference().isSubtypeOf(t));
+        // Evita re-processar classes que já são as coleções embaralhadas
+        boolean isAlreadyShuffled = this.mappings.values().stream().anyMatch(shuffled -> typeDec.getQualifiedName().equals(shuffled.getQualifiedName()));
+        if (isAlreadyShuffled) return false;
+
+        // Verifica se é subtipo de alguma das coleções suportadas
+        return this.mappings.keySet().stream().anyMatch(supportedType -> typeDec.getReference().isSubtypeOf(supportedType));
     }
 }
