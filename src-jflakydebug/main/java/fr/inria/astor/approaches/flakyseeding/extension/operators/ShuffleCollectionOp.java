@@ -20,6 +20,7 @@ import spoon.reflect.code.CtConstructorCall;
 import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.declaration.CtElement;
+import spoon.reflect.declaration.CtType;
 import spoon.reflect.factory.Factory;
 import spoon.reflect.factory.TypeFactory;
 import spoon.reflect.reference.CtTypeReference;
@@ -79,7 +80,6 @@ public class ShuffleCollectionOp extends Operator {
 
             // A invocação retorna um tipo que queremos mutacionar
             if (this.isCandidate(inv.getType()) && !(inv.getParent() instanceof CtBlock)) return true;
-
             // O alvo da invocação é um tipo que queremos mutacionar
             if (inv.getTarget() != null && this.isCandidate(inv.getTarget().getType())
                 && !(inv.getParent() instanceof CtBlock)) {
@@ -94,18 +94,15 @@ public class ShuffleCollectionOp extends Operator {
     
     private boolean isCandidate(CtTypeReference<?> type) {
         if (type == null) return false;
-        if (this.mappings.values().stream().anyMatch(shuffled -> type.getQualifiedName().equals(shuffled.getQualifiedName()))) return false;
+        CtType<?> typeDec = type.getTypeDeclaration();
+        if (this.mappings.values().stream().anyMatch(shuffled -> typeDec.getQualifiedName().equals(shuffled.getQualifiedName()))) return false;
 
-        String typeName = type.getQualifiedName().substring(type.getQualifiedName().lastIndexOf(".") + 1).toLowerCase();
-
+        String typeName = typeDec.getQualifiedName().substring(typeDec.getQualifiedName().lastIndexOf(".") + 1).toLowerCase();
         // Só mutacionamos implementações cuja ordem de iteração é hash-based e
         // não especificada pelo contrato (HashMap, HashSet, Hashtable, ...).
         // ArrayList, LinkedList, Vector, Stack, TreeMap, LinkedHashSet etc. têm
         // ordem determinística garantida e não devem ser candidatas.
         boolean isHashBased = typeName.contains("hash") && !typeName.contains("linkedhash");
-
-        if (!isHashBased) return false;
-
-        return this.mappings.keySet().stream().anyMatch(t -> t.isSubtypeOf(type));
+        return isHashBased && this.mappings.keySet().stream().anyMatch(t -> typeDec.getReference().isSubtypeOf(t));
     }
 }
