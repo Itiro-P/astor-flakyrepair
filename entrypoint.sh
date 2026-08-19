@@ -2,7 +2,6 @@
 set -euo pipefail
 
 JAVA_VERSION="${JAVA_VERSION:-8}"
-JAVA_VERSION="${JAVA_VERSION#-}"
 TARGET_DIR="${TARGET_DIR:-/astor/target-project}"
 LOG_DIR="/astor/output_astor"
 trap 'rm -rf "${TARGET_DIR:?}"/* 2>/dev/null || true' EXIT
