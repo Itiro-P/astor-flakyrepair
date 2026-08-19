@@ -4,7 +4,7 @@ import fr.inria.astor.core.validation.results.TestCasesProgramValidationResult;
 
 /**
  * 
- * @author Matias Martinez
+ * @author Pedro Itiro NAgao
  *
  */
 public class FsTestCasesProgramValidationResult  extends TestCasesProgramValidationResult {

@@ -2,7 +2,9 @@ package fr.inria.astor.approaches.flakyseeding.extension.operators;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import fr.inria.astor.approaches.flakyseeding.extension.operators.mutators.shufflemutators.ShuffleJSONMutator;
 import fr.inria.astor.approaches.flakyseeding.extension.operators.mutators.shufflemutators.ShuffleListMutator;
@@ -30,6 +32,11 @@ import spoon.reflect.reference.CtTypeReference;
 @SuppressWarnings("unchecked")
 public class ShuffleCollectionOp extends Operator {
     Map<CtTypeReference<?>, CtTypeReference<?>> mappings = new HashMap<>();
+
+    private static final Set<String> POINTWISE_METHODS = new HashSet<>(
+        Arrays.asList("get", "contains", "containsKey", "containsValue",
+        "remove", "put", "size", "isEmpty", "equals", "hashCode")
+    );
 
     public ShuffleCollectionOp() {
         super();
@@ -69,13 +76,17 @@ public class ShuffleCollectionOp extends Operator {
 
         if (element instanceof CtInvocation) {
             CtInvocation<?> inv = (CtInvocation<?>) element;
-            // Aqui pode ocorrer 2 casos:
-            
+
             // A invocação retorna um tipo que queremos mutacionar
             if (this.isCandidate(inv.getType()) && !(inv.getParent() instanceof CtBlock)) return true;
-            
+
             // O alvo da invocação é um tipo que queremos mutacionar
-            if (this.isCandidate(inv.getTarget().getType()) && !(inv.getParent() instanceof CtBlock)) return true;
+            if (inv.getTarget() != null && this.isCandidate(inv.getTarget().getType())
+                && !(inv.getParent() instanceof CtBlock)) {
+                // Filtramos métodos pontuais que não introduzem instabilidade (get(), add() por exemplo)
+                String methodName = inv.getExecutable().getSimpleName();
+                return !POINTWISE_METHODS.contains(methodName);
+            }
         }
 
         return false;
@@ -84,9 +95,16 @@ public class ShuffleCollectionOp extends Operator {
     private boolean isCandidate(CtTypeReference<?> type) {
         if (type == null) return false;
         if (this.mappings.values().stream().anyMatch(shuffled -> type.getQualifiedName().equals(shuffled.getQualifiedName()))) return false;
+
         String typeName = type.getQualifiedName().substring(type.getQualifiedName().lastIndexOf(".") + 1).toLowerCase();
-        // Guarda para evitar mutacionar classes que garantem ordem de inserção/leitura
-        if (typeName.contains("linked") || typeName.contains("tree") || typeName.contains("sorted") || typeName.contains("ordered")) return false;
+
+        // Só mutacionamos implementações cuja ordem de iteração é hash-based e
+        // não especificada pelo contrato (HashMap, HashSet, Hashtable, ...).
+        // ArrayList, LinkedList, Vector, Stack, TreeMap, LinkedHashSet etc. têm
+        // ordem determinística garantida e não devem ser candidatas.
+        boolean isHashBased = typeName.contains("hash") && !typeName.contains("linkedhash");
+
+        if (!isHashBased) return false;
 
         return this.mappings.keySet().stream().anyMatch(t -> t.isSubtypeOf(type));
     }

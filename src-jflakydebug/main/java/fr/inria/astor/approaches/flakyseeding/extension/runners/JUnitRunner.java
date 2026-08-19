@@ -8,11 +8,12 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import fr.inria.astor.approaches.flakydebug.extension.FdRunner;
+import fr.inria.astor.approaches.flakydebug.utils.Constants;
 import fr.inria.astor.approaches.flakyseeding.extension.FsTestResult;
 import fr.inria.astor.core.setup.ConfigurationProperties;
 
 public class JUnitRunner extends FdRunner<FsTestResult> {
-    private static final int K = 100;
+    private static final int K = Constants.EXECUTIONS;
     public JUnitRunner() {
         super();
     }
