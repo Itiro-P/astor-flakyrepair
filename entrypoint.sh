@@ -38,5 +38,5 @@ java -cp /astor/target/astor.jar fr.inria.main.evolution.AstorMain \
 --saveall true "$@" \
 2>&1 | tee "$LOG_DIR/astor-run.log"
 
-rm -rf /astor/output_astor
-mv /astor/diffSolutions /astor/output_astor
+rm -rf /astor/output_astor/*
+mv /astor/diffSolutions/* /astor/output_astor
