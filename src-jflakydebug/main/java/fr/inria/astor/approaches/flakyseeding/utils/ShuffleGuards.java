@@ -6,14 +6,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import spoon.reflect.code.CtBlock;
-import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtInvocation;
 import spoon.reflect.reference.CtTypeParameterReference;
 import spoon.reflect.reference.CtTypeReference;
 
 public class ShuffleGuards {
-    //private static final Logger log = Logger.getLogger(ShuffleGuards.class.getCanonicalName());
+    private static final Logger log = Logger.getLogger(ShuffleGuards.class.getCanonicalName());
     private static final Set<String> POINTWISE_METHODS = Collections.unmodifiableSet(
         new HashSet<>(Arrays.asList(
             "get", "contains", "containsKey", "containsValue",
@@ -27,18 +28,11 @@ public class ShuffleGuards {
         this.mappings = mappings;
     }
 
-    /**
-     * @brief Verifica se o tipo é uma implementação hash-based (HashMap,
-     * HashSet, Hashtable, ...), cuja ordem de iteração não é garantida.
-     * Exclui LinkedHashMap/LinkedHashSet, que contêm "hash" no nome mas
-     * preservam ordem de inserção.
-     */
-    public boolean isHashBased(CtTypeReference<?> type) {
+    public boolean isUnorderedCollection(CtTypeReference<?> type) {
         if (type == null) return false;
         try {
             String typeName = type.getSimpleName().toLowerCase();
-            return typeName.contains("hash") && 
-                !(
+            return !(
                     typeName.contains("linked") || 
                     typeName.contains("tree") || 
                     typeName.contains("ordered") ||
@@ -70,18 +64,21 @@ public class ShuffleGuards {
             CtTypeReference<?> erased = type.getTypeErasure();
             if (erased == null || erased instanceof CtTypeParameterReference) return false;
             // Evita re-processar classes que já são as coleções embaralhadas
-            boolean isAlreadyShuffled = mappings.values().stream()
-                .anyMatch(shuffled -> erased.getQualifiedName().equals(shuffled.getQualifiedName()));
-            if (isAlreadyShuffled) return false;
+            if (this.isShuffled(erased)) return false;
 
             // Evita classes que (parecem) não manipular a ordem indevidamente
-            if (!this.isHashBased(erased)) return false;
-
+            if (!this.isUnorderedCollection(erased)) return false;
             // O tipo concreto (ex.: HashMap) precisa ser subtipo de um dos tipos mapeados.
             return erased.isSubtypeOf(targetType);
         } catch (Exception e) {
           return false;
         }
+    }
+
+    private boolean isShuffled(CtTypeReference<?> type) {
+        CtTypeReference<?> erased = type.getTypeErasure();
+        if (erased == null || erased instanceof CtTypeParameterReference) return false;
+        return mappings.values().stream().anyMatch(shuffled -> erased.getQualifiedName().equals(shuffled.getQualifiedName()));
     }
 
     /**
@@ -90,11 +87,7 @@ public class ShuffleGuards {
      * versões já embaralhadas.
      */
     public boolean isCandidate(CtTypeReference<?> type) {
-        try {
-            return mappings.keySet().stream().anyMatch(m -> this.isCandidate(type, m));
-        } catch (Exception e) {
-          return false;
-        }
+        return mappings.keySet().stream().anyMatch(m -> this.isCandidate(type, m));
     }
 
 
@@ -104,8 +97,7 @@ public class ShuffleGuards {
 
     public boolean isTargetInvocationCandidate(CtInvocation<?> inv) {
         if (inv.getParent() instanceof CtBlock) return false;
-        CtExpression<?> target = inv.getTarget(); 
-        return this.isCandidate(target.getType());
+        return this.isCandidate(inv.getTarget().getType());
     }
 
     public boolean isInvocationCandidate(CtInvocation<?> inv, CtTypeReference<?> targetType) {
@@ -114,7 +106,6 @@ public class ShuffleGuards {
 
     public boolean isTargetInvocationCandidate(CtInvocation<?> inv, CtTypeReference<?> targetType) {
         if (inv.getParent() instanceof CtBlock) return false;
-        CtExpression<?> target = inv.getTarget(); 
-        return this.isCandidate(target.getType(), targetType);
+        return this.isCandidate(inv.getTarget().getType(), targetType);
     }
 }
