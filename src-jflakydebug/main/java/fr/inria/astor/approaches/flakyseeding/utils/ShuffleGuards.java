@@ -13,6 +13,7 @@ import spoon.reflect.reference.CtTypeParameterReference;
 import spoon.reflect.reference.CtTypeReference;
 
 public class ShuffleGuards {
+    //private static final Logger log = Logger.getLogger(ShuffleGuards.class.getCanonicalName());
     private static final Set<String> POINTWISE_METHODS = Collections.unmodifiableSet(
         new HashSet<>(Arrays.asList(
             "get", "contains", "containsKey", "containsValue",
@@ -36,7 +37,13 @@ public class ShuffleGuards {
         if (type == null) return false;
         try {
             String typeName = type.getSimpleName().toLowerCase();
-            return typeName.contains("hash") && !typeName.contains("linkedhash");
+            return typeName.contains("hash") && 
+                !(
+                    typeName.contains("linked") || 
+                    typeName.contains("tree") || 
+                    typeName.contains("ordered") ||
+                    typeName.contains("sorted")
+                );
         } catch (Exception e) {
             return false;
         }
@@ -51,32 +58,7 @@ public class ShuffleGuards {
     public boolean isPointwise(String methodName) {
         return methodName != null && POINTWISE_METHODS.contains(methodName);
     }
-
-    /**
-     * @brief Verifica se o tipo é candidato a mutação: subtipo de uma das
-     * coleções suportadas (List/Set/Map/JSONObject) e ainda não é uma das
-     * versões já embaralhadas.
-     */
-    public boolean isCandidate(CtTypeReference<?> type) {
-        if (type == null) return false;
-        try {
-            CtTypeReference<?> erased = type.getTypeErasure();
-            if (erased == null || erased instanceof CtTypeParameterReference) return false;
-            // Evita re-processar classes que já são as coleções embaralhadas
-            boolean isAlreadyShuffled = mappings.values().stream()
-                .anyMatch(shuffled -> erased.getQualifiedName().equals(shuffled.getQualifiedName()));
-            if (isAlreadyShuffled) return false;
-
-            // Evita classes que (parecem) não manipular a ordem indevidamente
-            if (this.isHashBased(erased)) return false;
-
-            // O tipo concreto (ex.: HashMap) precisa ser subtipo de um dos tipos mapeados.
-            return mappings.keySet().stream().anyMatch(erased::isSubtypeOf);
-        } catch (Exception e) {
-          return false;
-        }
-    }
-
+    
     /**
      * @brief Verifica se o tipo é candidato a mutação: subtipo de uma das
      * coleções suportadas (List/Set/Map/JSONObject) e ainda não é uma das
@@ -93,7 +75,7 @@ public class ShuffleGuards {
             if (isAlreadyShuffled) return false;
 
             // Evita classes que (parecem) não manipular a ordem indevidamente
-            if (this.isHashBased(erased)) return false;
+            if (!this.isHashBased(erased)) return false;
 
             // O tipo concreto (ex.: HashMap) precisa ser subtipo de um dos tipos mapeados.
             return erased.isSubtypeOf(targetType);
@@ -101,6 +83,20 @@ public class ShuffleGuards {
           return false;
         }
     }
+
+    /**
+     * @brief Verifica se o tipo é candidato a mutação: subtipo de uma das
+     * coleções suportadas (List/Set/Map/JSONObject) e ainda não é uma das
+     * versões já embaralhadas.
+     */
+    public boolean isCandidate(CtTypeReference<?> type) {
+        try {
+            return mappings.keySet().stream().anyMatch(m -> this.isCandidate(type, m));
+        } catch (Exception e) {
+          return false;
+        }
+    }
+
 
     public boolean isInvocationCandidate(CtInvocation<?> inv) {
         return this.isCandidate(inv.getType()) && !this.isPointwise(inv.getExecutable().getSimpleName());

@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,5 +25,27 @@ public class HashMapTest {
         // Flaky: assume ordem de inserção, que HashMap não preserva
         // Ordem de inserção não deve importar aqui
         assertThat(map.keySet()).containsExactly("a", "b", "c");
+    }
+
+    @Test
+    public void pickTreeKeys() {
+        Map<String, Integer> map = new TreeMap<>();
+        map.put("a", 1);
+        map.put("b", 2);
+        map.put("c", 3);
+
+        // Ordem de inserção não deve importar aqui
+        assertThat(map.keySet()).containsExactly("a", "b", "c");
+    }
+
+    @Test
+    public void assertElementsInSameOrder() {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("a", 1);
+        map.put("b", 2);
+        map.put("c", 3);
+
+        // Ordem de inserção não deve importar aqui
+        assertThat(map.get("a")).isEqualTo(1);
     }
 }
