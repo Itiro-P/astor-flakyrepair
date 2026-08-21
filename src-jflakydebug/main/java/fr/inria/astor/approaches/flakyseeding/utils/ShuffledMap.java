@@ -1,9 +1,7 @@
 package fr.inria.astor.approaches.flakyseeding.utils;
 
-import java.util.AbstractCollection;
+import java.util.AbstractMap;
 import java.util.AbstractSet;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -11,121 +9,93 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Tipo especial de Map onde seus elementos internos sao embaralhados na
- * leitura (keySet/entrySet/values/toString/equals), simulando
- * order-dependent flakiness.
+ * Tipo especial de Map onde a ordem de iteração (entrySet/keySet/values/
+ * toString) é embaralhada, simulando order-dependent flakiness.
+ * get()/put()/containsKey() continuam O(1), delegando direto a inner_map.
  */
-public class ShuffledMap<K, V> implements Map<K, V>, ShuffledColletion {
+public class ShuffledMap<K, V> extends AbstractMap<K, V> implements ShuffledColletion<K> {
 
     private Map<K, V> inner_map = new HashMap<>();
+    private List<K> cachedOrder;
 
     public ShuffledMap() {}
+    public ShuffledMap(Map<K, V> source) { this.inner_map = source; }
 
-    public ShuffledMap(Map<K, V> source) {
-        super();
-        this.inner_map = source;
-    }
+    @Override public List<K> getCachedOrder() { return cachedOrder; }
+    @Override public void setCachedOrder(List<K> order) { this.cachedOrder = order; }
 
     @Override
     public Set<Map.Entry<K, V>> entrySet() {
-        return new ShuffledSetView<>(inner_map.entrySet());
+        List<K> order = getShuffledOrder(inner_map::keySet);
+
+        return new AbstractSet<Map.Entry<K, V>>() {
+            @Override public int size() { return inner_map.size(); }
+
+            @Override
+            public Iterator<Map.Entry<K, V>> iterator() {
+                Iterator<K> keyIt = order.iterator();
+                return new Iterator<Map.Entry<K, V>>() {
+                    K lastKey;
+
+                    @Override public boolean hasNext() { return keyIt.hasNext(); }
+
+                    @Override
+                    public Map.Entry<K, V> next() {
+                        lastKey = keyIt.next();
+                        return new LiveEntry(lastKey); // entry ligada ao mapa real
+                    }
+
+                    @Override
+                    public void remove() {
+                        keyIt.remove();        // tira da ordem cacheada
+                        inner_map.remove(lastKey); // tira do mapa real
+                        invalidateOrder();
+                    }
+                };
+            }
+        };
     }
 
-    @Override
-    public Set<K> keySet() {
-        return new ShuffledSetView<>(inner_map.keySet());
-    }
+    /** Entry que lê/escreve direto em inner_map — setValue() afeta o mapa real. */
+    private class LiveEntry extends AbstractMap.SimpleEntry<K, V> {
+        LiveEntry(K key) { super(key, inner_map.get(key)); }
 
-    @Override
-    public Collection<V> values() {
-        return new ShuffledCollectionView<>(inner_map.values());
-    }
-
-    @Override
-    public String toString() {
-        // Le via keySet() (ja embaralhado) para manter o mesmo criterio de
-        // ordem usado nas demais views de leitura.
-        StringBuilder sb = new StringBuilder("{");
-        boolean first = true;
-        for (K key : this.keySet()) {
-            if (!first) sb.append(", ");
-            first = false;
-            sb.append(key).append('=').append(inner_map.get(key));
+        @Override
+        public V setValue(V value) {
+            inner_map.put(getKey(), value);
+            return super.setValue(value);
         }
-        return sb.append('}').toString();
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        return inner_map.equals(o);
+    public V put(K key, V value) {
+        V old = inner_map.put(key, value);
+        invalidateOrder();
+        return old;
     }
 
     @Override
-    public int hashCode() {
-        return inner_map.hashCode();
+    public V remove(Object key) {
+        boolean had = inner_map.containsKey(key);
+        V old = inner_map.remove(key);
+        if (had) invalidateOrder();
+        return old;
     }
 
-    // delega tudo o mais para inner_map
+    @Override
+    public void putAll(Map<? extends K, ? extends V> m) {
+        inner_map.putAll(m);
+        invalidateOrder();
+    }
+
+    @Override
+    public void clear() {
+        inner_map.clear();
+        invalidateOrder();
+    }
+
     @Override public int size() { return inner_map.size(); }
-    @Override public boolean isEmpty() { return inner_map.isEmpty(); }
     @Override public boolean containsKey(Object key) { return inner_map.containsKey(key); }
     @Override public boolean containsValue(Object value) { return inner_map.containsValue(value); }
     @Override public V get(Object key) { return inner_map.get(key); }
-    @Override public V put(K key, V value) { return inner_map.put(key, value); }
-    @Override public V remove(Object key) { return inner_map.remove(key); }
-    @Override public void putAll(Map<? extends K, ? extends V> m) { inner_map.putAll(m); }
-    @Override public void clear() { inner_map.clear(); }
-
-    /**
-     * View de leitura embaralhada para keySet()/entrySet(). Estende
-     * AbstractSet, que ja implementa remove()/removeAll()/retainAll()/
-     * clear() em termos de iterator() — por isso basta fornecer um
-     * iterator() correto (via DelegatingShuffledIterator) e size() para
-     * herdar um comportamento de Set consistente com o contrato de Map.
-     */
-    private class ShuffledSetView<T> extends AbstractSet<T> {
-        private final Collection<T> backing;
-
-        ShuffledSetView(Collection<T> backing) {
-            this.backing = backing;
-        }
-
-        @Override
-        public int size() {
-            return backing.size();
-        }
-
-        @Override
-        public Iterator<T> iterator() {
-            List<T> shuffled = shuffle(new ArrayList<>(backing));
-            return new DelegatedShuffledIterator<>(shuffled.iterator(), backing);
-        }
-    }
-
-    /**
-     * Equivalente a ShuffledSetView, mas para values(), que e uma Collection
-     * (nao um Set — valores podem se repetir). AbstractCollection tambem
-     * implementa remove()/removeAll()/retainAll()/clear() a partir de
-     * iterator(), entao remove(valor) aqui remove uma entrada cujo valor
-     * bate por igualdade — o mesmo comportamento de HashMap.values().
-     */
-    private class ShuffledCollectionView<T> extends AbstractCollection<T> {
-        private final Collection<T> backing;
-
-        ShuffledCollectionView(Collection<T> backing) {
-            this.backing = backing;
-        }
-
-        @Override
-        public int size() {
-            return backing.size();
-        }
-
-        @Override
-        public Iterator<T> iterator() {
-            List<T> shuffled = shuffle(new ArrayList<>(backing));
-            return new DelegatedShuffledIterator<>(shuffled.iterator(), backing);
-        }
-    }
 }

@@ -37,6 +37,7 @@ class DelegatedShuffledIterator<T> implements Iterator<T> {
             throw new IllegalStateException("next() precisa ser chamado antes de remove()");
         }
         backing.remove(last);
+        shuffledIt.remove();
         canRemove = false;
         last = null;
     }
