@@ -21,5 +21,12 @@ From IDOFT:
   - docker build --build-arg USER_UID=$(id -u) --build-arg USER_GID=$(id -g) -t astor .
   - ./scripts/run_astor_docker.sh underscore-java 8 samples/underscore-java
 
+- https://github.com/apache/commons-math/pull/163
+ - https://github.com/imxint/commons-math.git
+ 
+ - ./scripts/clone_pr.sh https://github.com/imxint/commons-math.git samples
+ - docker build --build-arg USER_UID=$(id -u) --build-arg USER_GID=$(id -g) -t astor .
+  - ./scripts/run_astor_docker.sh commons-math 8 samples/commons-math
+
 
 Open-source projects with no revealed flaky tests:
