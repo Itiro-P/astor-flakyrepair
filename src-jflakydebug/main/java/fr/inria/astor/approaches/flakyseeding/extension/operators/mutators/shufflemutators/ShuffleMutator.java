@@ -58,7 +58,10 @@ public abstract class ShuffleMutator extends Mutator<CtElement> {
 
         else if (toMutate instanceof CtConstructorCall) {
             CtConstructorCall<?> ctc = (CtConstructorCall<?>) toMutate;
-            if(!this.guards.isCandidate(ctc.getType(), targetType)) return result;
+            CtTypeReference<?> type = ctc.getTypeCasts().get(0);
+            if(type == null) type = ctc.getType();
+
+            if(!this.guards.isCandidate(type, targetType)) return result;
 
             CtConstructorCall<?> wrapped = this.wrapTarget(replacementType, ctc);
             result.add(new MutantCtElement(wrapped, 1));
@@ -68,7 +71,10 @@ public abstract class ShuffleMutator extends Mutator<CtElement> {
             // É uma variável local (`Map a = new HashMap(b)`)
             CtLocalVariable localVar = (CtLocalVariable) toMutate;
             CtExpression<?> assignment = localVar.getAssignment();
-            if(assignment == null || !this.guards.isCandidate(assignment.getType(), targetType)) return result;
+            CtTypeReference<?> type = assignment.getTypeCasts().get(0);
+            if(type == null) type = assignment.getType();
+
+            if(assignment == null || !this.guards.isCandidate(type, targetType)) return result;
             
             // Pegamos o tipo e seus argumentos (que aqui é a própria variável)
             // Criamos o novo construtor com os argumentos do alvo
@@ -82,6 +88,8 @@ public abstract class ShuffleMutator extends Mutator<CtElement> {
 
         else if (toMutate instanceof CtInvocation) {
             CtInvocation<?> inv = (CtInvocation<?>) toMutate;
+            CtTypeReference<?> type = inv.getTypeCasts().get(0);
+            if (type == null) type = inv.getType();
             // Aqui pode ocorrer 2 casos:
             
             // A invocação retorna umm tipo que queremos mutacionar
