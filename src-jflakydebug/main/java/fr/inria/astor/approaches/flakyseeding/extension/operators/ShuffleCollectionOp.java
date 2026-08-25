@@ -74,17 +74,25 @@ public class ShuffleCollectionOp extends Operator {
 
         if (element instanceof CtConstructorCall) {
             CtConstructorCall<?> ctc = (CtConstructorCall<?>) element;
-            CtTypeReference<?> type = ctc.getTypeCasts().get(0);
-            if(type == null) type = ctc.getType();
+            CtTypeReference<?> type = null;
+            if (ctc.getTypeCasts().isEmpty()) {
+                type = ctc.getType();
+            } else ctc.getTypeCasts().get(0);
             
+            if (type == null) return false;
+
             return this.guards.isCandidate(type);
         }
 
         if (element instanceof CtLocalVariable) {
             CtExpression<?> assignment = ((CtLocalVariable<?>) element).getAssignment();
 
-            CtTypeReference<?> type = assignment.getTypeCasts().get(0);
-            if(type == null) type = assignment.getType();
+            CtTypeReference<?> type = null;
+            if (assignment.getTypeCasts().isEmpty()) {
+                type = assignment.getType();
+            } else assignment.getTypeCasts().get(0);
+            
+            if (type == null) return false;
             
             return assignment != null && this.guards.isCandidate(type);
         }
@@ -97,8 +105,11 @@ public class ShuffleCollectionOp extends Operator {
     }
 
     private boolean checkInvocation(CtInvocation<?> inv) {
-        CtTypeReference<?> type = inv.getTypeCasts().get(0);
-        if (type == null) type = inv.getType();
+        CtTypeReference<?> type = null;
+        if (inv.getTypeCasts().isEmpty()) {
+            type = inv.getType();
+        } else inv.getTypeCasts().get(0);
+
         if (type == null) return false;
 
         CtType<?> typeDec = type.getTypeDeclaration();

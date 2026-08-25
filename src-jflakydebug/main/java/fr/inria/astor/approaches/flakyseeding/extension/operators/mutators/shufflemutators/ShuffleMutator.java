@@ -58,7 +58,11 @@ public abstract class ShuffleMutator extends Mutator<CtElement> {
 
         else if (toMutate instanceof CtConstructorCall) {
             CtConstructorCall<?> ctc = (CtConstructorCall<?>) toMutate;
-            CtTypeReference<?> type = ctc.getTypeCasts().get(0);
+            CtTypeReference<?> type = null;
+            if (ctc.getTypeCasts().isEmpty()) {
+                type = ctc.getType();
+            } else ctc.getTypeCasts().get(0);
+
             if(type == null) type = ctc.getType();
 
             if(!this.guards.isCandidate(type, targetType)) return result;
@@ -71,10 +75,13 @@ public abstract class ShuffleMutator extends Mutator<CtElement> {
             // É uma variável local (`Map a = new HashMap(b)`)
             CtLocalVariable localVar = (CtLocalVariable) toMutate;
             CtExpression<?> assignment = localVar.getAssignment();
-            CtTypeReference<?> type = assignment.getTypeCasts().get(0);
-            if(type == null) type = assignment.getType();
 
-            if(assignment == null || !this.guards.isCandidate(type, targetType)) return result;
+            CtTypeReference<?> type = null;
+            if (assignment.getTypeCasts().isEmpty()) {
+                type = assignment.getType();
+            } else assignment.getTypeCasts().get(0);
+
+            if(type == null || assignment == null || !this.guards.isCandidate(type, targetType)) return result;
             
             // Pegamos o tipo e seus argumentos (que aqui é a própria variável)
             // Criamos o novo construtor com os argumentos do alvo
@@ -88,8 +95,12 @@ public abstract class ShuffleMutator extends Mutator<CtElement> {
 
         else if (toMutate instanceof CtInvocation) {
             CtInvocation<?> inv = (CtInvocation<?>) toMutate;
-            CtTypeReference<?> type = inv.getTypeCasts().get(0);
-            if (type == null) type = inv.getType();
+            CtTypeReference<?> type = null;
+            if (inv.getTypeCasts().isEmpty()) {
+                type = inv.getType();
+            } else inv.getTypeCasts().get(0);
+            
+            if (type == null) return result;
             // Aqui pode ocorrer 2 casos:
             
             // A invocação retorna umm tipo que queremos mutacionar
