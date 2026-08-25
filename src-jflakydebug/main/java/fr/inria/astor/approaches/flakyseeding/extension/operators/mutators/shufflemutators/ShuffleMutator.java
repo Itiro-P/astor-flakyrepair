@@ -75,13 +75,14 @@ public abstract class ShuffleMutator extends Mutator<CtElement> {
             // É uma variável local (`Map a = new HashMap(b)`)
             CtLocalVariable localVar = (CtLocalVariable) toMutate;
             CtExpression<?> assignment = localVar.getAssignment();
+            if (assignment == null) return result;
 
             CtTypeReference<?> type = null;
             if (assignment.getTypeCasts().isEmpty()) {
                 type = assignment.getType();
             } else assignment.getTypeCasts().get(0);
 
-            if(type == null || assignment == null || !this.guards.isCandidate(type, targetType)) return result;
+            if(type == null || !this.guards.isCandidate(type, targetType)) return result;
             
             // Pegamos o tipo e seus argumentos (que aqui é a própria variável)
             // Criamos o novo construtor com os argumentos do alvo

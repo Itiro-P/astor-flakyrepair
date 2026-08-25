@@ -86,15 +86,16 @@ public class ShuffleCollectionOp extends Operator {
 
         if (element instanceof CtLocalVariable) {
             CtExpression<?> assignment = ((CtLocalVariable<?>) element).getAssignment();
-
-            CtTypeReference<?> type = null;
-            if (assignment.getTypeCasts().isEmpty()) {
-                type = assignment.getType();
-            } else assignment.getTypeCasts().get(0);
-            
-            if (type == null) return false;
-            
-            return assignment != null && this.guards.isCandidate(type);
+            if (assignment != null) {
+                CtTypeReference<?> type = null;
+                if (assignment.getTypeCasts().isEmpty()) {
+                    type = assignment.getType();
+                } else assignment.getTypeCasts().get(0);
+                
+                if (type == null) return false;
+                
+                return assignment != null && this.guards.isCandidate(type);
+            }
         }
 
         if (element instanceof CtInvocation) {
