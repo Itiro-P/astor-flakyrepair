@@ -3,6 +3,7 @@ package fr.inria.astor.approaches.flakyseeding.extension.operators.mutators.shuf
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import fr.inria.astor.approaches.flakyseeding.extension.operators.mutators.Mutator;
@@ -31,14 +32,24 @@ public abstract class ShuffleMutator extends Mutator<CtElement> {
 
     public ShuffleMutator(Factory factory) {
         super(factory);
+        TypeFactory typeFactory = factory.Type();
 
-        this.guards = new ShuffleGuards(new HashMap<CtTypeReference<?>, CtTypeReference<?>>() {{
-            TypeFactory typeFactory = factory.Type();
-            put(typeFactory.createReference(java.util.List.class), typeFactory.createReference(ShuffledList.class));
-            put(typeFactory.createReference(java.util.Set.class), typeFactory.createReference(ShuffledSet.class));
-            put(typeFactory.createReference(java.util.Map.class), typeFactory.createReference(ShuffledMap.class));
-            put(typeFactory.createReference(org.json.JSONObject.class), typeFactory.createReference(ShuffledJSON.class));
-        }});
+        this.guards = new ShuffleGuards(
+            new HashMap<CtTypeReference<?>, CtTypeReference<?>>() {{
+                put(typeFactory.createReference(java.util.List.class), typeFactory.createReference(ShuffledList.class));
+                put(typeFactory.createReference(java.util.Set.class), typeFactory.createReference(ShuffledSet.class));
+                put(typeFactory.createReference(java.util.Map.class), typeFactory.createReference(ShuffledMap.class));
+                put(typeFactory.createReference(org.json.JSONObject.class), typeFactory.createReference(ShuffledJSON.class));
+            }},
+            new HashSet<CtTypeReference<?>>() {{
+                add(typeFactory.createReference(java.util.SortedMap.class));
+                add(typeFactory.createReference(java.util.SortedSet.class));
+                add(typeFactory.createReference(java.util.LinkedHashMap.class));
+                add(typeFactory.createReference(java.util.LinkedHashSet.class));
+                add(typeFactory.createReference(java.util.TreeMap.class));
+                add(typeFactory.createReference(java.util.TreeSet.class));
+            }}
+        );
     }
 
     /**
