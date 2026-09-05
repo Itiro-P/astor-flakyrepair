@@ -11,13 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import fr.inria.astor.approaches.flakydebug.Configuration;
 import fr.inria.astor.approaches.flakydebug.extension.FdRunner;
-import fr.inria.astor.approaches.flakydebug.utils.Constants;
 import fr.inria.astor.core.setup.ConfigurationProperties;
 import fr.inria.astor.core.validation.results.TestResult;
 
 public class NondexRunner extends FdRunner<TestResult> {
-    private static final int K = Constants.EXECUTIONS;
+    private static final int K = Configuration.getInstance().getExecutions();
     public NondexRunner() {
         super();
     }

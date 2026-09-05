@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
 
+import fr.inria.astor.approaches.flakydebug.Configuration;
+
 public interface ShuffledColletion<T> {
     List<T> getCachedOrder();
     void setCachedOrder(List<T> order);
@@ -21,7 +23,7 @@ public interface ShuffledColletion<T> {
 
         // Selecionamos um subconjunto com uma parcela do tamanho do original e embaralhamos ele,
         // em vez de permutar a coleção inteira.
-        int subListSize = Math.max(original.size() / 20, 2);
+        int subListSize = Math.max(Math.round(original.size() * Configuration.getInstance().getShuffleRange()), 2);
         subListSize = Math.min(subListSize, original.size()); // guarda contra size pequeno
         int randIndex = (int) (Math.random() * (original.size() - subListSize + 1));
 

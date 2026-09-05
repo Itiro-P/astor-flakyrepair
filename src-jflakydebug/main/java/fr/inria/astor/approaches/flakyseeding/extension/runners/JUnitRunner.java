@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import fr.inria.astor.approaches.flakydebug.Configuration;
 import fr.inria.astor.approaches.flakydebug.extension.FdRunner;
-import fr.inria.astor.approaches.flakydebug.utils.Constants;
 import fr.inria.astor.approaches.flakyseeding.extension.FsTestResult;
 import fr.inria.astor.core.setup.ConfigurationProperties;
 
 public class JUnitRunner extends FdRunner<FsTestResult> {
-    private static final int K = Constants.EXECUTIONS;
+    private static final int K = Configuration.getInstance().getExecutions();
     public JUnitRunner() {
         super();
     }
@@ -127,8 +127,8 @@ public class JUnitRunner extends FdRunner<FsTestResult> {
                 }
             }
             try {
-                File srcDir  = new File("target/classes/fr/inria/astor/approaches/flakyseeding/utils/");
-                File destDir = new File(location + "/target/test-classes/fr/inria/astor/approaches/flakyseeding/utils/");
+                File srcDir  = new File("target/classes/fr/inria/astor/approaches/");
+                File destDir = new File(location + "/target/test-classes/fr/inria/astor/approaches/");
                 org.apache.commons.io.FileUtils.copyDirectory(srcDir, destDir);
             } catch (IOException e) {
                 log.error("Failed to copy utils package: " + e.getMessage());
