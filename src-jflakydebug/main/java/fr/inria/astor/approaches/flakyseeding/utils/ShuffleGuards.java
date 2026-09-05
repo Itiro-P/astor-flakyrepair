@@ -23,9 +23,11 @@ public class ShuffleGuards {
     );
 
     private final Map<CtTypeReference<?>, CtTypeReference<?>> mappings;
+    private final Set<CtTypeReference<?>> blacklistedTypes;
 
-    public ShuffleGuards(Map<CtTypeReference<?>, CtTypeReference<?>> mappings) {
+    public ShuffleGuards(Map<CtTypeReference<?>, CtTypeReference<?>> mappings, Set<CtTypeReference<?>> blacklistedTypes) {
         this.mappings = mappings;
+        this.blacklistedTypes = blacklistedTypes;
     }
 
     public boolean isUnorderedCollection(CtTypeReference<?> type) {
@@ -37,6 +39,9 @@ public class ShuffleGuards {
                     typeName.contains("tree") || 
                     typeName.contains("ordered") ||
                     typeName.contains("sorted")
+                ) &&
+                this.blacklistedTypes.stream().noneMatch(b_type ->
+                    type.isSubtypeOf(b_type)
                 );
         } catch (Exception e) {
             return false;
