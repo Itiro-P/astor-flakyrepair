@@ -96,7 +96,7 @@ java -cp target/astor-*-jar-with-dependencies.jar fr.inria.main.evolution.AstorM
 
 
 
-// -- Usando FlakyDebug aqui:
+// -- Usando FlakySeeding aqui:
 
 // cloudstack plugins/network-elements/tungsten
 (cd "$(pwd)/samples/cloudstack" && \

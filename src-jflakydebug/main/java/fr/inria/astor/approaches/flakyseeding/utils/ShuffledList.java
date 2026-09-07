@@ -1,6 +1,6 @@
 package fr.inria.astor.approaches.flakyseeding.utils;
 
-import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.ListIterator;
  * leitura (iterator/toArray/toString/listIterator), simulando
  * order-dependent flakiness.
  */
-public class ShuffledList<T> extends AbstractList<T> implements ShuffledColletion<T> {
+public class ShuffledList<T> extends ArrayList<T> implements ShuffledColletion<T> {
 
     private List<T> inner_list;
     private List<T> cachedOrder;
