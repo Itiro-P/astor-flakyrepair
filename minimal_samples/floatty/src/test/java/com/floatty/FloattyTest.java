@@ -26,11 +26,11 @@ public class FloattyTest {
 
     @Test
     public void testDouble() {
-        float frac = 1/127;
-        float a = 3.0f + frac;
-        float b = 3.0f + (1 - frac);
+        double frac = 1/127;
+        double a = 3.0f + frac;
+        double b = 3.0f + (1 - frac);
 
-        float result = a + b;
+        double result = a + b;
         assertEquals(7, result, 0.001f);
     }
 }

@@ -4,7 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
+import spoon.reflect.code.BinaryOperatorKind;
+import spoon.reflect.code.CtBinaryOperator;
+import spoon.reflect.code.CtExpression;
+import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLiteral;
+import spoon.reflect.code.CtVariableRead;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.factory.Factory;
 
@@ -15,30 +20,77 @@ import spoon.reflect.factory.Factory;
  * @author Pedro Itiro Nagao
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public class FloatNoiseMutator extends Mutator<CtLiteral<Number>> {
+public class FloatNoiseMutator extends Mutator<CtInvocation<?>> {
     final static float FACTOR = 1.001f;
+
     public FloatNoiseMutator(Factory factory) {
         super(factory);
     }
 
+    @Override
     public List<MutantCtElement> execute(CtElement toMutate) {
         List<MutantCtElement> result = new ArrayList<>();
-        if (!(toMutate instanceof CtLiteral)) return result;
-        CtLiteral<Number> literal = (CtLiteral<Number>) toMutate;
-
-        CtLiteral mutatedLiteral = literal.clone();
-        if (mutatedLiteral.getValue() instanceof Number) {
-            Number originalValue = (Number) mutatedLiteral.getValue();
-            // Preserva o tipo original do literal (float, double)
-            if (originalValue instanceof Double) {
-                double newValue = originalValue.doubleValue() * FloatNoiseMutator.FACTOR;
-                mutatedLiteral.setValue((double) newValue);
-            } else if (originalValue instanceof Float) {
-                float newValue = originalValue.floatValue() * FloatNoiseMutator.FACTOR;
-                mutatedLiteral.setValue((float) newValue);
-            }
-            result.add(new MutantCtElement(mutatedLiteral, 1));
+        
+        if (!(toMutate instanceof CtInvocation)) {
+            return result;
         }
+
+        CtInvocation<?> origInvocation = (CtInvocation<?>) toMutate;
+        List<CtExpression<?>> arguments = origInvocation.getArguments();
+
+        for (int i = 0; i < arguments.size(); i++) {
+            CtExpression<?> arg = arguments.get(i);
+
+            if (arg instanceof CtLiteral) {
+                CtLiteral<?> literal = (CtLiteral<?>) arg;
+                Object val = literal.getValue();
+
+                if (val instanceof Double || val instanceof Float) {
+                    CtInvocation<?> mutatedInvocation = origInvocation.clone();
+
+                    CtLiteral mutatedLiteral = (CtLiteral) mutatedInvocation.getArguments().get(i);
+                    Number originalValue = (Number) literal.getValue();
+
+                    if (originalValue instanceof Double) {
+                        double newValue = originalValue.doubleValue() * FloatNoiseMutator.FACTOR;
+                        mutatedLiteral.setValue(newValue);
+                    } else if (originalValue instanceof Float) {
+                        float newValue = originalValue.floatValue() * FloatNoiseMutator.FACTOR;
+                        mutatedLiteral.setValue(newValue);
+                    }
+
+                    result.add(new MutantCtElement(mutatedInvocation, 1));
+                }
+            }
+
+            else if (arg instanceof CtVariableRead && arg.getType() != null) {
+                String typeName = arg.getType().getSimpleName();
+                boolean isPrimitiveFloat = typeName.equals("float") || typeName.equals("double");
+                boolean isWrapperFloat = arg.getType().isSubtypeOf(arg.getFactory().Type().createReference(Double.class)) ||
+                                         arg.getType().isSubtypeOf(arg.getFactory().Type().createReference(Float.class));
+
+                if (isPrimitiveFloat || isWrapperFloat) {
+                    CtVariableRead<?> varRead = (CtVariableRead<?>) arg;
+                    CtInvocation<?> mutatedInvocation = origInvocation.clone();
+
+                    CtVariableRead<?> leftHandSide = (CtVariableRead<?>) mutatedInvocation.getArguments().get(i);
+
+                    CtLiteral<Float> factorLiteral = varRead.getFactory().Code().createLiteral(FloatNoiseMutator.FACTOR);
+                    CtBinaryOperator<?> multiplication = varRead.getFactory().Code().createBinaryOperator(
+                        leftHandSide, 
+                        factorLiteral, 
+                        BinaryOperatorKind.MUL
+                    );
+                    multiplication.setType((spoon.reflect.reference.CtTypeReference) varRead.getType());
+
+                    mutatedInvocation.getArguments().set(i, multiplication);
+                    multiplication.setParent(mutatedInvocation);
+
+                    result.add(new MutantCtElement(mutatedInvocation, 1));
+                }
+            }
+        }
+
         return result;
     }
 }

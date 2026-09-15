@@ -115,7 +115,7 @@ public abstract class ShuffleMutator extends Mutator<CtElement> {
             if (type == null) return result;
             // Aqui pode ocorrer 2 casos:
             
-            // A invocação retorna umm tipo que queremos mutacionar
+            // A invocação retorna um tipo que queremos mutacionar
             if (this.guards.isInvocationCandidate(inv, targetType)) {
                 CtConstructorCall wrapped = this.wrapTarget(replacementType, inv);
                 result.add(new MutantCtElement(wrapped, 1));
