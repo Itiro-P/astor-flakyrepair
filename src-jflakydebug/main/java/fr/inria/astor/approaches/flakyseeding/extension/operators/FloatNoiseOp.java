@@ -9,6 +9,7 @@ import spoon.reflect.code.CtBinaryOperator;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.factory.TypeFactory;
 import spoon.reflect.reference.CtTypeReference;
+import spoon.reflect.code.CtLiteral;
 
 /**
  * @brief Operador que injeta ruído em números de ponto flutuante.
@@ -34,18 +35,20 @@ public class FloatNoiseOp extends Operator {
 	@Override
 	public boolean canBeAppliedToPoint(ModificationPoint point) {
 		CtElement element = point.getCodeElement();
-		// Vemos se é um opareando.
-		if(!(element instanceof CtBinaryOperator)) return false;
-		CtBinaryOperator operation = (CtBinaryOperator) element;
+		if (!(element instanceof CtLiteral)) return false;
 
-		// Vemos se algum dos números é um número de ponto flututante (float ou double)
-		boolean firstMatch = this.types.stream().anyMatch(type -> {
-			return (
-				operation.getRightHandOperand().getType().isSubtypeOf(type) ||
-				operation.getLeftHandOperand().getType().isSubtypeOf(type) ||
-				operation.getType().isSubtypeOf(type)
-			);
-		});
-		return firstMatch;
+		CtLiteral<?> literal = (CtLiteral<?>) element;
+		Object value = literal.getValue();
+
+		if (value instanceof Double) {
+			Double d = (Double) value;
+			return !d.isNaN() && !d.isInfinite();
+		}
+		if (value instanceof Float) {
+			Float f = (Float) value;
+			return !f.isNaN() && !f.isInfinite();
+		}
+
+		return false;
 	}
 }

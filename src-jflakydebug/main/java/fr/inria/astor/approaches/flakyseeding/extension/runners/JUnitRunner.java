@@ -52,6 +52,11 @@ public class JUnitRunner extends FdRunner<FsTestResult> {
 
                 pb.redirectErrorStream(true);
                 pb.redirectOutput(ftemp);
+
+                String className = test.contains("#") ? test.substring(0, test.indexOf("#")) : test;
+                File reportFile = new File(location + "/target/surefire-reports/TEST-" + className + ".xml");
+                if (reportFile.exists()) reportFile.delete();
+
                 pb.directory(new File(location));
 
                 printCommandToExecute(command, waitTime);
@@ -151,6 +156,8 @@ public class JUnitRunner extends FdRunner<FsTestResult> {
         cmd.add("-Dmaven.main.skip=true");
         cmd.add("-Dmaven.test.compile.skip=true");
         cmd.add("-Dmaven.compiler.skip=true");
+        cmd.add("-Djacoco.skip=true");
+        cmd.add("-Dsurefire.useFile=true");
         cmd.add("test");
         cmd.add("-Dtest=" + test);
         return cmd;

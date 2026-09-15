@@ -1,0 +1,10 @@
+java -cp target/astor.jar fr.inria.main.evolution.AstorMain \
+  -mode custom \
+  -customengine fr.inria.astor.approaches.flakyseeding.FsEngine \
+  -javacompliancelevel 8 \
+  -srcjavafolder src/main/java \
+  -srctestfolder src/test/java  \
+  -binjavafolder target/classes \
+  -bintestfolder target/test-classes \
+  -location "$(pwd)/target-project" \
+  -dependencies "$(pwd)/target-project/lib"

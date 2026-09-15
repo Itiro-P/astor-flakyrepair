@@ -213,22 +213,24 @@ docker build \
   --build-arg USER_GID=$(id -g) \
   -t astor .
 
-// Rodar
-PROJECT_NAME="array" && \
-PROJECT_PATH="$(pwd)/minimal_samples/array" && \
-JAVA_VERSION=11 && \
-RESULT_PATH="$(pwd)/results/$PROJECT_NAME/latest" && \
-mkdir -p "$RESULT_PATH" && \
-docker container inspect astor-docker > /dev/null 2>&1 || \
-  docker create --name astor-docker \
-    -v "$RESULT_PATH:/astor/output_astor" \
-    -e JAVA_VERSION=$JAVA_VERSION \
-    -e ENGINE_CLASS=fr.inria.astor.approaches.flakyseeding.FsEngine \
-    astor && \
-docker exec -it astor-docker rm -rf astor-docker/target-project && \
-docker cp "$PROJECT_PATH/." astor-docker/target-project" && \
-docker start -a astor-docker
+mvn clean install -DskipTests -T1C
 
+mvn dependency:copy-dependencies -DoutputDirectory=lib -DincludeScope=test -pl . -am && \
+cp -r target/classes/* lib/ 2>/dev/null; \
+cp -r target/test-classes/* lib/ 2>/dev/null
+
+nohup bash -c 'java -cp target/astor.jar fr.inria.main.evolution.AstorMain -mode custom -customengine fr.inria.astor.approaches.flakyseeding.FsEngine -javacompliancelevel 8 -srcjavafolder src/main/java -srctestfolder src/test/java -binjavafolder target/classes -bintestfolder target/test-classes -location "$(pwd)/target-project/system/platform-core" -dependencies "$(pwd)/target-project/system/platform-core/lib" 2>&1 | tee astor-log.log' &
 
 JAVA_VERSION = Versão do java usado.
 ENGINE_CLASS = Método do ASTOR a ser usado.
+
+java -cp target/astor.jar fr.inria.main.evolution.AstorMain \
+  -mode custom \
+  -customengine fr.inria.astor.approaches.flakyseeding.FsEngine \
+  -javacompliancelevel 11 \
+  -srcjavafolder src/main/java \
+  -srctestfolder src/test/java  \
+  -binjavafolder target/classes \
+  -bintestfolder target/test-classes \
+  -location "$(pwd)/target-project" \
+  -dependencies "$(pwd)/target-project/lib"

@@ -18,7 +18,7 @@ import spoon.reflect.declaration.CtElement;
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class LiteralMultiplierOp extends Operator {
-	private Set<String> allowedMethods = new HashSet<>(Arrays.asList("sleep", "wait", "join", "countDown", "incrementAndGet", "decrementAndGet"));
+	//private Set<String> allowedMethods = new HashSet<>(Arrays.asList("sleep", "wait", "join", "countDown", "incrementAndGet", "decrementAndGet"));
 
 	public LiteralMultiplierOp() {
 		super();
@@ -33,7 +33,6 @@ public class LiteralMultiplierOp extends Operator {
 		if (!(element instanceof CtLiteral)) return false;
         CtLiteral literal = (CtLiteral) element;
 		// Agora vemos se é uma invocaćão e é um dos métodos mutáveis.
-		return literal.getParent() instanceof CtInvocation
-            && allowedMethods.contains(((CtInvocation) literal.getParent()).getExecutable().getSimpleName());
+		return literal.getParent() instanceof CtInvocation;
 	}
 }

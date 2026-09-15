@@ -48,25 +48,38 @@ public abstract class FdRunner<T extends TestResult> {
     }
 
     protected String classifyTestResult(String location, String test) {
-        // extrai o nome da classe (ex: "com.example.MeuTeste#metodoTeste" -> "com.example.MeuTeste")
+        // test vem como "com.example.MeuTeste#metodoTeste"
         String className = test.contains("#") ? test.substring(0, test.indexOf("#")) : test;
-        File reportFile = new File(location + "/target/surefire-reports/TEST-" + className + ".xml");
+        String methodName = test.contains("#") ? test.substring(test.indexOf("#") + 1) : null;
 
+        File reportFile = new File(location + "/target/surefire-reports/TEST-" + className + ".xml");
         if (!reportFile.exists()) {
-            return "UNKNOWN";
+            return "NO_REPORT";
         }
 
         try {
-            String content = org.apache.commons.io.FileUtils.readFileToString(reportFile, "UTF-8");
-            if (content.contains("<error ") || content.contains("<error>")) {
-                return "ERROR";
-            } else if (content.contains("<failure ") || content.contains("<failure>")) {
-                return "FAILURE";
-            } else {
-                return "SUCCESS";
+            javax.xml.parsers.DocumentBuilder builder = javax.xml.parsers.DocumentBuilderFactory
+                .newInstance().newDocumentBuilder();
+            org.w3c.dom.Document doc = builder.parse(reportFile);
+            org.w3c.dom.NodeList testcases = doc.getElementsByTagName("testcase");
+
+            for (int i = 0; i < testcases.getLength(); i++) {
+                org.w3c.dom.Element testcase = (org.w3c.dom.Element) testcases.item(i);
+                String name = testcase.getAttribute("name");
+
+                if (methodName == null || name.equals(methodName)) {
+                    if (testcase.getElementsByTagName("error").getLength() > 0) {
+                        return "ERROR";
+                    }
+                    if (testcase.getElementsByTagName("failure").getLength() > 0) {
+                        return "FAILURE";
+                    }
+                    return "SUCCESS";
+                }
             }
-        } catch (IOException e) {
-            log.error("Failed to read surefire report: " + e.getMessage());
+            return "UNKNOWN"; // método não encontrado no relatório
+        } catch (Exception e) {
+            log.error("Failed to parse surefire XML: " + e.getMessage());
             return "UNKNOWN";
         }
     }
