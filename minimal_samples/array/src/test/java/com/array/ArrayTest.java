@@ -17,57 +17,27 @@ import java.util.ArrayList;
 
 
 public class ArrayTest {
-    @Test
-    public void testArray() {
-        Map<String, Integer> map = new HashMap<>();
-        map.put("a", 1);
-        map.put("b", 2);
-        map.put("c", 3);
- 
-        List<String> keys = new ArrayList<>(List.of("a", "b", "c"));
-        List<String> keys2 = new ArrayList<>(map.keySet());
-
-        // Flaky: assume ordem de inserção, que HashMap não preserva
-        // Ordem de inserção não deve importar aqui
-        //assertEquals(keys, keys2);
-        assertEquals(keys, keys2);
-    }
 
     @Test
-    public void testGroupingByCollector() {
-        List<String> names = List.of("alice", "bob", "alex", "carol");
+    public void testFlakyAsyncWithSleep() throws InterruptedException {
+        Set<String> asyncCollectedKeys = new HashSet<>();
 
-        Map<Character, List<String>> groupedByFirstLetter = names.stream()
-                .collect(Collectors.groupingBy(name -> name.charAt(0)));
+        // Processamento assíncrono simulado
+        Thread worker = new Thread(() -> {
+            asyncCollectedKeys.add("data1");
+            asyncCollectedKeys.add("data2");
+            asyncCollectedKeys.add("data3");
+        });
+        worker.start();
 
-        assertEquals(2, groupedByFirstLetter.get('a').size());
-        assertEquals(List.of("alice", "alex"), groupedByFirstLetter.get('a'));
-        assertEquals(List.of("bob"), groupedByFirstLetter.get('b'));
-    }
+        // FLAKY 1 (Timing): Presume que 50ms são suficientes para a thread concluir.
+        // Em ambientes lentos (como servidores de CI/CD), a asserção roda antes do fim da thread.
+        Thread.sleep(50);
 
-    @Test
-    public void testJoiningCollector() {
-        List<String> words = List.of("Flaky", "Seeding", "Mutation");
+        List<String> result = new ArrayList<>(asyncCollectedKeys);
 
-        String result = words.stream()
-                .collect(Collectors.joining("-"));
-
-        assertEquals("Flaky-Seeding-Mutation", result);
-    }
-
-    @Test
-    public void testFlakyGroupingFromSet() {
-        Set<String> tags = new HashSet<>();
-        tags.add("flaky");
-        tags.add("junit");
-        tags.add("astor");
-
-        // FLAKY: A fonte é um HashSet (sem ordem).
-        // groupingBy agrupa os elementos em uma List mantendo a ordem de iteração da Stream.
-        Map<Integer, List<String>> groupedByLength = tags.stream()
-                .collect(Collectors.groupingBy(String::length));
-
-        // Asserção assume uma ordem específica ("flaky" antes de "junit")
-        assertEquals(List.of("astor", "flaky", "junit"), groupedByLength.get(5));
+        // FLAKY 2 (Ordering): Converte um HashSet para ArrayList sem ordenar,
+        // dependendo da ordem interna da tabela Hash.
+        assertEquals(List.of("data1", "data2", "data3"), result);
     }
 }
