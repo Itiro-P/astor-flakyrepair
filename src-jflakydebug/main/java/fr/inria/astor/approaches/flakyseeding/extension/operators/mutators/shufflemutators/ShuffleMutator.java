@@ -16,16 +16,12 @@ import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
 import spoon.reflect.code.CtConstructorCall;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtInvocation;
-import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.factory.Factory;
 import spoon.reflect.factory.TypeFactory;
 import spoon.reflect.reference.CtTypeReference;
-
 import spoon.reflect.cu.position.NoSourcePosition;
-/**
- * @brief Mutator base de coleções.
- */
+
 @SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class ShuffleMutator extends Mutator<CtElement> {
     private final ShuffleGuards guards;
@@ -35,13 +31,13 @@ public abstract class ShuffleMutator extends Mutator<CtElement> {
         TypeFactory typeFactory = factory.Type();
 
         this.guards = new ShuffleGuards(
-            new HashMap<CtTypeReference<?>, CtTypeReference<?>>() {{
+            new HashMap() {{
                 put(typeFactory.createReference(java.util.List.class), typeFactory.createReference(ShuffledList.class));
                 put(typeFactory.createReference(java.util.Set.class), typeFactory.createReference(ShuffledSet.class));
                 put(typeFactory.createReference(java.util.Map.class), typeFactory.createReference(ShuffledMap.class));
                 put(typeFactory.createReference(org.json.JSONObject.class), typeFactory.createReference(ShuffledJSON.class));
             }},
-            new HashSet<CtTypeReference<?>>() {{
+            new HashSet() {{
                 add(typeFactory.createReference(java.util.SortedMap.class));
                 add(typeFactory.createReference(java.util.SortedSet.class));
                 add(typeFactory.createReference(java.util.LinkedHashMap.class));
@@ -52,98 +48,56 @@ public abstract class ShuffleMutator extends Mutator<CtElement> {
         );
     }
 
-    /**
-     * @brief Computa a mutação para um certo tipo alvo.
-     * @param toMutate O elemento a ser mutado.
-     * @param replacementType O tipo a ser trocado.
-     * @param targetType O tipo original alvo.
-     * @return Uma lista de mutantes.
-     */
     public List<MutantCtElement> compute(CtElement toMutate,
         CtTypeReference replacementType,
         CtTypeReference targetType
     ) {
         List<MutantCtElement> result = new ArrayList<>();
-            
         if (toMutate == null) return result;
 
-        else if (toMutate instanceof CtConstructorCall) {
-            CtConstructorCall<?> ctc = (CtConstructorCall<?>) toMutate;
-            CtTypeReference<?> type = null;
-            if (ctc.getTypeCasts().isEmpty()) {
-                type = ctc.getType();
-            } else ctc.getTypeCasts().get(0);
-
-            if(type == null) type = ctc.getType();
-
-            if(!this.guards.isCandidate(type, targetType)) return result;
-
-            CtConstructorCall<?> wrapped = this.wrapTarget(replacementType, ctc);
-            result.add(new MutantCtElement(wrapped, 1));
-        }
-
-        else if (toMutate instanceof CtLocalVariable) {
-            // É uma variável local (`Map a = new HashMap(b)`)
-            CtLocalVariable localVar = (CtLocalVariable) toMutate;
-            CtExpression<?> assignment = localVar.getAssignment();
-            if (assignment == null) return result;
-
-            CtTypeReference<?> type = null;
-            if (assignment.getTypeCasts().isEmpty()) {
-                type = assignment.getType();
-            } else assignment.getTypeCasts().get(0);
-
-            if(type == null || !this.guards.isCandidate(type, targetType)) return result;
-            
-            // Pegamos o tipo e seus argumentos (que aqui é a própria variável)
-            // Criamos o novo construtor com os argumentos do alvo
-            CtConstructorCall<?> wrapped = this.wrapTarget(replacementType, localVar.getDefaultExpression().clone());
-
-            // Como é uma variável, precisamos mudar a ATRIBUIÇÃO dela
-            CtLocalVariable mutant = localVar.clone();
-            mutant.setAssignment(wrapped);
-            result.add(new MutantCtElement(mutant, 1));
-        }
-
-        else if (toMutate instanceof CtInvocation) {
+        // Caso 1: O nó selecionado é uma invocação (ex: assertEquals(keys, keys2))
+        if (toMutate instanceof CtInvocation) {
             CtInvocation<?> inv = (CtInvocation<?>) toMutate;
-            CtTypeReference<?> type = null;
-            if (inv.getTypeCasts().isEmpty()) {
-                type = inv.getType();
-            } else inv.getTypeCasts().get(0);
-            
-            if (type == null) return result;
-            // Aqui pode ocorrer 2 casos:
-            
-            // A invocação retorna um tipo que queremos mutacionar
-            if (this.guards.isInvocationCandidate(inv, targetType)) {
-                CtConstructorCall wrapped = this.wrapTarget(replacementType, inv);
-                result.add(new MutantCtElement(wrapped, 1));
+            List<CtExpression<?>> args = inv.getArguments();
+
+            for (int i = 0; i < args.size(); i++) {
+                CtExpression<?> arg = args.get(i);
+                
+                // Valida se o argumento (ou sua raiz) é elegível para embaralhamento
+                CtExpression<?> rootExpr = guards.getMutationTarget(arg, targetType);
+                if (rootExpr != null) {
+                    // Clona a invocação inteira para preservar a chamada de método original
+                    CtInvocation mutatedInv = inv.clone();
+                    mutatedInv.setPosition(new NoSourcePosition());
+
+                    // Aplica o wrap no argumento atual (ou na expressão clonada do nó)
+                    CtConstructorCall wrappedArg = wrapTarget(replacementType, arg);
+                    
+                    // Substitui o argumento mutado no clone da invocação
+                    List<CtExpression<?>> newArgs = new ArrayList<>(mutatedInv.getArguments());
+                    newArgs.set(i, wrappedArg);
+                    mutatedInv.setArguments(newArgs);
+
+                    result.add(new MutantCtElement(mutatedInv, 1));
+                }
             }
-            
-            // O alvo da invocação é um tipo que queremos mutacionar
-            else if (this.guards.isTargetInvocationCandidate(inv, targetType)) {
-                CtConstructorCall wrapped = this.wrapTarget(replacementType, inv.getTarget());
-                CtInvocation newParent = inv.clone();
-                newParent.setTarget(wrapped);
-                result.add(new MutantCtElement(newParent, 1));
+
+        // Caso 2: O nó selecionado é uma expressão direta (ex: atribuição de variável ou retorno)
+        } else if (toMutate instanceof CtExpression) {
+            CtExpression<?> expr = (CtExpression<?>) toMutate;
+            CtExpression<?> rootExpr = guards.getMutationTarget(expr, targetType);
+            if (rootExpr != null) {
+                result.add(new MutantCtElement(wrapTarget(replacementType, expr), 1));
             }
         }
         return result;
     }
-    
-    /**
-     * @brief Cria um novo objeto com o tipo desejado envolto dele.
-     * @param replacementType O tipo desejado.
-     * @param target O objeto alvo.
-     * @return Um novo objeto com o tipo desejado envolto dele.
-     */
+
     private CtConstructorCall wrapTarget(CtTypeReference<?> replacementType, CtExpression<?> target) {
         CtConstructorCall wrapped = factory.createConstructorCall();
         CtExpression<?> clonedTarget = target.clone();
         clonedTarget.setPosition(new NoSourcePosition());
-        clonedTarget.getElements(element -> true)
-            .forEach(element -> element.setPosition(new NoSourcePosition()));
+        clonedTarget.getElements(element -> true).forEach(element -> element.setPosition(new NoSourcePosition()));
         wrapped.setType(replacementType);
         wrapped.setArguments(Arrays.asList(clonedTarget));
         return wrapped;

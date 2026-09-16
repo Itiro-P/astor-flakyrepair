@@ -1,11 +1,14 @@
 package fr.inria.astor.approaches.flakyseeding.extension.runners;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import fr.inria.astor.approaches.flakydebug.Configuration;
 import fr.inria.astor.approaches.flakydebug.extension.FdRunner;
@@ -85,9 +88,20 @@ public class JUnitRunner extends FdRunner<FsTestResult> {
                 if(exitCode != 0) {
                     testResult.failures++;
                     String classification = classifyTestResult(location, test);
-                    log.info("[JUnit] Execution " + (i+1) + " failed. Classification: " + classification);
+                    String reason = "";
+                    try (BufferedReader br = new BufferedReader(new FileReader(ftemp))) {
+                        List<String> lines = br.lines().collect(Collectors.toList());
+
+                        reason = lines.stream()
+                            .filter(line -> line.contains("AssertionError"))
+                            .findFirst()
+                            .orElseGet(() -> String.join("\n", lines));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    log.info("[JUnit] Execution " + (i+1) + " failed. Classification: " + classification + ". Reason: " + reason + '\n');
                 } else {
-                    log.info("[JUnit] Execution " + (i+1) + " passed.");
+                    log.info("[JUnit] Execution " + (i+1) + " passed.\n");
                 }
                 
                 ftemp.delete();
