@@ -83,40 +83,9 @@ public class ShuffleCollectionOp extends Operator {
     public boolean canBeAppliedToPoint(ModificationPoint point) {
         CtElement element = point.getCodeElement();
 
-        if (element instanceof CtConstructorCall) {
-            CtConstructorCall<?> ctc = (CtConstructorCall<?>) element;
-            CtTypeReference<?> type = null;
-            if (ctc.getTypeCasts().isEmpty()) {
-                type = ctc.getType();
-            } else ctc.getTypeCasts().get(0);
-            
-            if (type == null) return false;
+        if (!(element instanceof CtInvocation)) return false;
+        CtInvocation<?> inv  = (CtInvocation<?>) element;
 
-            return this.guards.isCandidate(type);
-        }
-
-        if (element instanceof CtLocalVariable) {
-            CtExpression<?> assignment = ((CtLocalVariable<?>) element).getAssignment();
-            if (assignment != null) {
-                CtTypeReference<?> type = null;
-                if (assignment.getTypeCasts().isEmpty()) {
-                    type = assignment.getType();
-                } else assignment.getTypeCasts().get(0);
-                
-                if (type == null) return false;
-                
-                return assignment != null && this.guards.isCandidate(type);
-            }
-        }
-
-        if (element instanceof CtInvocation) {
-            return this.checkInvocation((CtInvocation<?>) element);
-        }
-
-        return false;
-    }
-
-    private boolean checkInvocation(CtInvocation<?> inv) {
         CtTypeReference<?> type = null;
         if (inv.getTypeCasts().isEmpty()) {
             type = inv.getType();
