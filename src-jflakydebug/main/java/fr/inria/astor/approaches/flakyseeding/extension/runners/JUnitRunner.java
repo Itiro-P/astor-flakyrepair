@@ -99,6 +99,17 @@ public class JUnitRunner extends FdRunner<FsTestResult> {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+
+                    // Guarda para caso de erro em execućão.
+                    // Se um mutante não compilar, as execućões nunca ocorrem.
+                    // Mas erros dinâmicos (como excećões em tempo de execućão) podem ser despercebidos.
+                    // Rodamos ao menos uma vez para depurarmos depois.
+                    if (reason.startsWith("[ERROR]")) {
+                        log.error("[JUnit] Execution " + (i+1) + " error: + " + reason);
+                        testResult.failures = K;
+                        break;
+                    }
+
                     log.info("[JUnit] Execution " + (i+1) + " failed. Classification: " + classification + ". Reason: " + reason + '\n');
                 } else {
                     log.info("[JUnit] Execution " + (i+1) + " passed.\n");
