@@ -34,6 +34,7 @@ public class JUnitRunner extends FdRunner<FsTestResult> {
 
         this.prepareMutatedEnvironment(newClasspath, location);
 
+        List<Long> execTimes = new ArrayList<>();
         List<String> command = buildMavenCommand(test, location);
         FsTestResult testResult = new FsTestResult();
         testResult.casesExecuted = K;
@@ -63,6 +64,7 @@ public class JUnitRunner extends FdRunner<FsTestResult> {
                 pb.directory(new File(location));
 
                 printCommandToExecute(command, waitTime);
+                long start = System.nanoTime();
                 Process p = pb.start();
 
                 // Só interage com o stdin se NÃO for Windows e se necessário (neste caso, 'bash -c' elimina a necessidade)
@@ -74,12 +76,17 @@ public class JUnitRunner extends FdRunner<FsTestResult> {
                 }
                 
                 boolean finished = p.waitFor(waitTime, TimeUnit.MILLISECONDS);
+                long end = System.nanoTime();
+                long duration = (start - end) / 1_000_000;
+
                 int exitCode = 0;
 
                 if(!finished) {
                     log.info("Test exceeded wait time.\n");
                     p.destroyForcibly();
                     p.waitFor();
+                    end = System.nanoTime();
+                    duration = (start - end) / 1_000_000;
                     exitCode = 1;
                 } else {
                     exitCode = p.exitValue();
@@ -110,11 +117,11 @@ public class JUnitRunner extends FdRunner<FsTestResult> {
                         break;
                     }
 
-                    log.info("[JUnit] Execution " + (i+1) + " failed. Classification: " + classification + ". Reason: " + reason + '\n');
+                    log.info("[JUnit] Execution " + (i+1) + " failed. Took " + duration + "ms. Classification: " + classification + ". Reason: " + reason + '\n');
                 } else {
-                    log.info("[JUnit] Execution " + (i+1) + " passed.\n");
+                    log.info("[JUnit] Execution " + (i+1) + " passed. Took " + duration + "ms\n");
                 }
-                
+                execTimes.add(duration);
                 ftemp.delete();
 
             } catch (IOException | InterruptedException e) {
@@ -126,7 +133,7 @@ public class JUnitRunner extends FdRunner<FsTestResult> {
         successList.add(test);
         testResult.setSuccessTest(successList);
 
-        log.info("[JUnit] Done — failures=" + testResult.failures + "/" + K);
+        log.info("[JUnit] Done — failures=" + testResult.failures + "/" + K + ". Took " + execTimes.stream().mapToLong(Long::longValue).sum() + "ms\n");
         return testResult;
     }
 

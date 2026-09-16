@@ -18,7 +18,7 @@ public abstract class FdEngine extends jMutRepairExhaustive {
 		ConfigurationProperties.properties.setProperty("population", "1");
         ConfigurationProperties.setProperty("canhavezerosusp", Boolean.TRUE.toString());
         ConfigurationProperties.setProperty("includeTestInSusp", Boolean.TRUE.toString());
-        ConfigurationProperties.setProperty("tmax1", "" + 30000);
+        ConfigurationProperties.setProperty("tmax1", String.valueOf(Integer.MAX_VALUE));
         ConfigurationProperties.setProperty(ExtensionPoints.TARGET_CODE_PROCESSOR.identifier, "expression");
     }
 }
