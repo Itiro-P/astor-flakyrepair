@@ -7,4 +7,5 @@ java -cp target/astor.jar fr.inria.main.evolution.AstorMain \
   -binjavafolder target/classes \
   -bintestfolder target/test-classes \
   -location "$(pwd)/target-project" \
-  -dependencies "$(pwd)/target-project/lib"
+  -dependencies "$(pwd)/target-project/lib" \
+  -stopfirst false
