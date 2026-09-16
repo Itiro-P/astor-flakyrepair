@@ -233,10 +233,13 @@ public class ShuffleGuards {
     }
 
     private boolean isShuffled(CtTypeReference<?> type) {
-        if (type == null) return false;
-        CtTypeReference<?> erased = type.getTypeErasure();
-        if (erased == null || erased instanceof CtTypeParameterReference) return false;
-        return mappings.values().stream().anyMatch(shuffled -> erased.getQualifiedName().equals(shuffled.getQualifiedName()));
+        try {
+            CtTypeReference<?> erased = type.getTypeErasure();
+            if (erased == null || erased instanceof CtTypeParameterReference) return false;
+            return mappings.values().stream().anyMatch(shuffled -> erased.getQualifiedName().equals(shuffled.getQualifiedName()));
+        } catch(Exception e) {
+            return false;
+        }
     }
 
     private CtTypeReference<?> getCleanType(CtExpression<?> expression) {
