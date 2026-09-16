@@ -64,7 +64,7 @@ public class ShuffleCollectionOp extends Operator {
     @Override
     public boolean canBeAppliedToPoint(ModificationPoint point) {
         CtElement element = point.getCodeElement();
-        boolean canApplyAsExpr, canApplyAsInv = false;
+        boolean canApplyAsExpr = false, canApplyAsInv = false;
 
 
         if (element instanceof CtInvocation) {
