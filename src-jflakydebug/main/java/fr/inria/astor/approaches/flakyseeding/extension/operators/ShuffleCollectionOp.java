@@ -64,15 +64,17 @@ public class ShuffleCollectionOp extends Operator {
     @Override
     public boolean canBeAppliedToPoint(ModificationPoint point) {
         CtElement element = point.getCodeElement();
+        boolean canApplyAsExpr, canApplyAsInv = false;
+
 
         if (element instanceof CtInvocation) {
             CtInvocation<?> invocation  = (CtInvocation<?>) element;
-            return invocation.getArguments().stream().anyMatch(arg -> guards.getMutationTarget(arg) != null);
+            canApplyAsInv = invocation.getArguments().stream().anyMatch(arg -> guards.getMutationTarget(arg) != null);
         }
 
         if (element instanceof CtExpression) {
-            return guards.getMutationTarget((CtExpression<?>) element) != null;
+            canApplyAsExpr = guards.getMutationTarget((CtExpression<?>) element) != null;
         }
-        return false;
+        return canApplyAsExpr || canApplyAsInv;
     }
 }
