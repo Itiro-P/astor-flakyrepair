@@ -13,8 +13,10 @@ import fr.inria.astor.core.entities.ModificationPoint;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLiteral;
+import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.code.CtVariableRead;
 import spoon.reflect.declaration.CtElement;
+import spoon.reflect.declaration.CtField;
 import spoon.reflect.reference.CtExecutableReference;
 import spoon.reflect.reference.CtTypeReference;
 
@@ -111,19 +113,58 @@ public class LiteralMultiplierOp extends Operator {
         CtTypeReference<?> type = arg.getType();
         if (type == null) return false;
 
+        boolean isNumericType = false;
+
         // Trata tipos primitivos numéricos (int, long, double, float)
         if (type.isPrimitive()) {
             String name = type.getSimpleName();
-            return "long".equals(name) || "int".equals(name) || "double".equals(name) || "float".equals(name);
+            isNumericType = "long".equals(name) || "int".equals(name) || "double".equals(name) || "float".equals(name);
+        } else {
+            // Trata wrappers estendendo java.lang.Number (Long, Integer, Double, etc.)
+            try {
+                CtTypeReference<?> erased = type.getTypeErasure();
+                isNumericType = erased != null && erased.isSubtypeOf(this.numberType);
+            } catch (Exception e) {
+                isNumericType = false;
+            }
         }
 
-        // Trata wrappers estendendo java.lang.Number (Long, Integer, Double, etc.)
-        try {
-            CtTypeReference<?> erased = type.getTypeErasure();
-            return erased != null && erased.isSubtypeOf(this.numberType);
-        } catch (Exception e) {
+        // Se não for um tipo numérico válido, já retorna falso
+        if (!isNumericType) {
             return false;
         }
+
+        // Agora extraímos o valor para verificar se é maior que 100
+        Object value = extractValue(arg);
+        if (value instanceof Number) {
+            return ((Number) value).doubleValue() > 100.0;
+        }
+
+        return false;
+    }
+
+    // Método auxiliar para isolar a extração do valor
+    private Object extractValue(CtExpression<?> arg) {
+        if (arg instanceof CtLiteral) {
+            return ((CtLiteral<?>) arg).getValue();
+        }
+
+        if (arg instanceof CtVariableRead) {
+            var variableDecl = ((CtVariableRead<?>) arg).getVariable().getDeclaration();
+            
+            CtExpression<?> defaultExpr = null;
+            if (variableDecl instanceof CtLocalVariable) {
+                defaultExpr = ((CtLocalVariable<?>) variableDecl).getDefaultExpression();
+            } else if (variableDecl instanceof CtField) {
+                defaultExpr = ((CtField<?>) variableDecl).getAssignment();
+            }
+
+            if (defaultExpr instanceof CtLiteral) {
+                return ((CtLiteral<?>) defaultExpr).getValue();
+            }
+        }
+
+        return null;
     }
 
     private boolean isDurationType(CtExpression<?> arg) {

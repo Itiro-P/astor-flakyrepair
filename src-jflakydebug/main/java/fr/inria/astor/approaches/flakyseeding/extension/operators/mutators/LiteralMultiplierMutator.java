@@ -19,7 +19,7 @@ import fr.inria.astor.approaches.jmutrepair.MutantCtElement;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class LiteralMultiplierMutator extends Mutator<CtInvocation<?>> {
     
-    private static final List<Double> multiplicationFactors = Arrays.asList(0.9, 1.25, 1.5, 2.0, 5.0);
+    private static final List<Double> multiplicationFactors = Arrays.asList(0.5, 0.9, 1.2, 1.4);
 
     public LiteralMultiplierMutator(Factory factory) {
         super(factory);

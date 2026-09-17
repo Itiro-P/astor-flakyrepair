@@ -3,6 +3,7 @@ package fr.inria.astor.approaches.flakyseeding.extension.operators;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 import fr.inria.astor.approaches.flakyseeding.extension.operators.mutators.shufflemutators.ShuffleJSONMutator;
 import fr.inria.astor.approaches.flakyseeding.extension.operators.mutators.shufflemutators.ShuffleListMutator;
@@ -41,6 +42,7 @@ public class ShuffleCollectionOp extends Operator {
             new ShuffleMapMutator(factory),
             new ShuffleJSONMutator(factory)
         ));
+
         TypeFactory typeFactory = factory.Type();
 
         this.guards = new ShuffleGuards(
@@ -66,15 +68,17 @@ public class ShuffleCollectionOp extends Operator {
         CtElement element = point.getCodeElement();
         boolean canApplyAsExpr = false, canApplyAsInv = false;
 
-
         if (element instanceof CtInvocation) {
             CtInvocation<?> invocation  = (CtInvocation<?>) element;
+            if (invocation.getType().isSubtypeOf(invocation.getFactory().Type().VOID_PRIMITIVE)) return false;
             canApplyAsInv = invocation.getArguments().stream().anyMatch(arg -> guards.getMutationTarget(arg) != null);
         }
 
         if (element instanceof CtExpression) {
-            canApplyAsExpr = guards.getMutationTarget((CtExpression<?>) element) != null;
+            CtExpression<?> expr = (CtExpression<?>) element;
+            if (expr.getType().isSubtypeOf(expr.getFactory().Type().VOID_PRIMITIVE)) return false;
+            canApplyAsExpr = guards.getMutationTarget(expr) != null;
         }
-        return canApplyAsExpr || canApplyAsInv;
+        return (canApplyAsExpr || canApplyAsInv);
     }
 }

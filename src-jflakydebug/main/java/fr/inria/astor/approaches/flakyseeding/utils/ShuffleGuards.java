@@ -59,6 +59,11 @@ public class ShuffleGuards {
         CtExpression<?> rootExpr = resolveRoot(expr);
         if (rootExpr == null) return null;
 
+        // Por enquanto vamos ignorar métodos void.
+        if (expr.getType().isSubtypeOf(expr.getFactory().Type().VOID_PRIMITIVE)) {
+            return null;
+        }
+
         // Bloqueia coleções com ordem garantida (List.of ou new ArrayList<>(List.of(...)))
         if (isOrderGuaranteed(rootExpr)) {
             return null;

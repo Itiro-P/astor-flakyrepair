@@ -53,9 +53,11 @@ public class FloatNoiseMutator extends Mutator<CtInvocation<?>> {
 
                     if (originalValue instanceof Double) {
                         double newValue = originalValue.doubleValue() * FloatNoiseMutator.FACTOR;
+                        if (Double.isInfinite(newValue) || Double.isNaN(newValue)) continue;
                         mutatedLiteral.setValue(newValue);
                     } else if (originalValue instanceof Float) {
                         float newValue = originalValue.floatValue() * FloatNoiseMutator.FACTOR;
+                        if (Float.isInfinite(newValue) || Float.isNaN(newValue)) continue;
                         mutatedLiteral.setValue(newValue);
                     }
 

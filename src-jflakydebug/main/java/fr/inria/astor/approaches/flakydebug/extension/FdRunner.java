@@ -44,7 +44,7 @@ public abstract class FdRunner<T extends TestResult> {
         String toPrint = (trunk != 0 && cmd.length() > trunk)
                 ? cmd.substring(0, trunk) + "..AND " + (cmd.length() - trunk) + " CHARS MORE..."
                 : cmd;
-        log.debug("Executing process: (timeout" + waitTime / 1000 + "secs) \n" + toPrint);
+        log.debug("Executing process: (timeout " + waitTime / 1000 + "secs) \n" + toPrint);
     }
 
     protected String classifyTestResult(String location, String test) {
