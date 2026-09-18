@@ -1,0 +1,17 @@
+Variant,Classificação,Falhas,Execuções,Teste,Tempo médio (s)
+2,non_revealing,0,100,com.amazon.pay.api.CreateStringToSignTest#ValidateAllTestCases,1.3843
+3,non_revealing,0,100,com.amazon.pay.api.CreateStringToSignTest#ValidateAllTestCases,1.3313
+4,non_revealing,0,100,com.amazon.pay.api.UtilTest#testGetHttpUriRequestForValidHttpMethod,1.3445
+5,non_revealing,0,100,com.amazon.pay.api.RequestSignerWithHeaderTest#signRequestWithHeader,2.0344
+6,non_revealing,0,100,com.amazon.pay.api.UtilTest#testEnhanceResponseWithShippingAddressList,1.2619
+7,non_revealing,0,100,com.amazon.pay.api.RequestSignerWithHeaderTest#signRequestWithHeader,1.8679
+8,revealing,51,100,com.amazon.pay.api.UtilTest#testEnhanceResponseWithShippingAddressList,1.3962
+9,non_revealing,0,100,com.amazon.pay.api.UtilTest#testEnhanceResponseWithShippingAddressList,1.3960
+10,non_revealing,0,100,com.amazon.pay.api.UtilTest#testEnhanceResponseWithShippingAddressList,1.4653
+11,revealing,47,100,com.amazon.pay.api.UtilTest#testEnhanceResponseWithShippingAddressList,1.4724
+12,non_revealing,0,100,com.amazon.pay.api.UtilTest#testEnhanceResponseWithShippingAddressList,1.4711
+13,non_revealing,0,100,com.amazon.pay.api.UtilTest#updateHeader,1.4705
+14,non_revealing,0,100,com.amazon.pay.api.RequestSignerTest#signRequestWithEmptyHeader,2.4341
+15,non_revealing,0,100,com.amazon.pay.api.UtilTest#updateHeader,1.6310
+16,non_revealing,0,100,com.amazon.pay.api.RequestSignerTest#signRequestWithEmptyHeader,2.3159
+17,non_revealing,0,100,com.amazon.pay.api.UtilTest#updateHeader,1.5563

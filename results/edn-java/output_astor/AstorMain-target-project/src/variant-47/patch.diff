@@ -1,0 +1,6 @@
+--- /src/test/java/us/bpsm/edn/printer/PrinterTest.java
++++ /src/test/java/us/bpsm/edn/printer/PrinterTest.java
+@@ -112 +112 @@
+-		java.util.Map<java.lang.Integer, java.lang.String> m = new java.util.HashMap();
++		java.util.Map<java.lang.Integer, java.lang.String> m = new fr.inria.astor.approaches.flakyseeding.utils.ShuffledMap(new java.util.HashMap());
+

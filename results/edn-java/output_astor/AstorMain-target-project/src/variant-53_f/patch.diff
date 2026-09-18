@@ -1,0 +1,6 @@
+--- /src/test/java/us/bpsm/edn/parser/ParserTest.java
++++ /src/test/java/us/bpsm/edn/parser/ParserTest.java
+@@ -9 +9 @@
+-		java.util.List<java.lang.Object> results = new java.util.ArrayList<java.lang.Object>();
++		java.util.List<java.lang.Object> results = new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(new java.util.ArrayList<java.lang.Object>());
+

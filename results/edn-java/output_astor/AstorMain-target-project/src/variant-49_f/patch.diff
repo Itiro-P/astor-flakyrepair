@@ -1,0 +1,6 @@
+--- /src/test/java/us/bpsm/edn/printer/PrinterTest.java
++++ /src/test/java/us/bpsm/edn/printer/PrinterTest.java
+@@ -53 +53 @@
+-		java.util.ArrayList<java.lang.Object> al = new java.util.ArrayList<java.lang.Object>();
++		java.util.ArrayList<java.lang.Object> al = new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(new java.util.ArrayList<java.lang.Object>());
+

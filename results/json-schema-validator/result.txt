@@ -1,0 +1,252 @@
+Modification points:                  283
+Mutantes compilados:                  41
+Mutantes reveladores:                 0
+Mutantes não-reveladores:             39
+Mutantes prematuros:                  2
+
+Total contabilizado: 41
+NR_RIGHT_COMPILATIONS (Astor):       41
+
+Mutantes:
+  variant   2: non_revealing  0/100    com.networknt.schema.ThresholdMixinPerfTest#specificCaseForEachThresholdValue
+    tempo total: 251514 ms (251.514 s)
+    tempo médio por execução: 2515.14 ms (2.515 s)
+    tempo mínimo: 2062 ms
+    tempo máximo: 3127 ms
+    execuções com tempo coletado: 100
+  variant   3: non_revealing  0/100    com.networknt.schema.UriMappingTest#testValidatorConfigUriMappingUri
+    tempo total: 267278 ms (267.278 s)
+    tempo médio por execução: 2672.78 ms (2.673 s)
+    tempo mínimo: 2199 ms
+    tempo máximo: 3361 ms
+    execuções com tempo coletado: 100
+  variant   4: non_revealing  0/100    com.networknt.schema.ThresholdMixinPerfTest#allInOneAproachTimeEstimate
+    tempo total: 262643 ms (262.643 s)
+    tempo médio por execução: 2626.43 ms (2.626 s)
+    tempo mínimo: 2086 ms
+    tempo máximo: 6189 ms
+    execuções com tempo coletado: 100
+  variant   6: non_revealing  0/100    com.networknt.schema.ThresholdMixinPerfTest#specificCaseForEachThresholdValue
+    tempo total: 271687 ms (271.687 s)
+    tempo médio por execução: 2716.87 ms (2.717 s)
+    tempo mínimo: 2033 ms
+    tempo máximo: 5607 ms
+    execuções com tempo coletado: 100
+  variant   7: non_revealing  0/100    com.networknt.schema.Issue471Test#shouldFailV201909_with_enUS
+    tempo total: 259563 ms (259.563 s)
+    tempo médio por execução: 2595.63 ms (2.596 s)
+    tempo mínimo: 2114 ms
+    tempo máximo: 3466 ms
+    execuções com tempo coletado: 100
+  variant   8: non_revealing  0/100    com.networknt.schema.ThresholdMixinPerfTest#specificCaseForEachThresholdValue
+    tempo total: 255567 ms (255.567 s)
+    tempo médio por execução: 2555.67 ms (2.556 s)
+    tempo mínimo: 2078 ms
+    tempo máximo: 3333 ms
+    execuções com tempo coletado: 100
+  variant   9: non_revealing  0/100    com.networknt.schema.MaximumValidatorPerfTest#testTime
+    tempo total: 251388 ms (251.388 s)
+    tempo médio por execução: 2513.88 ms (2.514 s)
+    tempo mínimo: 2079 ms
+    tempo máximo: 3399 ms
+    execuções com tempo coletado: 100
+  variant  10: non_revealing  0/100    com.networknt.schema.UriMappingTest#testValidatorConfigExampleMappings
+    tempo total: 269570 ms (269.570 s)
+    tempo médio por execução: 2695.70 ms (2.696 s)
+    tempo mínimo: 2310 ms
+    tempo máximo: 4038 ms
+    execuções com tempo coletado: 100
+  variant  11: non_revealing  0/100    com.networknt.schema.Issue471Test#shouldFailV201909_with_zhCN
+    tempo total: 220696 ms (220.696 s)
+    tempo médio por execução: 2206.96 ms (2.207 s)
+    tempo mínimo: 2077 ms
+    tempo máximo: 2320 ms
+    execuções com tempo coletado: 100
+  variant  13: non_revealing  0/100    com.networknt.schema.Issue375Test#shouldFailAndShowValidationValuesWithError
+    tempo total: 234829 ms (234.829 s)
+    tempo médio por execução: 2348.29 ms (2.348 s)
+    tempo mínimo: 2262 ms
+    tempo máximo: 2477 ms
+    execuções com tempo coletado: 100
+  variant  15: non_revealing  0/100    com.networknt.schema.ThresholdMixinPerfTest#allInOneAproachTimeEstimate
+    tempo total: 219422 ms (219.422 s)
+    tempo médio por execução: 2194.22 ms (2.194 s)
+    tempo mínimo: 2011 ms
+    tempo máximo: 2324 ms
+    execuções com tempo coletado: 100
+  variant  16: non_revealing  0/100    com.networknt.schema.ThresholdMixinPerfTest#allInOneAproachTimeEstimate
+    tempo total: 219053 ms (219.053 s)
+    tempo médio por execução: 2190.53 ms (2.191 s)
+    tempo mínimo: 2058 ms
+    tempo máximo: 2322 ms
+    execuções com tempo coletado: 100
+  variant  17: non_revealing  0/100    com.networknt.schema.ThresholdMixinPerfTest#allInOneAproachTimeEstimate
+    tempo total: 220060 ms (220.060 s)
+    tempo médio por execução: 2200.60 ms (2.201 s)
+    tempo mínimo: 2034 ms
+    tempo máximo: 2324 ms
+    execuções com tempo coletado: 100
+  variant  18: non_revealing  0/100    com.networknt.schema.ThresholdMixinPerfTest#allInOneAproachTimeEstimate
+    tempo total: 219164 ms (219.164 s)
+    tempo médio por execução: 2191.64 ms (2.192 s)
+    tempo mínimo: 2060 ms
+    tempo máximo: 2317 ms
+    execuções com tempo coletado: 100
+  variant  19: non_revealing  0/100    com.networknt.schema.ThresholdMixinPerfTest#allInOneAproachTimeEstimate
+    tempo total: 218766 ms (218.766 s)
+    tempo médio por execução: 2187.66 ms (2.188 s)
+    tempo mínimo: 2040 ms
+    tempo máximo: 2325 ms
+    execuções com tempo coletado: 100
+  variant  20: non_revealing  0/100    com.networknt.schema.UriMappingTest#testMappingsForRef
+    tempo total: 233211 ms (233.211 s)
+    tempo médio por execução: 2332.11 ms (2.332 s)
+    tempo mínimo: 2226 ms
+    tempo máximo: 2480 ms
+    execuções com tempo coletado: 100
+  variant  21: non_revealing  0/100    com.networknt.schema.MaximumValidatorTest#negativeDoubleOverflowTest
+    tempo total: 234488 ms (234.488 s)
+    tempo médio por execução: 2344.88 ms (2.345 s)
+    tempo mínimo: 2185 ms
+    tempo máximo: 2474 ms
+    execuções com tempo coletado: 100
+  variant  22: non_revealing  0/100    com.networknt.schema.ThresholdMixinPerfTest#currentTimeEstimate
+    tempo total: 219411 ms (219.411 s)
+    tempo médio por execução: 2194.11 ms (2.194 s)
+    tempo mínimo: 2038 ms
+    tempo máximo: 2375 ms
+    execuções com tempo coletado: 100
+  variant  23: non_revealing  0/100    com.networknt.schema.ThresholdMixinPerfTest#currentTimeEstimate
+    tempo total: 218709 ms (218.709 s)
+    tempo médio por execução: 2187.09 ms (2.187 s)
+    tempo mínimo: 2031 ms
+    tempo máximo: 2284 ms
+    execuções com tempo coletado: 100
+  variant  24: non_revealing  0/100    com.networknt.schema.UriMappingTest#testBuilderUriMappingUri
+    tempo total: 232194 ms (232.194 s)
+    tempo médio por execução: 2321.94 ms (2.322 s)
+    tempo mínimo: 2149 ms
+    tempo máximo: 2472 ms
+    execuções com tempo coletado: 100
+  variant  25: non_revealing  0/100    com.networknt.schema.ThresholdMixinPerfTest#currentTimeEstimate
+    tempo total: 218489 ms (218.489 s)
+    tempo médio por execução: 2184.89 ms (2.185 s)
+    tempo mínimo: 2029 ms
+    tempo máximo: 2321 ms
+    execuções com tempo coletado: 100
+  variant  26: non_revealing  0/100    com.networknt.schema.ThresholdMixinPerfTest#currentTimeEstimate
+    tempo total: 219198 ms (219.198 s)
+    tempo médio por execução: 2191.98 ms (2.192 s)
+    tempo mínimo: 2014 ms
+    tempo máximo: 2305 ms
+    execuções com tempo coletado: 100
+  variant  27: non_revealing  0/100    com.networknt.schema.ThresholdMixinPerfTest#currentTimeEstimate
+    tempo total: 218986 ms (218.986 s)
+    tempo médio por execução: 2189.86 ms (2.190 s)
+    tempo mínimo: 2030 ms
+    tempo máximo: 2318 ms
+    execuções com tempo coletado: 100
+  variant  28: non_revealing  0/100    com.networknt.schema.ThresholdMixinPerfTest#noMixinsIntegralTimeEstimate
+    tempo total: 217338 ms (217.338 s)
+    tempo médio por execução: 2173.38 ms (2.173 s)
+    tempo mínimo: 2052 ms
+    tempo máximo: 2317 ms
+    execuções com tempo coletado: 100
+  variant  29: non_revealing  0/100    com.networknt.schema.ThresholdMixinPerfTest#noMixinsIntegralTimeEstimate
+    tempo total: 216128 ms (216.128 s)
+    tempo médio por execução: 2161.28 ms (2.161 s)
+    tempo mínimo: 2018 ms
+    tempo máximo: 2303 ms
+    execuções com tempo coletado: 100
+  variant  30: non_revealing  0/100    com.networknt.schema.ThresholdMixinPerfTest#noMixinsIntegralTimeEstimate
+    tempo total: 216127 ms (216.127 s)
+    tempo médio por execução: 2161.27 ms (2.161 s)
+    tempo mínimo: 2030 ms
+    tempo máximo: 2315 ms
+    execuções com tempo coletado: 100
+  variant  32: non_revealing  0/100    com.networknt.schema.Issue396Test#testComplexPropertyNamesV7
+    tempo total: 230366 ms (230.366 s)
+    tempo médio por execução: 2303.66 ms (2.304 s)
+    tempo mínimo: 2159 ms
+    tempo máximo: 2486 ms
+    execuções com tempo coletado: 100
+  variant  33: non_revealing  0/100    com.networknt.schema.ThresholdMixinPerfTest#noMixinsIntegralTimeEstimate
+    tempo total: 216895 ms (216.895 s)
+    tempo médio por execução: 2168.95 ms (2.169 s)
+    tempo mínimo: 2025 ms
+    tempo máximo: 2307 ms
+    execuções com tempo coletado: 100
+  variant  34: premature      100/100  com.networknt.schema.MaximumValidatorTest#negativeInteger
+    erros de execução: 1
+    tempo total: 0 ms (0.000 s)
+  variant  35: premature      100/100  com.networknt.schema.MaximumValidatorTest#negativeInteger
+    erros de execução: 1
+    tempo total: 0 ms (0.000 s)
+  variant  36: non_revealing  0/100    com.networknt.schema.ThresholdMixinPerfTest#noMixinsFloatingTimeEstimate
+    tempo total: 215545 ms (215.545 s)
+    tempo médio por execução: 2155.45 ms (2.155 s)
+    tempo mínimo: 1990 ms
+    tempo máximo: 2290 ms
+    execuções com tempo coletado: 100
+  variant  37: non_revealing  0/100    com.networknt.schema.MinimumValidatorTest#negativeDoubleOverflowTest
+    tempo total: 230362 ms (230.362 s)
+    tempo médio por execução: 2303.62 ms (2.304 s)
+    tempo mínimo: 2160 ms
+    tempo máximo: 2414 ms
+    execuções com tempo coletado: 100
+  variant  38: non_revealing  0/100    com.networknt.schema.ThresholdMixinPerfTest#noMixinsFloatingTimeEstimate
+    tempo total: 217102 ms (217.102 s)
+    tempo médio por execução: 2171.02 ms (2.171 s)
+    tempo mínimo: 2050 ms
+    tempo máximo: 2329 ms
+    execuções com tempo coletado: 100
+  variant  39: non_revealing  0/100    com.networknt.schema.Issue396Test#testComplexPropertyNamesV7
+    tempo total: 231438 ms (231.438 s)
+    tempo médio por execução: 2314.38 ms (2.314 s)
+    tempo mínimo: 2173 ms
+    tempo máximo: 2456 ms
+    execuções com tempo coletado: 100
+  variant  40: non_revealing  0/100    com.networknt.schema.Issue396Test#testComplexPropertyNamesV7
+    tempo total: 231520 ms (231.520 s)
+    tempo médio por execução: 2315.20 ms (2.315 s)
+    tempo mínimo: 2197 ms
+    tempo máximo: 2508 ms
+    execuções com tempo coletado: 100
+  variant  41: non_revealing  0/100    com.networknt.schema.ThresholdMixinPerfTest#noMixinsFloatingTimeEstimate
+    tempo total: 216124 ms (216.124 s)
+    tempo médio por execução: 2161.24 ms (2.161 s)
+    tempo mínimo: 2024 ms
+    tempo máximo: 2271 ms
+    execuções com tempo coletado: 100
+  variant  42: non_revealing  0/100    com.networknt.schema.SpecVersionTest#testGetVersionValue
+    tempo total: 217234 ms (217.234 s)
+    tempo médio por execução: 2172.34 ms (2.172 s)
+    tempo mínimo: 2034 ms
+    tempo máximo: 2345 ms
+    execuções com tempo coletado: 100
+  variant  43: non_revealing  0/100    com.networknt.schema.MinimumValidatorTest#negativeDoubleOverflowTest
+    tempo total: 231025 ms (231.025 s)
+    tempo médio por execução: 2310.25 ms (2.310 s)
+    tempo mínimo: 2124 ms
+    tempo máximo: 2468 ms
+    execuções com tempo coletado: 100
+  variant  44: non_revealing  0/100    com.networknt.schema.MaximumValidatorTest#negativeDoubleOverflowTest
+    tempo total: 231806 ms (231.806 s)
+    tempo médio por execução: 2318.06 ms (2.318 s)
+    tempo mínimo: 2126 ms
+    tempo máximo: 2506 ms
+    execuções com tempo coletado: 100
+  variant  45: non_revealing  0/100    com.networknt.schema.UriMappingTest#testBuilderExampleMappings
+    tempo total: 255303 ms (255.303 s)
+    tempo médio por execução: 2553.03 ms (2.553 s)
+    tempo mínimo: 2146 ms
+    tempo máximo: 4463 ms
+    execuções com tempo coletado: 100
+  variant  46: non_revealing  0/100    com.networknt.schema.ThresholdMixinPerfTest#currentTimeEstimate
+    tempo total: 217018 ms (217.018 s)
+    tempo médio por execução: 2170.18 ms (2.170 s)
+    tempo mínimo: 2000 ms
+    tempo máximo: 2355 ms
+    execuções com tempo coletado: 100
+
+Detalhes dos reveladores:

@@ -1,0 +1,6 @@
+--- /tst/com/amazon/pay/api/UtilTest.java
++++ /tst/com/amazon/pay/api/UtilTest.java
+@@ -150 +150 @@
+-		final org.json.JSONObject expectedShippingAddress = new org.json.JSONObject();
++		final org.json.JSONObject expectedShippingAddress = new fr.inria.astor.approaches.flakyseeding.utils.ShuffledJSON(new org.json.JSONObject());
+

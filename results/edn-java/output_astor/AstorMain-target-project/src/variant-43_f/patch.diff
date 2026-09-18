@@ -1,0 +1,6 @@
+--- /src/test/java/us/bpsm/edn/printer/PrinterTest.java
++++ /src/test/java/us/bpsm/edn/printer/PrinterTest.java
+@@ -56 +56 @@
+-		p.printValue(al);
++		p.printValue(new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(al));
+

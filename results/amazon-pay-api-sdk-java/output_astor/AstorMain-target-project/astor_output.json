@@ -1,0 +1,57 @@
+{
+  "general": {
+    "NR_RIGHT_COMPILATIONS": 16,
+    "EXECUTION_IDENTIFIER": "",
+    "FAULT_LOCALIZATION": "fr.inria.astor.approaches.flakyseeding.extension.FsFaultLocalization",
+    "OUTPUT_STATUS": "EXHAUSTIVE_NAVIGATED",
+    "TOTAL_TIME": 2587.076
+  },
+  "patches": [
+    {
+      "VARIANT_ID": "8",
+      "VALIDATION": "|true|51|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "com.amazon.pay.api.UtilTest",
+          "PATH": "\\/astor\\/target-project\\/tst\\/com\\/amazon\\/pay\\/api\\/UtilTest.java",
+          "ORIGINAL_CODE": "new org.json.JSONArray().put(expectedShippingAddress)",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtInvocationImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-8\\/com\\/amazon\\/pay\\/api\\/UtilTest.java",
+          "LINE": "251",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "6",
+          "PATCH_HUNK_CODE": "new org.json.JSONArray().put(new fr.inria.astor.approaches.flakyseeding.utils.ShuffledJSON(expectedShippingAddress))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtInvocationImpl"
+        }
+      ],
+      "TIME": "924",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-8",
+      "PATCH_DIFF_ORIG": "--- \\/tst\\/com\\/amazon\\/pay\\/api\\/UtilTest.java\\n+++ \\/tst\\/com\\/amazon\\/pay\\/api\\/UtilTest.java\\n@@ -251 +251 @@\\n-\\t\\texpectedShippingAddressListResponse.put(\\\"shippingAddressList\\\", new org.json.JSONArray().put(expectedShippingAddress));\\n+\\t\\texpectedShippingAddressListResponse.put(\\\"shippingAddressList\\\", new org.json.JSONArray().put(new fr.inria.astor.approaches.flakyseeding.utils.ShuffledJSON(expectedShippingAddress)));\\n\\n"
+    },
+    {
+      "VARIANT_ID": "11",
+      "VALIDATION": "|true|47|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "com.amazon.pay.api.UtilTest",
+          "PATH": "\\/astor\\/target-project\\/tst\\/com\\/amazon\\/pay\\/api\\/UtilTest.java",
+          "ORIGINAL_CODE": "new org.json.JSONObject()",
+          "BUGGY_CODE_TYPE": "CtConstructorCallImpl|CtLocalVariableImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-11\\/com\\/amazon\\/pay\\/api\\/UtilTest.java",
+          "LINE": "236",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "10",
+          "PATCH_HUNK_CODE": "new fr.inria.astor.approaches.flakyseeding.utils.ShuffledJSON(new org.json.JSONObject())",
+          "PATCH_HUNK_TYPE": "CtConstructorCallImpl|CtLocalVariableImpl"
+        }
+      ],
+      "TIME": "1350",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-11",
+      "PATCH_DIFF_ORIG": "--- \\/tst\\/com\\/amazon\\/pay\\/api\\/UtilTest.java\\n+++ \\/tst\\/com\\/amazon\\/pay\\/api\\/UtilTest.java\\n@@ -236 +236 @@\\n-\\t\\tfinal org.json.JSONObject expectedShippingAddress \u003d new org.json.JSONObject();\\n+\\t\\tfinal org.json.JSONObject expectedShippingAddress \u003d new fr.inria.astor.approaches.flakyseeding.utils.ShuffledJSON(new org.json.JSONObject());\\n\\n"
+    }
+  ]
+}

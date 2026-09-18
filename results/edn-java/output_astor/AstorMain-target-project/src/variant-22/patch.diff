@@ -1,0 +1,6 @@
+--- /src/test/java/us/bpsm/edn/SerializabilityTest.java
++++ /src/test/java/us/bpsm/edn/SerializabilityTest.java
+@@ -43 +43 @@
+-		org.junit.Assert.assertEquals(expected, result);
++		org.junit.Assert.assertEquals(expected, new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(result));
+

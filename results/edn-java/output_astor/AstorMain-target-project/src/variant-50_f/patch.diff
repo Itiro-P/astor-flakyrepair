@@ -1,0 +1,6 @@
+--- /src/test/java/us/bpsm/edn/parser/ParserTest.java
++++ /src/test/java/us/bpsm/edn/parser/ParserTest.java
+@@ -126 +126 @@
+-		org.junit.Assert.assertEquals(expected, results);
++		org.junit.Assert.assertEquals(expected, new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(results));
+

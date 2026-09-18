@@ -1,0 +1,11 @@
+{
+  "general": {
+    "NR_RIGHT_COMPILATIONS": 41,
+    "EXECUTION_IDENTIFIER": "",
+    "FAULT_LOCALIZATION": "fr.inria.astor.approaches.flakyseeding.extension.FsFaultLocalization",
+    "OUTPUT_STATUS": "EXHAUSTIVE_NAVIGATED",
+    "NR_FAILLING_COMPILATIONS": 4,
+    "TOTAL_TIME": 9039.886
+  },
+  "patches": []
+}

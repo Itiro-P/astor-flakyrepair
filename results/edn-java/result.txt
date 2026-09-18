@@ -1,0 +1,486 @@
+Modification points:                  126
+Mutantes compilados:                  52
+Mutantes reveladores:                 29
+Mutantes não-reveladores:             23
+Mutantes prematuros:                  0
+
+Total contabilizado: 52
+NR_RIGHT_COMPILATIONS (Astor):       52
+
+Mutantes:
+  variant   2: revealing      45/100   us.bpsm.edn.examples.SimpleParserConfigTest#test
+    falhas do teste: 45
+    tempo total: 126802 ms (126.802 s)
+    tempo médio por execução: 1268.02 ms (1.268 s)
+    tempo mínimo: 1127 ms
+    tempo máximo: 1374 ms
+    execuções com tempo coletado: 100
+  variant   3: revealing      57/100   us.bpsm.edn.examples.SimpleParserConfigTest#test
+    falhas do teste: 57
+    tempo total: 131949 ms (131.949 s)
+    tempo médio por execução: 1319.49 ms (1.319 s)
+    tempo mínimo: 1155 ms
+    tempo máximo: 1979 ms
+    execuções com tempo coletado: 100
+  variant   4: revealing      48/100   us.bpsm.edn.parser.ParserTest#integersParseAsLongByDefault
+    falhas do teste: 48
+    tempo total: 131216 ms (131.216 s)
+    tempo médio por execução: 1312.16 ms (1.312 s)
+    tempo mínimo: 1183 ms
+    tempo máximo: 1418 ms
+    execuções com tempo coletado: 100
+  variant   5: non_revealing  100/100  us.bpsm.edn.parser.ScannerTest#floatWithFractionAndExponent
+    falhas do teste: 100
+    tempo total: 134220 ms (134.220 s)
+    tempo médio por execução: 1342.20 ms (1.342 s)
+    tempo mínimo: 1218 ms
+    tempo máximo: 2278 ms
+    execuções com tempo coletado: 100
+  variant   6: non_revealing  100/100  us.bpsm.edn.parser.ScannerTest#floatWithFractionAndExponent
+    falhas do teste: 100
+    tempo total: 130167 ms (130.167 s)
+    tempo médio por execução: 1301.67 ms (1.302 s)
+    tempo mínimo: 1167 ms
+    tempo máximo: 1597 ms
+    execuções com tempo coletado: 100
+  variant   7: non_revealing  0/100    us.bpsm.edn.printer.PrinterTest#testLoosePrinter
+    tempo total: 130308 ms (130.308 s)
+    tempo médio por execução: 1303.08 ms (1.303 s)
+    tempo mínimo: 1140 ms
+    tempo máximo: 1869 ms
+    execuções com tempo coletado: 100
+  variant   8: non_revealing  100/100  us.bpsm.edn.parser.ScannerTest#floatWithFraction
+    falhas do teste: 100
+    tempo total: 120507 ms (120.507 s)
+    tempo médio por execução: 1205.07 ms (1.205 s)
+    tempo mínimo: 1072 ms
+    tempo máximo: 1417 ms
+    execuções com tempo coletado: 100
+  variant   9: non_revealing  100/100  us.bpsm.edn.EdnFormatTest#commaIsWhitespace
+    falhas do teste: 100
+    tempo total: 115582 ms (115.582 s)
+    tempo médio por execução: 1155.82 ms (1.156 s)
+    tempo mínimo: 1068 ms
+    tempo máximo: 1321 ms
+    execuções com tempo coletado: 100
+  variant  10: revealing      45/100   us.bpsm.edn.EdnFormatTest#commaIsWhitespace
+    falhas do teste: 45
+    tempo total: 133389 ms (133.389 s)
+    tempo médio por execução: 1333.89 ms (1.334 s)
+    tempo mínimo: 1050 ms
+    tempo máximo: 2136 ms
+    execuções com tempo coletado: 100
+  variant  11: revealing      28/100   us.bpsm.edn.parser.ParserTest#canCustomizeParsingOfInteger
+    falhas do teste: 28
+    tempo total: 137339 ms (137.339 s)
+    tempo médio por execução: 1373.39 ms (1.373 s)
+    tempo mínimo: 1099 ms
+    tempo máximo: 1906 ms
+    execuções com tempo coletado: 100
+  variant  12: revealing      56/100   us.bpsm.edn.printer.PrinterTest#testLoosePrinter
+    falhas do teste: 56
+    tempo total: 142121 ms (142.121 s)
+    tempo médio por execução: 1421.21 ms (1.421 s)
+    tempo mínimo: 1109 ms
+    tempo máximo: 1985 ms
+    execuções com tempo coletado: 100
+  variant  13: non_revealing  0/100    us.bpsm.edn.printer.PrinterTest#testLoosePrinter
+    tempo total: 144824 ms (144.824 s)
+    tempo médio por execução: 1448.24 ms (1.448 s)
+    tempo mínimo: 1157 ms
+    tempo máximo: 1920 ms
+    execuções com tempo coletado: 100
+  variant  14: revealing      54/100   us.bpsm.edn.protocols.C3Test#testMroExample3
+    falhas do teste: 54
+    tempo total: 144818 ms (144.818 s)
+    tempo médio por execução: 1448.18 ms (1.448 s)
+    tempo mínimo: 1107 ms
+    tempo máximo: 1978 ms
+    execuções com tempo coletado: 100
+  variant  15: revealing      51/100   us.bpsm.edn.protocols.C3Test#testMroExample3
+    falhas do teste: 51
+    tempo total: 144673 ms (144.673 s)
+    tempo médio por execução: 1446.73 ms (1.447 s)
+    tempo mínimo: 1132 ms
+    tempo máximo: 2035 ms
+    execuções com tempo coletado: 100
+  variant  16: non_revealing  100/100  us.bpsm.edn.parser.ScannerTest#leadingZeroOnFloat
+    falhas do teste: 100
+    tempo total: 145879 ms (145.879 s)
+    tempo médio por execução: 1458.79 ms (1.459 s)
+    tempo mínimo: 1162 ms
+    tempo máximo: 1976 ms
+    execuções com tempo coletado: 100
+  variant  17: revealing      49/100   us.bpsm.edn.protocols.C3Test#testMroExample3
+    falhas do teste: 49
+    tempo total: 163550 ms (163.550 s)
+    tempo médio por execução: 1635.50 ms (1.635 s)
+    tempo mínimo: 1145 ms
+    tempo máximo: 3621 ms
+    execuções com tempo coletado: 100
+  variant  18: revealing      61/100   us.bpsm.edn.protocols.C3Test#testMroExample1
+    falhas do teste: 61
+    tempo total: 161170 ms (161.170 s)
+    tempo médio por execução: 1611.70 ms (1.612 s)
+    tempo mínimo: 1106 ms
+    tempo máximo: 3622 ms
+    execuções com tempo coletado: 100
+  variant  19: revealing      56/100   us.bpsm.edn.protocols.C3Test#testMroExample3
+    falhas do teste: 56
+    tempo total: 147586 ms (147.586 s)
+    tempo médio por execução: 1475.86 ms (1.476 s)
+    tempo mínimo: 1163 ms
+    tempo máximo: 2067 ms
+    execuções com tempo coletado: 100
+  variant  20: non_revealing  100/100  us.bpsm.edn.parser.ScannerTest#leadingZeroOnFloat
+    falhas do teste: 100
+    tempo total: 152722 ms (152.722 s)
+    tempo médio por execução: 1527.22 ms (1.527 s)
+    tempo mínimo: 1193 ms
+    tempo máximo: 2321 ms
+    execuções com tempo coletado: 100
+  variant  21: non_revealing  100/100  us.bpsm.edn.parser.ScannerTest#leadingZeroOnFloat
+    falhas do teste: 100
+    tempo total: 153659 ms (153.659 s)
+    tempo médio por execução: 1536.59 ms (1.537 s)
+    tempo mínimo: 1158 ms
+    tempo máximo: 2191 ms
+    execuções com tempo coletado: 100
+  variant  22: revealing      94/100   us.bpsm.edn.SerializabilityTest#testSerializability
+    falhas do teste: 94
+    tempo total: 149640 ms (149.640 s)
+    tempo médio por execução: 1496.40 ms (1.496 s)
+    tempo mínimo: 1203 ms
+    tempo máximo: 2081 ms
+    execuções com tempo coletado: 100
+  variant  23: revealing      48/100   us.bpsm.edn.printer.PrinterTest#testLoosePrinter
+    falhas do teste: 48
+    tempo total: 146005 ms (146.005 s)
+    tempo médio por execução: 1460.05 ms (1.460 s)
+    tempo mínimo: 1130 ms
+    tempo máximo: 2187 ms
+    execuções com tempo coletado: 100
+  variant  24: non_revealing  100/100  us.bpsm.edn.EdnFormatTest#floats
+    falhas do teste: 100
+    tempo total: 146189 ms (146.189 s)
+    tempo médio por execução: 1461.89 ms (1.462 s)
+    tempo mínimo: 1141 ms
+    tempo máximo: 2114 ms
+    execuções com tempo coletado: 100
+  variant  25: non_revealing  100/100  us.bpsm.edn.EdnFormatTest#floats
+    falhas do teste: 100
+    tempo total: 125379 ms (125.379 s)
+    tempo médio por execução: 1253.79 ms (1.254 s)
+    tempo mínimo: 1102 ms
+    tempo máximo: 1341 ms
+    execuções com tempo coletado: 100
+  variant  26: non_revealing  0/100    us.bpsm.edn.EdnFormatTest#floats
+    tempo total: 125926 ms (125.926 s)
+    tempo médio por execução: 1259.26 ms (1.259 s)
+    tempo mínimo: 1161 ms
+    tempo máximo: 1363 ms
+    execuções com tempo coletado: 100
+  variant  27: non_revealing  0/100    us.bpsm.edn.EdnFormatTest#floats
+    tempo total: 125824 ms (125.824 s)
+    tempo médio por execução: 1258.24 ms (1.258 s)
+    tempo mínimo: 1127 ms
+    tempo máximo: 1393 ms
+    execuções com tempo coletado: 100
+  variant  28: revealing      47/100   us.bpsm.edn.protocols.C3Test#testArrayList
+    falhas do teste: 47
+    tempo total: 126095 ms (126.095 s)
+    tempo médio por execução: 1260.95 ms (1.261 s)
+    tempo mínimo: 1164 ms
+    tempo máximo: 1353 ms
+    execuções com tempo coletado: 100
+  variant  29: revealing      51/100   us.bpsm.edn.protocols.C3Test#testMroExample3
+    falhas do teste: 51
+    tempo total: 126107 ms (126.107 s)
+    tempo médio por execução: 1261.07 ms (1.261 s)
+    tempo mínimo: 1172 ms
+    tempo máximo: 1362 ms
+    execuções com tempo coletado: 100
+  variant  30: revealing      47/100   us.bpsm.edn.protocols.C3Test#testMroExample3
+    falhas do teste: 47
+    tempo total: 126420 ms (126.420 s)
+    tempo médio por execução: 1264.20 ms (1.264 s)
+    tempo mínimo: 1130 ms
+    tempo máximo: 1378 ms
+    execuções com tempo coletado: 100
+  variant  31: revealing      51/100   us.bpsm.edn.protocols.C3Test#testMroExample3
+    falhas do teste: 51
+    tempo total: 124986 ms (124.986 s)
+    tempo médio por execução: 1249.86 ms (1.250 s)
+    tempo mínimo: 1117 ms
+    tempo máximo: 1356 ms
+    execuções com tempo coletado: 100
+  variant  32: non_revealing  100/100  us.bpsm.edn.parser.ScannerTest#floatWithExponent
+    falhas do teste: 100
+    tempo total: 125357 ms (125.357 s)
+    tempo médio por execução: 1253.57 ms (1.254 s)
+    tempo mínimo: 1125 ms
+    tempo máximo: 1391 ms
+    execuções com tempo coletado: 100
+  variant  33: revealing      41/100   us.bpsm.edn.protocols.C3Test#testMroExample3
+    falhas do teste: 41
+    tempo total: 125035 ms (125.035 s)
+    tempo médio por execução: 1250.35 ms (1.250 s)
+    tempo mínimo: 1125 ms
+    tempo máximo: 1363 ms
+    execuções com tempo coletado: 100
+  variant  34: non_revealing  100/100  us.bpsm.edn.EdnFormatTest#floats
+    falhas do teste: 100
+    tempo total: 125760 ms (125.760 s)
+    tempo médio por execução: 1257.60 ms (1.258 s)
+    tempo mínimo: 1107 ms
+    tempo máximo: 1372 ms
+    execuções com tempo coletado: 100
+  variant  35: non_revealing  100/100  us.bpsm.edn.EdnFormatTest#floats
+    falhas do teste: 100
+    tempo total: 125127 ms (125.127 s)
+    tempo médio por execução: 1251.27 ms (1.251 s)
+    tempo mínimo: 1140 ms
+    tempo máximo: 1358 ms
+    execuções com tempo coletado: 100
+  variant  36: non_revealing  100/100  us.bpsm.edn.EdnFormatTest#floats
+    falhas do teste: 100
+    tempo total: 125011 ms (125.011 s)
+    tempo médio por execução: 1250.11 ms (1.250 s)
+    tempo mínimo: 1152 ms
+    tempo máximo: 1368 ms
+    execuções com tempo coletado: 100
+  variant  37: non_revealing  100/100  us.bpsm.edn.parser.ParserTest#parseEdnSample
+    falhas do teste: 100
+    tempo total: 125981 ms (125.981 s)
+    tempo médio por execução: 1259.81 ms (1.260 s)
+    tempo mínimo: 1156 ms
+    tempo máximo: 1392 ms
+    execuções com tempo coletado: 100
+  variant  38: non_revealing  100/100  us.bpsm.edn.EdnFormatTest#floats
+    falhas do teste: 100
+    tempo total: 124276 ms (124.276 s)
+    tempo médio por execução: 1242.76 ms (1.243 s)
+    tempo mínimo: 1111 ms
+    tempo máximo: 1395 ms
+    execuções com tempo coletado: 100
+  variant  39: non_revealing  100/100  us.bpsm.edn.EdnFormatTest#floats
+    falhas do teste: 100
+    tempo total: 124492 ms (124.492 s)
+    tempo médio por execução: 1244.92 ms (1.245 s)
+    tempo mínimo: 1141 ms
+    tempo máximo: 1354 ms
+    execuções com tempo coletado: 100
+  variant  40: non_revealing  0/100    us.bpsm.edn.parser.ParserTest#parseEdnSample
+    tempo total: 125919 ms (125.919 s)
+    tempo médio por execução: 1259.19 ms (1.259 s)
+    tempo mínimo: 1162 ms
+    tempo máximo: 1395 ms
+    execuções com tempo coletado: 100
+  variant  41: non_revealing  0/100    us.bpsm.edn.parser.ParserTest#canCustomizeParsingOfFloats
+    tempo total: 125378 ms (125.378 s)
+    tempo médio por execução: 1253.78 ms (1.254 s)
+    tempo mínimo: 1151 ms
+    tempo máximo: 1362 ms
+    execuções com tempo coletado: 100
+  variant  42: non_revealing  100/100  us.bpsm.edn.parser.ParserTest#canCustomizeParsingOfFloats
+    falhas do teste: 100
+    tempo total: 125796 ms (125.796 s)
+    tempo médio por execução: 1257.96 ms (1.258 s)
+    tempo mínimo: 1152 ms
+    tempo máximo: 1354 ms
+    execuções com tempo coletado: 100
+  variant  43: revealing      42/100   us.bpsm.edn.printer.PrinterTest#testDefaultPrinter
+    falhas do teste: 42
+    tempo total: 125534 ms (125.534 s)
+    tempo médio por execução: 1255.34 ms (1.255 s)
+    tempo mínimo: 1137 ms
+    tempo máximo: 1353 ms
+    execuções com tempo coletado: 100
+  variant  44: revealing      46/100   us.bpsm.edn.parser.ParserTest#canCustomizeParsingOfFloats
+    falhas do teste: 46
+    tempo total: 125252 ms (125.252 s)
+    tempo médio por execução: 1252.52 ms (1.253 s)
+    tempo mínimo: 1136 ms
+    tempo máximo: 1349 ms
+    execuções com tempo coletado: 100
+  variant  45: revealing      52/100   us.bpsm.edn.protocols.C3Test#testMroExample2
+    falhas do teste: 52
+    tempo total: 124778 ms (124.778 s)
+    tempo médio por execução: 1247.78 ms (1.248 s)
+    tempo mínimo: 1130 ms
+    tempo máximo: 1378 ms
+    execuções com tempo coletado: 100
+  variant  46: revealing      59/100   us.bpsm.edn.printer.PrinterTest#testPrettyPrinting
+    falhas do teste: 59
+    tempo total: 124387 ms (124.387 s)
+    tempo médio por execução: 1243.87 ms (1.244 s)
+    tempo mínimo: 1068 ms
+    tempo máximo: 1330 ms
+    execuções com tempo coletado: 100
+  variant  47: revealing      51/100   us.bpsm.edn.printer.PrinterTest#testPrettyPrinting
+    falhas do teste: 51
+    tempo total: 125375 ms (125.375 s)
+    tempo médio por execução: 1253.75 ms (1.254 s)
+    tempo mínimo: 1108 ms
+    tempo máximo: 1353 ms
+    execuções com tempo coletado: 100
+  variant  48: revealing      54/100   us.bpsm.edn.protocols.C3Test#testMroExample3
+    falhas do teste: 54
+    tempo total: 125168 ms (125.168 s)
+    tempo médio por execução: 1251.68 ms (1.252 s)
+    tempo mínimo: 1146 ms
+    tempo máximo: 1347 ms
+    execuções com tempo coletado: 100
+  variant  49: revealing      56/100   us.bpsm.edn.printer.PrinterTest#testDefaultPrinter
+    falhas do teste: 56
+    tempo total: 125017 ms (125.017 s)
+    tempo médio por execução: 1250.17 ms (1.250 s)
+    tempo mínimo: 1122 ms
+    tempo máximo: 1387 ms
+    execuções com tempo coletado: 100
+  variant  50: revealing      48/100   us.bpsm.edn.parser.ParserTest#integersAutoPromoteToBigIfTooBig
+    falhas do teste: 48
+    tempo total: 125193 ms (125.193 s)
+    tempo médio por execução: 1251.93 ms (1.252 s)
+    tempo mínimo: 1069 ms
+    tempo máximo: 1366 ms
+    execuções com tempo coletado: 100
+  variant  51: revealing      59/100   us.bpsm.edn.protocols.C3Test#objectIsFinalInOrder
+    falhas do teste: 59
+    tempo total: 125178 ms (125.178 s)
+    tempo médio por execução: 1251.78 ms (1.252 s)
+    tempo mínimo: 1138 ms
+    tempo máximo: 1369 ms
+    execuções com tempo coletado: 100
+  variant  52: revealing      51/100   us.bpsm.edn.parser.ParserTest#parseEdnSample
+    falhas do teste: 51
+    tempo total: 125875 ms (125.875 s)
+    tempo médio por execução: 1258.75 ms (1.259 s)
+    tempo mínimo: 1160 ms
+    tempo máximo: 1371 ms
+    execuções com tempo coletado: 100
+  variant  53: revealing      50/100   us.bpsm.edn.parser.ParserTest#parseEdnSample
+    falhas do teste: 50
+    tempo total: 125992 ms (125.992 s)
+    tempo médio por execução: 1259.92 ms (1.260 s)
+    tempo mínimo: 1084 ms
+    tempo máximo: 1377 ms
+    execuções com tempo coletado: 100
+
+Detalhes dos reveladores:
+  variant 2 (ShuffleCollectionOp): 45/100 (45.0%)
+    teste: us.bpsm.edn.examples.SimpleParserConfigTest
+    linha: 48
+    primeira manifestação: execução 1
+  variant 3 (ShuffleCollectionOp): 57/100 (57.0%)
+    teste: us.bpsm.edn.examples.SimpleParserConfigTest
+    linha: 47
+    primeira manifestação: execução 2
+  variant 4 (ShuffleCollectionOp): 48/100 (48.0%)
+    teste: us.bpsm.edn.parser.ParserTest
+    linha: 176
+    primeira manifestação: execução 2
+  variant 10 (ShuffleCollectionOp): 45/100 (45.0%)
+    teste: us.bpsm.edn.EdnFormatTest
+    linha: 82
+    primeira manifestação: execução 2
+  variant 11 (ShuffleCollectionOp): 28/100 (28.0%)
+    teste: us.bpsm.edn.parser.ParserTest
+    linha: 202
+    primeira manifestação: execução 1
+  variant 12 (ShuffleCollectionOp): 56/100 (56.0%)
+    teste: us.bpsm.edn.printer.PrinterTest
+    linha: 132
+    primeira manifestação: execução 2
+  variant 14 (ShuffleCollectionOp): 54/100 (54.0%)
+    teste: us.bpsm.edn.protocols.C3Test
+    linha: 89
+    primeira manifestação: execução 1
+  variant 15 (ShuffleCollectionOp): 51/100 (51.0%)
+    teste: us.bpsm.edn.protocols.C3Test
+    linha: 85
+    primeira manifestação: execução 2
+  variant 17 (ShuffleCollectionOp): 49/100 (49.0%)
+    teste: us.bpsm.edn.protocols.C3Test
+    linha: 87
+    primeira manifestação: execução 1
+  variant 18 (ShuffleCollectionOp): 61/100 (61.0%)
+    teste: us.bpsm.edn.protocols.C3Test
+    linha: 22
+    primeira manifestação: execução 1
+  variant 19 (ShuffleCollectionOp): 56/100 (56.0%)
+    teste: us.bpsm.edn.protocols.C3Test
+    linha: 83
+    primeira manifestação: execução 2
+  variant 22 (ShuffleCollectionOp): 94/100 (94.0%)
+    teste: us.bpsm.edn.SerializabilityTest
+    linha: 43
+    primeira manifestação: execução 1
+  variant 23 (ShuffleCollectionOp): 48/100 (48.0%)
+    teste: us.bpsm.edn.printer.PrinterTest
+    linha: 125
+    primeira manifestação: execução 1
+  variant 28 (ShuffleCollectionOp): 47/100 (47.0%)
+    teste: us.bpsm.edn.protocols.C3Test
+    linha: 209
+    primeira manifestação: execução 1
+  variant 29 (ShuffleCollectionOp): 51/100 (51.0%)
+    teste: us.bpsm.edn.protocols.C3Test
+    linha: 96
+    primeira manifestação: execução 3
+  variant 30 (ShuffleCollectionOp): 47/100 (47.0%)
+    teste: us.bpsm.edn.protocols.C3Test
+    linha: 99
+    primeira manifestação: execução 2
+  variant 31 (ShuffleCollectionOp): 51/100 (51.0%)
+    teste: us.bpsm.edn.protocols.C3Test
+    linha: 93
+    primeira manifestação: execução 2
+  variant 33 (ShuffleCollectionOp): 41/100 (41.0%)
+    teste: us.bpsm.edn.protocols.C3Test
+    linha: 91
+    primeira manifestação: execução 3
+  variant 43 (ShuffleCollectionOp): 42/100 (42.0%)
+    teste: us.bpsm.edn.printer.PrinterTest
+    linha: 77
+    primeira manifestação: execução 2
+  variant 44 (ShuffleCollectionOp): 46/100 (46.0%)
+    teste: us.bpsm.edn.parser.ParserTest
+    linha: 225
+    primeira manifestação: execução 1
+  variant 45 (ShuffleCollectionOp): 52/100 (52.0%)
+    teste: us.bpsm.edn.protocols.C3Test
+    linha: 52
+    primeira manifestação: execução 1
+  variant 46 (ShuffleCollectionOp): 59/100 (59.0%)
+    teste: us.bpsm.edn.printer.PrinterTest
+    linha: 115
+    primeira manifestação: execução 1
+  variant 47 (ShuffleCollectionOp): 51/100 (51.0%)
+    teste: us.bpsm.edn.printer.PrinterTest
+    linha: 112
+    primeira manifestação: execução 2
+  variant 48 (ShuffleCollectionOp): 54/100 (54.0%)
+    teste: us.bpsm.edn.protocols.C3Test
+    linha: 101
+    primeira manifestação: execução 3
+  variant 49 (ShuffleCollectionOp): 56/100 (56.0%)
+    teste: us.bpsm.edn.printer.PrinterTest
+    linha: 74
+    primeira manifestação: execução 1
+  variant 50 (ShuffleCollectionOp): 48/100 (48.0%)
+    teste: us.bpsm.edn.parser.ParserTest
+    linha: 185
+    primeira manifestação: execução 3
+  variant 51 (ShuffleCollectionOp): 59/100 (59.0%)
+    teste: us.bpsm.edn.protocols.C3Test
+    linha: 194
+    primeira manifestação: execução 1
+  variant 52 (ShuffleCollectionOp): 51/100 (51.0%)
+    teste: us.bpsm.edn.parser.ParserTest
+    linha: 59
+    primeira manifestação: execução 3
+  variant 53 (ShuffleCollectionOp): 50/100 (50.0%)
+    teste: us.bpsm.edn.parser.ParserTest
+    linha: 55
+    primeira manifestação: execução 1

@@ -1,0 +1,678 @@
+{
+  "general": {
+    "NR_RIGHT_COMPILATIONS": 52,
+    "EXECUTION_IDENTIFIER": "",
+    "FAULT_LOCALIZATION": "fr.inria.astor.approaches.flakyseeding.extension.FsFaultLocalization",
+    "OUTPUT_STATUS": "EXHAUSTIVE_NAVIGATED",
+    "TOTAL_TIME": 6886.609
+  },
+  "patches": [
+    {
+      "VARIANT_ID": "2",
+      "VALIDATION": "|true|45|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.examples.SimpleParserConfigTest",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/examples\\/SimpleParserConfigTest.java",
+          "ORIGINAL_CODE": "new java.util.ArrayList\u003cjava.lang.Object\u003e(s)",
+          "BUGGY_CODE_TYPE": "CtConstructorCallImpl|CtInvocationImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-2\\/us\\/bpsm\\/edn\\/examples\\/SimpleParserConfigTest.java",
+          "LINE": "48",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "0",
+          "PATCH_HUNK_CODE": "new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(new java.util.ArrayList\u003cjava.lang.Object\u003e(s))",
+          "PATCH_HUNK_TYPE": "CtConstructorCallImpl|CtInvocationImpl"
+        }
+      ],
+      "TIME": "0",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-2",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/examples\\/SimpleParserConfigTest.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/examples\\/SimpleParserConfigTest.java\\n@@ -47,2 +47,2 @@\\n-\\t\\torg.junit.Assert.assertEquals(java.util.Arrays.asList(0L, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L), \\n-\\t\\tnew java.util.ArrayList\u003cjava.lang.Object\u003e(s));\\n+\\t\\torg.junit.Assert.assertEquals(java.util.Arrays.asList(0L, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(new java.util.ArrayList\u003cjava.lang.Object\u003e(s)));\\n+\\n\\n"
+    },
+    {
+      "VARIANT_ID": "3",
+      "VALIDATION": "|true|57|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.examples.SimpleParserConfigTest",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/examples\\/SimpleParserConfigTest.java",
+          "ORIGINAL_CODE": "\\/\\/ The elements of s are sorted since our SetFactory\\n\\/\\/ builds a SortedSet, not a (Hash)Set.\\norg.junit.Assert.assertEquals(java.util.Arrays.asList(0L, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L), \\nnew java.util.ArrayList\u003cjava.lang.Object\u003e(s))",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-3\\/us\\/bpsm\\/edn\\/examples\\/SimpleParserConfigTest.java",
+          "LINE": "47",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "2",
+          "PATCH_HUNK_CODE": "\\/\\/ The elements of s are sorted since our SetFactory\\n\\/\\/ builds a SortedSet, not a (Hash)Set.\\norg.junit.Assert.assertEquals(java.util.Arrays.asList(0L, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(new java.util.ArrayList\u003cjava.lang.Object\u003e(s)))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "127",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-3",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/examples\\/SimpleParserConfigTest.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/examples\\/SimpleParserConfigTest.java\\n@@ -47,2 +47,2 @@\\n-\\t\\torg.junit.Assert.assertEquals(java.util.Arrays.asList(0L, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L), \\n-\\t\\tnew java.util.ArrayList\u003cjava.lang.Object\u003e(s));\\n+\\t\\torg.junit.Assert.assertEquals(java.util.Arrays.asList(0L, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(new java.util.ArrayList\u003cjava.lang.Object\u003e(s)));\\n+\\n\\n"
+    },
+    {
+      "VARIANT_ID": "4",
+      "VALIDATION": "|true|48|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.parser.ParserTest",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java",
+          "ORIGINAL_CODE": "\\/\\/ In Java Integer and Long are never equal(), even if they have\\n\\/\\/ the same value.\\norg.junit.Assert.assertEquals(expected, results)",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-4\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java",
+          "LINE": "176",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "3",
+          "PATCH_HUNK_CODE": "\\/\\/ In Java Integer and Long are never equal(), even if they have\\n\\/\\/ the same value.\\norg.junit.Assert.assertEquals(expected, new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(results))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "259",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-4",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java\\n@@ -176 +176 @@\\n-\\t\\torg.junit.Assert.assertEquals(expected, results);\\n+\\t\\torg.junit.Assert.assertEquals(expected, new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(results));\\n\\n"
+    },
+    {
+      "VARIANT_ID": "10",
+      "VALIDATION": "|true|45|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.EdnFormatTest",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/EdnFormatTest.java",
+          "ORIGINAL_CODE": "org.junit.Assert.assertEquals(parseall(\\\"a      b\\\"), parseall(\\\"a,b\\\"))",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-10\\/us\\/bpsm\\/edn\\/EdnFormatTest.java",
+          "LINE": "82",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "18",
+          "PATCH_HUNK_CODE": "org.junit.Assert.assertEquals(\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\nparseall(\\\"a      b\\\"), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(parseall(\\\"a,b\\\")))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "1023",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-10",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/EdnFormatTest.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/EdnFormatTest.java\\n@@ -82 +82 @@\\n-\\t\\torg.junit.Assert.assertEquals(parseall(\\\"a      b\\\"), parseall(\\\"a,b\\\"));\\n+\\t\\torg.junit.Assert.assertEquals(parseall(\\\"a      b\\\"), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(parseall(\\\"a,b\\\")));\\n\\n"
+    },
+    {
+      "VARIANT_ID": "11",
+      "VALIDATION": "|true|28|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.parser.ParserTest",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java",
+          "ORIGINAL_CODE": "org.junit.Assert.assertEquals(expected, results)",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-11\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java",
+          "LINE": "202",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "21",
+          "PATCH_HUNK_CODE": "org.junit.Assert.assertEquals(\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\nexpected, new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(results))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "1157",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-11",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java\\n@@ -202 +202 @@\\n-\\t\\torg.junit.Assert.assertEquals(expected, results);\\n+\\t\\torg.junit.Assert.assertEquals(expected, new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(results));\\n\\n"
+    },
+    {
+      "VARIANT_ID": "12",
+      "VALIDATION": "|true|56|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.printer.PrinterTest",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java",
+          "ORIGINAL_CODE": "p.printValue(al)",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-12\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java",
+          "LINE": "132",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "22",
+          "PATCH_HUNK_CODE": "p.printValue(new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(al))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "1294",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-12",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java\\n@@ -132 +132 @@\\n-\\t\\tp.printValue(al);\\n+\\t\\tp.printValue(new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(al));\\n\\n"
+    },
+    {
+      "VARIANT_ID": "14",
+      "VALIDATION": "|true|54|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.protocols.C3Test",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "ORIGINAL_CODE": "org.junit.Assert.assertEquals(java.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.D.class, us.bpsm.edn.protocols.C3Test.X3.O.class), \\nus.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.D.class))",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-14\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "LINE": "89",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "25",
+          "PATCH_HUNK_CODE": "org.junit.Assert.assertEquals(\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\njava.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.D.class, us.bpsm.edn.protocols.C3Test.X3.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.D.class)))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "1582",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-14",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n@@ -89,2 +89,2 @@\\n-\\t\\torg.junit.Assert.assertEquals(java.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.D.class, us.bpsm.edn.protocols.C3Test.X3.O.class), \\n-\\t\\tus.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.D.class));\\n+\\t\\torg.junit.Assert.assertEquals(java.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.D.class, us.bpsm.edn.protocols.C3Test.X3.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.D.class)));\\n+\\n\\n"
+    },
+    {
+      "VARIANT_ID": "15",
+      "VALIDATION": "|true|51|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.protocols.C3Test",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "ORIGINAL_CODE": "org.junit.Assert.assertEquals(java.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.B.class, us.bpsm.edn.protocols.C3Test.X3.O.class), \\nus.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.B.class))",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-15\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "LINE": "85",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "27",
+          "PATCH_HUNK_CODE": "org.junit.Assert.assertEquals(\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\njava.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.B.class, us.bpsm.edn.protocols.C3Test.X3.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.B.class)))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "1727",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-15",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n@@ -85,2 +85,2 @@\\n-\\t\\torg.junit.Assert.assertEquals(java.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.B.class, us.bpsm.edn.protocols.C3Test.X3.O.class), \\n-\\t\\tus.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.B.class));\\n+\\t\\torg.junit.Assert.assertEquals(java.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.B.class, us.bpsm.edn.protocols.C3Test.X3.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.B.class)));\\n+\\n\\n"
+    },
+    {
+      "VARIANT_ID": "17",
+      "VALIDATION": "|true|49|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.protocols.C3Test",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "ORIGINAL_CODE": "org.junit.Assert.assertEquals(java.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.C.class, us.bpsm.edn.protocols.C3Test.X3.O.class), \\nus.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.C.class))",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-17\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "LINE": "87",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "35",
+          "PATCH_HUNK_CODE": "org.junit.Assert.assertEquals(\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\njava.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.C.class, us.bpsm.edn.protocols.C3Test.X3.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.C.class)))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "2018",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-17",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n@@ -87,2 +87,2 @@\\n-\\t\\torg.junit.Assert.assertEquals(java.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.C.class, us.bpsm.edn.protocols.C3Test.X3.O.class), \\n-\\t\\tus.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.C.class));\\n+\\t\\torg.junit.Assert.assertEquals(java.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.C.class, us.bpsm.edn.protocols.C3Test.X3.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.C.class)));\\n+\\n\\n"
+    },
+    {
+      "VARIANT_ID": "18",
+      "VALIDATION": "|true|61|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.protocols.C3Test",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "ORIGINAL_CODE": "org.junit.Assert.assertEquals(java.util.Arrays.asList(us.bpsm.edn.protocols.C3Test.X1.A.class, us.bpsm.edn.protocols.C3Test.X1.B.class, us.bpsm.edn.protocols.C3Test.X1.C.class, \\nus.bpsm.edn.protocols.C3Test.X1.D.class, us.bpsm.edn.protocols.C3Test.X1.E.class, us.bpsm.edn.protocols.C3Test.X1.F.class, us.bpsm.edn.protocols.C3Test.X1.O.class), \\nus.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X1.A.class))",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-18\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "LINE": "22",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "37",
+          "PATCH_HUNK_CODE": "org.junit.Assert.assertEquals(\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\njava.util.Arrays.asList(us.bpsm.edn.protocols.C3Test.X1.A.class, us.bpsm.edn.protocols.C3Test.X1.B.class, us.bpsm.edn.protocols.C3Test.X1.C.class, \\nus.bpsm.edn.protocols.C3Test.X1.D.class, us.bpsm.edn.protocols.C3Test.X1.E.class, us.bpsm.edn.protocols.C3Test.X1.F.class, us.bpsm.edn.protocols.C3Test.X1.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X1.A.class)))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "2182",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-18",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n@@ -23,2 +23,2 @@\\n-\\t\\tus.bpsm.edn.protocols.C3Test.X1.D.class, us.bpsm.edn.protocols.C3Test.X1.E.class, us.bpsm.edn.protocols.C3Test.X1.F.class, us.bpsm.edn.protocols.C3Test.X1.O.class), \\n-\\t\\tus.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X1.A.class));\\n+\\t\\tus.bpsm.edn.protocols.C3Test.X1.D.class, us.bpsm.edn.protocols.C3Test.X1.E.class, us.bpsm.edn.protocols.C3Test.X1.F.class, us.bpsm.edn.protocols.C3Test.X1.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X1.A.class)));\\n+\\n\\n"
+    },
+    {
+      "VARIANT_ID": "19",
+      "VALIDATION": "|true|56|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.protocols.C3Test",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "ORIGINAL_CODE": "org.junit.Assert.assertEquals(java.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.A.class, us.bpsm.edn.protocols.C3Test.X3.O.class), \\nus.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.A.class))",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-19\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "LINE": "83",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "40",
+          "PATCH_HUNK_CODE": "org.junit.Assert.assertEquals(\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\njava.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.A.class, us.bpsm.edn.protocols.C3Test.X3.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.A.class)))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "2344",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-19",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n@@ -83,2 +83,2 @@\\n-\\t\\torg.junit.Assert.assertEquals(java.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.A.class, us.bpsm.edn.protocols.C3Test.X3.O.class), \\n-\\t\\tus.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.A.class));\\n+\\t\\torg.junit.Assert.assertEquals(java.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.A.class, us.bpsm.edn.protocols.C3Test.X3.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.A.class)));\\n+\\n\\n"
+    },
+    {
+      "VARIANT_ID": "22",
+      "VALIDATION": "|true|94|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.SerializabilityTest",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/SerializabilityTest.java",
+          "ORIGINAL_CODE": "org.junit.Assert.assertEquals(expected, result)",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-22\\/us\\/bpsm\\/edn\\/SerializabilityTest.java",
+          "LINE": "43",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "48",
+          "PATCH_HUNK_CODE": "org.junit.Assert.assertEquals(\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\nexpected, new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(result))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "2799",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-22",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/SerializabilityTest.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/SerializabilityTest.java\\n@@ -43 +43 @@\\n-\\t\\torg.junit.Assert.assertEquals(expected, result);\\n+\\t\\torg.junit.Assert.assertEquals(expected, new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(result));\\n\\n"
+    },
+    {
+      "VARIANT_ID": "23",
+      "VALIDATION": "|true|48|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.printer.PrinterTest",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java",
+          "ORIGINAL_CODE": "new java.util.ArrayList\u003cjava.lang.Object\u003e()",
+          "BUGGY_CODE_TYPE": "CtConstructorCallImpl|CtLocalVariableImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-23\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java",
+          "LINE": "125",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "49",
+          "PATCH_HUNK_CODE": "new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(new java.util.ArrayList\u003cjava.lang.Object\u003e())",
+          "PATCH_HUNK_TYPE": "CtConstructorCallImpl|CtLocalVariableImpl"
+        }
+      ],
+      "TIME": "2949",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-23",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java\\n@@ -125 +125 @@\\n-\\t\\tjava.util.ArrayList\u003cjava.lang.Object\u003e al \u003d new java.util.ArrayList\u003cjava.lang.Object\u003e();\\n+\\t\\tjava.util.ArrayList\u003cjava.lang.Object\u003e al \u003d new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(new java.util.ArrayList\u003cjava.lang.Object\u003e());\\n\\n"
+    },
+    {
+      "VARIANT_ID": "28",
+      "VALIDATION": "|true|47|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.protocols.C3Test",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "ORIGINAL_CODE": "org.junit.Assert.assertEquals(java.util.Arrays.asList(java.util.ArrayList.class, java.util.AbstractList.class, \\njava.util.AbstractCollection.class, java.util.List.class, java.util.Collection.class, \\njava.lang.Iterable.class, java.util.RandomAccess.class, java.lang.Cloneable.class, \\njava.io.Serializable.class, java.lang.Object.class), \\nus.bpsm.edn.protocols.C3.methodResolutionOrder(java.util.ArrayList.class))",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-28\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "LINE": "209",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "57",
+          "PATCH_HUNK_CODE": "org.junit.Assert.assertEquals(\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\njava.util.Arrays.asList(java.util.ArrayList.class, java.util.AbstractList.class, \\njava.util.AbstractCollection.class, java.util.List.class, java.util.Collection.class, \\njava.lang.Iterable.class, java.util.RandomAccess.class, java.lang.Cloneable.class, \\njava.io.Serializable.class, java.lang.Object.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(java.util.ArrayList.class)))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "3619",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-28",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n@@ -212,2 +212,2 @@\\n-\\t\\tjava.io.Serializable.class, java.lang.Object.class), \\n-\\t\\tus.bpsm.edn.protocols.C3.methodResolutionOrder(java.util.ArrayList.class));\\n+\\t\\tjava.io.Serializable.class, java.lang.Object.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(java.util.ArrayList.class)));\\n+\\n\\n"
+    },
+    {
+      "VARIANT_ID": "29",
+      "VALIDATION": "|true|51|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.protocols.C3Test",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "ORIGINAL_CODE": "org.junit.Assert.assertEquals(java.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.K2.class, us.bpsm.edn.protocols.C3Test.X3.D.class, \\nus.bpsm.edn.protocols.C3Test.X3.B.class, us.bpsm.edn.protocols.C3Test.X3.E.class, us.bpsm.edn.protocols.C3Test.X3.O.class), \\nus.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.K2.class))",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-29\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "LINE": "96",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "59",
+          "PATCH_HUNK_CODE": "org.junit.Assert.assertEquals(\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\njava.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.K2.class, us.bpsm.edn.protocols.C3Test.X3.D.class, \\nus.bpsm.edn.protocols.C3Test.X3.B.class, us.bpsm.edn.protocols.C3Test.X3.E.class, us.bpsm.edn.protocols.C3Test.X3.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.K2.class)))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "3746",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-29",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n@@ -97,2 +97,2 @@\\n-\\t\\tus.bpsm.edn.protocols.C3Test.X3.B.class, us.bpsm.edn.protocols.C3Test.X3.E.class, us.bpsm.edn.protocols.C3Test.X3.O.class), \\n-\\t\\tus.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.K2.class));\\n+\\t\\tus.bpsm.edn.protocols.C3Test.X3.B.class, us.bpsm.edn.protocols.C3Test.X3.E.class, us.bpsm.edn.protocols.C3Test.X3.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.K2.class)));\\n+\\n\\n"
+    },
+    {
+      "VARIANT_ID": "30",
+      "VALIDATION": "|true|47|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.protocols.C3Test",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "ORIGINAL_CODE": "org.junit.Assert.assertEquals(java.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.K3.class, us.bpsm.edn.protocols.C3Test.X3.D.class, \\nus.bpsm.edn.protocols.C3Test.X3.A.class, us.bpsm.edn.protocols.C3Test.X3.O.class), us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.K3.class))",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-30\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "LINE": "99",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "62",
+          "PATCH_HUNK_CODE": "org.junit.Assert.assertEquals(\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\njava.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.K3.class, us.bpsm.edn.protocols.C3Test.X3.D.class, \\nus.bpsm.edn.protocols.C3Test.X3.A.class, us.bpsm.edn.protocols.C3Test.X3.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.K3.class)))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "3872",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-30",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n@@ -100 +100 @@\\n-\\t\\tus.bpsm.edn.protocols.C3Test.X3.A.class, us.bpsm.edn.protocols.C3Test.X3.O.class), us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.K3.class));\\n+\\t\\tus.bpsm.edn.protocols.C3Test.X3.A.class, us.bpsm.edn.protocols.C3Test.X3.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.K3.class)));\\n\\n"
+    },
+    {
+      "VARIANT_ID": "31",
+      "VALIDATION": "|true|51|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.protocols.C3Test",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "ORIGINAL_CODE": "org.junit.Assert.assertEquals(java.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.K1.class, us.bpsm.edn.protocols.C3Test.X3.A.class, \\nus.bpsm.edn.protocols.C3Test.X3.B.class, us.bpsm.edn.protocols.C3Test.X3.C.class, us.bpsm.edn.protocols.C3Test.X3.O.class), \\nus.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.K1.class))",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-31\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "LINE": "93",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "65",
+          "PATCH_HUNK_CODE": "org.junit.Assert.assertEquals(\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\njava.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.K1.class, us.bpsm.edn.protocols.C3Test.X3.A.class, \\nus.bpsm.edn.protocols.C3Test.X3.B.class, us.bpsm.edn.protocols.C3Test.X3.C.class, us.bpsm.edn.protocols.C3Test.X3.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.K1.class)))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "3999",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-31",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n@@ -94,2 +94,2 @@\\n-\\t\\tus.bpsm.edn.protocols.C3Test.X3.B.class, us.bpsm.edn.protocols.C3Test.X3.C.class, us.bpsm.edn.protocols.C3Test.X3.O.class), \\n-\\t\\tus.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.K1.class));\\n+\\t\\tus.bpsm.edn.protocols.C3Test.X3.B.class, us.bpsm.edn.protocols.C3Test.X3.C.class, us.bpsm.edn.protocols.C3Test.X3.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.K1.class)));\\n+\\n\\n"
+    },
+    {
+      "VARIANT_ID": "33",
+      "VALIDATION": "|true|41|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.protocols.C3Test",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "ORIGINAL_CODE": "org.junit.Assert.assertEquals(java.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.E.class, us.bpsm.edn.protocols.C3Test.X3.O.class), \\nus.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.E.class))",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-33\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "LINE": "91",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "72",
+          "PATCH_HUNK_CODE": "org.junit.Assert.assertEquals(\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\njava.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.E.class, us.bpsm.edn.protocols.C3Test.X3.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.E.class)))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "4250",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-33",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n@@ -91,2 +91,2 @@\\n-\\t\\torg.junit.Assert.assertEquals(java.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.E.class, us.bpsm.edn.protocols.C3Test.X3.O.class), \\n-\\t\\tus.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.E.class));\\n+\\t\\torg.junit.Assert.assertEquals(java.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X3.E.class, us.bpsm.edn.protocols.C3Test.X3.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.E.class)));\\n+\\n\\n"
+    },
+    {
+      "VARIANT_ID": "43",
+      "VALIDATION": "|true|42|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.printer.PrinterTest",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java",
+          "ORIGINAL_CODE": "p.printValue(al)",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-43\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java",
+          "LINE": "77",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "90",
+          "PATCH_HUNK_CODE": "p.printValue(new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(al))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "5505",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-43",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java\\n@@ -77 +77 @@\\n-\\t\\tp.printValue(al);\\n+\\t\\tp.printValue(new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(al));\\n\\n"
+    },
+    {
+      "VARIANT_ID": "44",
+      "VALIDATION": "|true|46|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.parser.ParserTest",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java",
+          "ORIGINAL_CODE": "org.junit.Assert.assertEquals(expected, results)",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-44\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java",
+          "LINE": "225",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "91",
+          "PATCH_HUNK_CODE": "org.junit.Assert.assertEquals(\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\nexpected, new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(results))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "5631",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-44",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java\\n@@ -225 +225 @@\\n-\\t\\torg.junit.Assert.assertEquals(expected, results);\\n+\\t\\torg.junit.Assert.assertEquals(expected, new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(results));\\n\\n"
+    },
+    {
+      "VARIANT_ID": "45",
+      "VALIDATION": "|true|52|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.protocols.C3Test",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "ORIGINAL_CODE": "org.junit.Assert.assertEquals(java.util.Arrays.asList(us.bpsm.edn.protocols.C3Test.X2.A.class, us.bpsm.edn.protocols.C3Test.X2.B.class, us.bpsm.edn.protocols.C3Test.X2.E.class, \\nus.bpsm.edn.protocols.C3Test.X2.C.class, us.bpsm.edn.protocols.C3Test.X2.D.class, us.bpsm.edn.protocols.C3Test.X2.F.class, us.bpsm.edn.protocols.C3Test.X2.O.class), \\nus.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X2.A.class))",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-45\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "LINE": "52",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "93",
+          "PATCH_HUNK_CODE": "org.junit.Assert.assertEquals(\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\njava.util.Arrays.asList(us.bpsm.edn.protocols.C3Test.X2.A.class, us.bpsm.edn.protocols.C3Test.X2.B.class, us.bpsm.edn.protocols.C3Test.X2.E.class, \\nus.bpsm.edn.protocols.C3Test.X2.C.class, us.bpsm.edn.protocols.C3Test.X2.D.class, us.bpsm.edn.protocols.C3Test.X2.F.class, us.bpsm.edn.protocols.C3Test.X2.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X2.A.class)))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "5756",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-45",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n@@ -53,2 +53,2 @@\\n-\\t\\tus.bpsm.edn.protocols.C3Test.X2.C.class, us.bpsm.edn.protocols.C3Test.X2.D.class, us.bpsm.edn.protocols.C3Test.X2.F.class, us.bpsm.edn.protocols.C3Test.X2.O.class), \\n-\\t\\tus.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X2.A.class));\\n+\\t\\tus.bpsm.edn.protocols.C3Test.X2.C.class, us.bpsm.edn.protocols.C3Test.X2.D.class, us.bpsm.edn.protocols.C3Test.X2.F.class, us.bpsm.edn.protocols.C3Test.X2.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X2.A.class)));\\n+\\n\\n"
+    },
+    {
+      "VARIANT_ID": "46",
+      "VALIDATION": "|true|59|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.printer.PrinterTest",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java",
+          "ORIGINAL_CODE": "java.util.Arrays.asList(new java.util.HashSet(java.util.Arrays.asList(1, 2)), m)",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtLocalVariableImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-46\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java",
+          "LINE": "115",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "96",
+          "PATCH_HUNK_CODE": "java.util.Arrays.asList(new java.util.HashSet(java.util.Arrays.asList(1, 2)), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledMap(m))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtLocalVariableImpl"
+        }
+      ],
+      "TIME": "5881",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-46",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java\\n@@ -115 +115 @@\\n-\\t\\tjava.util.List\u003c?\u003e list \u003d java.util.Arrays.asList(new java.util.HashSet(java.util.Arrays.asList(1, 2)), m);\\n+\\t\\tjava.util.List\u003c?\u003e list \u003d java.util.Arrays.asList(new java.util.HashSet(java.util.Arrays.asList(1, 2)), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledMap(m));\\n\\n"
+    },
+    {
+      "VARIANT_ID": "47",
+      "VALIDATION": "|true|51|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.printer.PrinterTest",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java",
+          "ORIGINAL_CODE": "new java.util.HashMap()",
+          "BUGGY_CODE_TYPE": "CtConstructorCallImpl|CtLocalVariableImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-47\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java",
+          "LINE": "112",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "98",
+          "PATCH_HUNK_CODE": "new fr.inria.astor.approaches.flakyseeding.utils.ShuffledMap(new java.util.HashMap())",
+          "PATCH_HUNK_TYPE": "CtConstructorCallImpl|CtLocalVariableImpl"
+        }
+      ],
+      "TIME": "6006",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-47",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java\\n@@ -112 +112 @@\\n-\\t\\tjava.util.Map\u003cjava.lang.Integer, java.lang.String\u003e m \u003d new java.util.HashMap();\\n+\\t\\tjava.util.Map\u003cjava.lang.Integer, java.lang.String\u003e m \u003d new fr.inria.astor.approaches.flakyseeding.utils.ShuffledMap(new java.util.HashMap());\\n\\n"
+    },
+    {
+      "VARIANT_ID": "48",
+      "VALIDATION": "|true|54|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.protocols.C3Test",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "ORIGINAL_CODE": "org.junit.Assert.assertEquals(java.util.Arrays.asList(us.bpsm.edn.protocols.C3Test.X3.Z.class, us.bpsm.edn.protocols.C3Test.X3.K1.class, us.bpsm.edn.protocols.C3Test.X3.K2.class, \\nus.bpsm.edn.protocols.C3Test.X3.K3.class, us.bpsm.edn.protocols.C3Test.X3.D.class, us.bpsm.edn.protocols.C3Test.X3.A.class, us.bpsm.edn.protocols.C3Test.X3.B.class, us.bpsm.edn.protocols.C3Test.X3.C.class, \\nus.bpsm.edn.protocols.C3Test.X3.E.class, us.bpsm.edn.protocols.C3Test.X3.O.class), us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.Z.class))",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-48\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "LINE": "101",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "104",
+          "PATCH_HUNK_CODE": "org.junit.Assert.assertEquals(\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\njava.util.Arrays.asList(us.bpsm.edn.protocols.C3Test.X3.Z.class, us.bpsm.edn.protocols.C3Test.X3.K1.class, us.bpsm.edn.protocols.C3Test.X3.K2.class, \\nus.bpsm.edn.protocols.C3Test.X3.K3.class, us.bpsm.edn.protocols.C3Test.X3.D.class, us.bpsm.edn.protocols.C3Test.X3.A.class, us.bpsm.edn.protocols.C3Test.X3.B.class, us.bpsm.edn.protocols.C3Test.X3.C.class, \\nus.bpsm.edn.protocols.C3Test.X3.E.class, us.bpsm.edn.protocols.C3Test.X3.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.Z.class)))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "6132",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-48",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n@@ -103 +103 @@\\n-\\t\\tus.bpsm.edn.protocols.C3Test.X3.E.class, us.bpsm.edn.protocols.C3Test.X3.O.class), us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.Z.class));\\n+\\t\\tus.bpsm.edn.protocols.C3Test.X3.E.class, us.bpsm.edn.protocols.C3Test.X3.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.Z.class)));\\n\\n"
+    },
+    {
+      "VARIANT_ID": "49",
+      "VALIDATION": "|true|56|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.printer.PrinterTest",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java",
+          "ORIGINAL_CODE": "new java.util.ArrayList\u003cjava.lang.Object\u003e()",
+          "BUGGY_CODE_TYPE": "CtConstructorCallImpl|CtLocalVariableImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-49\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java",
+          "LINE": "74",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "105",
+          "PATCH_HUNK_CODE": "new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(new java.util.ArrayList\u003cjava.lang.Object\u003e())",
+          "PATCH_HUNK_TYPE": "CtConstructorCallImpl|CtLocalVariableImpl"
+        }
+      ],
+      "TIME": "6257",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-49",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/printer\\/PrinterTest.java\\n@@ -74 +74 @@\\n-\\t\\tjava.util.ArrayList\u003cjava.lang.Object\u003e al \u003d new java.util.ArrayList\u003cjava.lang.Object\u003e();\\n+\\t\\tjava.util.ArrayList\u003cjava.lang.Object\u003e al \u003d new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(new java.util.ArrayList\u003cjava.lang.Object\u003e());\\n\\n"
+    },
+    {
+      "VARIANT_ID": "50",
+      "VALIDATION": "|true|48|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.parser.ParserTest",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java",
+          "ORIGINAL_CODE": "org.junit.Assert.assertEquals(expected, results)",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-50\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java",
+          "LINE": "185",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "106",
+          "PATCH_HUNK_CODE": "org.junit.Assert.assertEquals(\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\nexpected, new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(results))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "6383",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-50",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java\\n@@ -185 +185 @@\\n-\\t\\torg.junit.Assert.assertEquals(expected, results);\\n+\\t\\torg.junit.Assert.assertEquals(expected, new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(results));\\n\\n"
+    },
+    {
+      "VARIANT_ID": "51",
+      "VALIDATION": "|true|59|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.protocols.C3Test",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "ORIGINAL_CODE": "org.junit.Assert.assertEquals(\\njava.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X5.K.class, us.bpsm.edn.protocols.C3Test.X5.A.class, java.lang.Object.class), \\nus.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X5.K.class))",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-51\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java",
+          "LINE": "194",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "107",
+          "PATCH_HUNK_CODE": "org.junit.Assert.assertEquals(\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\njava.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X5.K.class, us.bpsm.edn.protocols.C3Test.X5.A.class, java.lang.Object.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X5.K.class)))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "6508",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-51",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/protocols\\/C3Test.java\\n@@ -195,2 +195,2 @@\\n-\\t\\tjava.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X5.K.class, us.bpsm.edn.protocols.C3Test.X5.A.class, java.lang.Object.class), \\n-\\t\\tus.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X5.K.class));\\n+\\t\\tjava.util.Arrays.\u003cjava.lang.Class\u003c?\u003e\u003easList(us.bpsm.edn.protocols.C3Test.X5.K.class, us.bpsm.edn.protocols.C3Test.X5.A.class, java.lang.Object.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X5.K.class)));\\n+\\n\\n"
+    },
+    {
+      "VARIANT_ID": "52",
+      "VALIDATION": "|true|51|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.parser.ParserTest",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java",
+          "ORIGINAL_CODE": "org.junit.Assert.assertEquals(expected, results)",
+          "BUGGY_CODE_TYPE": "CtInvocationImpl|CtBlockImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-52\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java",
+          "LINE": "59",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "113",
+          "PATCH_HUNK_CODE": "org.junit.Assert.assertEquals(\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\nexpected, new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(results))",
+          "PATCH_HUNK_TYPE": "CtInvocationImpl|CtBlockImpl"
+        }
+      ],
+      "TIME": "6634",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-52",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java\\n@@ -59 +59 @@\\n-\\t\\torg.junit.Assert.assertEquals(expected, results);\\n+\\t\\torg.junit.Assert.assertEquals(expected, new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(results));\\n\\n"
+    },
+    {
+      "VARIANT_ID": "53",
+      "VALIDATION": "|true|50|100|[]|",
+      "patchhunks": [
+        {
+          "LOCATION": "us.bpsm.edn.parser.ParserTest",
+          "PATH": "\\/astor\\/target-project\\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java",
+          "ORIGINAL_CODE": "new java.util.ArrayList\u003cjava.lang.Object\u003e()",
+          "BUGGY_CODE_TYPE": "CtConstructorCallImpl|CtLocalVariableImpl",
+          "OPERATOR": "ShuffleCollectionOp",
+          "MODIFIED_FILE_PATH": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-53\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java",
+          "LINE": "55",
+          "SUSPICIOUNESS": "1",
+          "MP_RANKING": "116",
+          "PATCH_HUNK_CODE": "new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(new java.util.ArrayList\u003cjava.lang.Object\u003e())",
+          "PATCH_HUNK_TYPE": "CtConstructorCallImpl|CtLocalVariableImpl"
+        }
+      ],
+      "TIME": "6760",
+      "GENERATION": "1",
+      "FOLDER_SOLUTION_CODE": "\\/astor\\/.\\/output_astor\\/AstorMain-target-project\\/\\/src\\/\\/variant-53",
+      "PATCH_DIFF_ORIG": "--- \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java\\n+++ \\/src\\/test\\/java\\/us\\/bpsm\\/edn\\/parser\\/ParserTest.java\\n@@ -55 +55 @@\\n-\\t\\tjava.util.List\u003cjava.lang.Object\u003e results \u003d new java.util.ArrayList\u003cjava.lang.Object\u003e();\\n+\\t\\tjava.util.List\u003cjava.lang.Object\u003e results \u003d new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(new java.util.ArrayList\u003cjava.lang.Object\u003e());\\n\\n"
+    }
+  ]
+}

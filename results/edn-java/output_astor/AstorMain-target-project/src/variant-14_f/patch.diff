@@ -1,0 +1,6 @@
+--- /src/test/java/us/bpsm/edn/protocols/C3Test.java
++++ /src/test/java/us/bpsm/edn/protocols/C3Test.java
+@@ -51 +51 @@
+-		org.junit.Assert.assertEquals(java.util.Arrays.<java.lang.Class<?>>asList(us.bpsm.edn.protocols.C3Test.X3.D.class, us.bpsm.edn.protocols.C3Test.X3.O.class), us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.D.class));
++		org.junit.Assert.assertEquals(java.util.Arrays.<java.lang.Class<?>>asList(us.bpsm.edn.protocols.C3Test.X3.D.class, us.bpsm.edn.protocols.C3Test.X3.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X3.D.class)));
+

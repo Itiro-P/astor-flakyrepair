@@ -1,0 +1,35 @@
+Execution map
+X = failed execution
+. = passed execution
+? = missing execution
+
+Variant | 1234567890 | First | Failures | Rate | Operator
+----------------------------------------------------------      2 | XXXXX...X. |     1 |        6 | 60.00% | ShuffleCollectionOp
+     11 | XX...XXX.. |     1 |        5 | 50.00% | ShuffleCollectionOp
+     14 | XXXX.XX.XX |     1 |        8 | 80.00% | ShuffleCollectionOp
+     17 | XXX.....X. |     1 |        4 | 40.00% | ShuffleCollectionOp
+     18 | X.X.XXXX.. |     1 |        6 | 60.00% | ShuffleCollectionOp
+     22 | XXXXXXXX.X |     1 |        9 | 90.00% | ShuffleCollectionOp
+     23 | XX.XX..XXX |     1 |        7 | 70.00% | ShuffleCollectionOp
+     28 | XX...X.X.X |     1 |        5 | 50.00% | ShuffleCollectionOp
+     44 | XXX...X... |     1 |        4 | 40.00% | ShuffleCollectionOp
+     45 | XX.XX.XX.X |     1 |        7 | 70.00% | ShuffleCollectionOp
+     46 | XXXX..XXX. |     1 |        7 | 70.00% | ShuffleCollectionOp
+     49 | XX.XXXXX.X |     1 |        8 | 80.00% | ShuffleCollectionOp
+     51 | XXX..X.X.X |     1 |        6 | 60.00% | ShuffleCollectionOp
+     53 | XX...XX..X |     1 |        5 | 50.00% | ShuffleCollectionOp
+      3 | .XXX.XX.XX |     2 |        7 | 70.00% | ShuffleCollectionOp
+      4 | .X....X.XX |     2 |        4 | 40.00% | ShuffleCollectionOp
+     10 | .XXXXXXX.. |     2 |        7 | 70.00% | ShuffleCollectionOp
+     12 | .X.XX..X.X |     2 |        5 | 50.00% | ShuffleCollectionOp
+     15 | .XX.XX.X.. |     2 |        5 | 50.00% | ShuffleCollectionOp
+     19 | .X..XX.X.. |     2 |        4 | 40.00% | ShuffleCollectionOp
+     30 | .XXXX.XX.X |     2 |        7 | 70.00% | ShuffleCollectionOp
+     31 | .XX.X.XXX. |     2 |        6 | 60.00% | ShuffleCollectionOp
+     43 | .X.XX.XX.. |     2 |        5 | 50.00% | ShuffleCollectionOp
+     47 | .XX....XX. |     2 |        4 | 40.00% | ShuffleCollectionOp
+     29 | ..X..XXXX. |     3 |        5 | 50.00% | ShuffleCollectionOp
+     33 | ..XX.XX..X |     3 |        5 | 50.00% | ShuffleCollectionOp
+     48 | ..X.X..XX. |     3 |        4 | 40.00% | ShuffleCollectionOp
+     50 | ..XXXXX.XX |     3 |        7 | 70.00% | ShuffleCollectionOp
+     52 | ..X.X.XX.. |     3 |        4 | 40.00% | ShuffleCollectionOp

@@ -1,0 +1,8 @@
+--- /src/test/java/us/bpsm/edn/examples/SimpleParserConfigTest.java
++++ /src/test/java/us/bpsm/edn/examples/SimpleParserConfigTest.java
+@@ -47,2 +47,2 @@
+-		org.junit.Assert.assertEquals(java.util.Arrays.asList(0L, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L), 
+-		new java.util.ArrayList<java.lang.Object>(s));
++		org.junit.Assert.assertEquals(java.util.Arrays.asList(0L, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(new java.util.ArrayList<java.lang.Object>(s)));
++
+

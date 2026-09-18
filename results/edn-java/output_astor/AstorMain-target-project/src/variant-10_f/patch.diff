@@ -1,0 +1,6 @@
+--- /src/test/java/us/bpsm/edn/EdnFormatTest.java
++++ /src/test/java/us/bpsm/edn/EdnFormatTest.java
+@@ -56 +56 @@
+-		org.junit.Assert.assertEquals(parseall("a      b"), parseall("a,b"));
++		org.junit.Assert.assertEquals(parseall("a      b"), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(parseall("a,b")));
+

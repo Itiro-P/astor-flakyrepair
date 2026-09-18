@@ -1,0 +1,8 @@
+--- /src/test/java/us/bpsm/edn/protocols/C3Test.java
++++ /src/test/java/us/bpsm/edn/protocols/C3Test.java
+@@ -212,2 +212,2 @@
+-		java.io.Serializable.class, java.lang.Object.class), 
+-		us.bpsm.edn.protocols.C3.methodResolutionOrder(java.util.ArrayList.class));
++		java.io.Serializable.class, java.lang.Object.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(java.util.ArrayList.class)));
++
+

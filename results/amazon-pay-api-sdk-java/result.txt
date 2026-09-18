@@ -1,0 +1,118 @@
+Modification points:                  21
+Mutantes compilados:                  16
+Mutantes reveladores:                 2
+Mutantes não-reveladores:             14
+Mutantes prematuros:                  0
+
+Total contabilizado: 16
+NR_RIGHT_COMPILATIONS (Astor):       16
+
+Mutantes:
+  variant   2: non_revealing  0/100    com.amazon.pay.api.CreateStringToSignTest#ValidateAllTestCases
+    tempo total: 138432 ms (138.432 s)
+    tempo médio por execução: 1384.32 ms (1.384 s)
+    tempo mínimo: 1243 ms
+    tempo máximo: 3589 ms
+    execuções com tempo coletado: 100
+  variant   3: non_revealing  0/100    com.amazon.pay.api.CreateStringToSignTest#ValidateAllTestCases
+    tempo total: 133125 ms (133.125 s)
+    tempo médio por execução: 1331.25 ms (1.331 s)
+    tempo mínimo: 1228 ms
+    tempo máximo: 1429 ms
+    execuções com tempo coletado: 100
+  variant   4: non_revealing  0/100    com.amazon.pay.api.UtilTest#testGetHttpUriRequestForValidHttpMethod
+    tempo total: 134455 ms (134.455 s)
+    tempo médio por execução: 1344.55 ms (1.345 s)
+    tempo mínimo: 1184 ms
+    tempo máximo: 1991 ms
+    execuções com tempo coletado: 100
+  variant   5: non_revealing  0/100    com.amazon.pay.api.RequestSignerWithHeaderTest#signRequestWithHeader
+    tempo total: 203444 ms (203.444 s)
+    tempo médio por execução: 2034.44 ms (2.034 s)
+    tempo mínimo: 1875 ms
+    tempo máximo: 2311 ms
+    execuções com tempo coletado: 100
+  variant   6: non_revealing  0/100    com.amazon.pay.api.UtilTest#testEnhanceResponseWithShippingAddressList
+    tempo total: 126187 ms (126.187 s)
+    tempo médio por execução: 1261.87 ms (1.262 s)
+    tempo mínimo: 1106 ms
+    tempo máximo: 1892 ms
+    execuções com tempo coletado: 100
+  variant   7: non_revealing  0/100    com.amazon.pay.api.RequestSignerWithHeaderTest#signRequestWithHeader
+    tempo total: 186794 ms (186.794 s)
+    tempo médio por execução: 1867.94 ms (1.868 s)
+    tempo mínimo: 1710 ms
+    tempo máximo: 2565 ms
+    execuções com tempo coletado: 100
+  variant   8: revealing      51/100   com.amazon.pay.api.UtilTest#testEnhanceResponseWithShippingAddressList
+    falhas do teste: 51
+    tempo total: 139624 ms (139.624 s)
+    tempo médio por execução: 1396.24 ms (1.396 s)
+    tempo mínimo: 1142 ms
+    tempo máximo: 2077 ms
+    execuções com tempo coletado: 100
+  variant   9: non_revealing  0/100    com.amazon.pay.api.UtilTest#testEnhanceResponseWithShippingAddressList
+    tempo total: 139598 ms (139.598 s)
+    tempo médio por execução: 1395.98 ms (1.396 s)
+    tempo mínimo: 1114 ms
+    tempo máximo: 1942 ms
+    execuções com tempo coletado: 100
+  variant  10: non_revealing  0/100    com.amazon.pay.api.UtilTest#testEnhanceResponseWithShippingAddressList
+    tempo total: 146526 ms (146.526 s)
+    tempo médio por execução: 1465.26 ms (1.465 s)
+    tempo mínimo: 1151 ms
+    tempo máximo: 2030 ms
+    execuções com tempo coletado: 100
+  variant  11: revealing      47/100   com.amazon.pay.api.UtilTest#testEnhanceResponseWithShippingAddressList
+    falhas do teste: 47
+    tempo total: 147241 ms (147.241 s)
+    tempo médio por execução: 1472.41 ms (1.472 s)
+    tempo mínimo: 1182 ms
+    tempo máximo: 1968 ms
+    execuções com tempo coletado: 100
+  variant  12: non_revealing  0/100    com.amazon.pay.api.UtilTest#testEnhanceResponseWithShippingAddressList
+    tempo total: 147109 ms (147.109 s)
+    tempo médio por execução: 1471.09 ms (1.471 s)
+    tempo mínimo: 1156 ms
+    tempo máximo: 2007 ms
+    execuções com tempo coletado: 100
+  variant  13: non_revealing  0/100    com.amazon.pay.api.UtilTest#updateHeader
+    tempo total: 147047 ms (147.047 s)
+    tempo médio por execução: 1470.47 ms (1.470 s)
+    tempo mínimo: 1167 ms
+    tempo máximo: 1943 ms
+    execuções com tempo coletado: 100
+  variant  14: non_revealing  0/100    com.amazon.pay.api.RequestSignerTest#signRequestWithEmptyHeader
+    tempo total: 243407 ms (243.407 s)
+    tempo médio por execução: 2434.07 ms (2.434 s)
+    tempo mínimo: 1858 ms
+    tempo máximo: 5535 ms
+    execuções com tempo coletado: 100
+  variant  15: non_revealing  0/100    com.amazon.pay.api.UtilTest#updateHeader
+    tempo total: 163098 ms (163.098 s)
+    tempo médio por execução: 1630.98 ms (1.631 s)
+    tempo mínimo: 1166 ms
+    tempo máximo: 3511 ms
+    execuções com tempo coletado: 100
+  variant  16: non_revealing  0/100    com.amazon.pay.api.RequestSignerTest#signRequestWithEmptyHeader
+    tempo total: 231591 ms (231.591 s)
+    tempo médio por execução: 2315.91 ms (2.316 s)
+    tempo mínimo: 1843 ms
+    tempo máximo: 3169 ms
+    execuções com tempo coletado: 100
+  variant  17: non_revealing  0/100    com.amazon.pay.api.UtilTest#updateHeader
+    tempo total: 155632 ms (155.632 s)
+    tempo médio por execução: 1556.32 ms (1.556 s)
+    tempo mínimo: 1187 ms
+    tempo máximo: 2226 ms
+    execuções com tempo coletado: 100
+
+Detalhes dos reveladores:
+  variant 8 (ShuffleCollectionOp): 51/100 (51.0%)
+    teste: com.amazon.pay.api.UtilTest
+    linha: 251
+    primeira manifestação: execução 4
+  variant 11 (ShuffleCollectionOp): 47/100 (47.0%)
+    teste: com.amazon.pay.api.UtilTest
+    linha: 236
+    primeira manifestação: execução 5

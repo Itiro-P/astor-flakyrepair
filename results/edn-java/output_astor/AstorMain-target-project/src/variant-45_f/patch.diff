@@ -1,0 +1,6 @@
+--- /src/test/java/us/bpsm/edn/protocols/C3Test.java
++++ /src/test/java/us/bpsm/edn/protocols/C3Test.java
+@@ -26 +26 @@
+-		org.junit.Assert.assertEquals(java.util.Arrays.asList(us.bpsm.edn.protocols.C3Test.X2.A.class, us.bpsm.edn.protocols.C3Test.X2.B.class, us.bpsm.edn.protocols.C3Test.X2.E.class, us.bpsm.edn.protocols.C3Test.X2.C.class, us.bpsm.edn.protocols.C3Test.X2.D.class, us.bpsm.edn.protocols.C3Test.X2.F.class, us.bpsm.edn.protocols.C3Test.X2.O.class), us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X2.A.class));
++		org.junit.Assert.assertEquals(java.util.Arrays.asList(us.bpsm.edn.protocols.C3Test.X2.A.class, us.bpsm.edn.protocols.C3Test.X2.B.class, us.bpsm.edn.protocols.C3Test.X2.E.class, us.bpsm.edn.protocols.C3Test.X2.C.class, us.bpsm.edn.protocols.C3Test.X2.D.class, us.bpsm.edn.protocols.C3Test.X2.F.class, us.bpsm.edn.protocols.C3Test.X2.O.class), new fr.inria.astor.approaches.flakyseeding.utils.ShuffledList(us.bpsm.edn.protocols.C3.methodResolutionOrder(us.bpsm.edn.protocols.C3Test.X2.A.class)));
+

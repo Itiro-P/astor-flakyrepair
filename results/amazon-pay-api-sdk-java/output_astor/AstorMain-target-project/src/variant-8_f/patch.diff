@@ -1,0 +1,6 @@
+--- /tst/com/amazon/pay/api/UtilTest.java
++++ /tst/com/amazon/pay/api/UtilTest.java
+@@ -164 +164 @@
+-		expectedShippingAddressListResponse.put("shippingAddressList", new org.json.JSONArray().put(expectedShippingAddress));
++		expectedShippingAddressListResponse.put("shippingAddressList", new org.json.JSONArray().put(new fr.inria.astor.approaches.flakyseeding.utils.ShuffledJSON(expectedShippingAddress)));
+
